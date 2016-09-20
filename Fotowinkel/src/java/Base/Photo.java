@@ -69,11 +69,11 @@ public class Photo extends Item
         //Get the server location and photo from it
         try
         {
-        if (Photo.hasAtLocation("Preview Location"))
+        if (Photo.imagePresentAt("Preview Location"))
         {
             this.previewLocation = "Somewhere/From/Server/555-1.jpg";
         }
-        if (Photo.hasAtLocation("Full location"))
+        if (Photo.imagePresentAt("Full location"))
         {
             this.fullLocation = "Somewhere/Else/555-1.png";
         }
@@ -89,8 +89,10 @@ public class Photo extends Item
      * Finds an image at a specified location
      *
      * @param location The relative location of the image
+     * @throws java.lang.Exception
+     * @return Whether a photo was at specified location
      */
-    private static boolean hasAtLocation(final String location) throws Exception
+    public static boolean imagePresentAt(final String location) throws Exception
     {
         boolean has = false;
         HttpURLConnection conn = null;

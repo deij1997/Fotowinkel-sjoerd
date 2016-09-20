@@ -20,6 +20,7 @@ public class PhotoTest
 
     public PhotoTest()
     {
+        p = new Photo(0, "555-1");
         p = new Photo(0, new BufferedImage(1, 1, 8));
     }
 

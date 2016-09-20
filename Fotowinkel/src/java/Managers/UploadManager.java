@@ -22,6 +22,7 @@ public class UploadManager
      *
      * @param photos The photos to upload
      * @return The code to give to the customer
+     * @throws Exceptions.UploadFailed
      */
     public static String[] UploadPhotos(ArrayList<Photo> photos) throws UploadFailed
     {

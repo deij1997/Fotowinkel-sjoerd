@@ -24,6 +24,7 @@ public class ViewManager
     {
         //TODO
         //Find all photos where the code matches the starting piece 
-        return new Photo(0, code);
+        throw new UnsupportedOperationException("Not yet implemented");
+        //Eg. return new Photo(0, code);
     }
 }

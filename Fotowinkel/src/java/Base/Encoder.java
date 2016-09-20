@@ -19,11 +19,14 @@ public class Encoder
      */
     public static String[] GenerateCodeStrings(int amount)
     {
-        String[] ret = new String[amount];
-        for (int i = 0; i < amount; i++)
-        {
-            ret[i] = "555-" + i;
-        }
-        return ret;
+        throw new UnsupportedOperationException("Not yet implemented");
+        
+        //Eg.
+//        String[] ret = new String[amount];
+//        for (int i = 0; i < amount; i++)
+//        {
+//            ret[i] = "555-" + i;
+//        }
+//        return ret;
     }
 }

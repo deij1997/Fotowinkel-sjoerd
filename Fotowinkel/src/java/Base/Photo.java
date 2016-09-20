@@ -57,7 +57,7 @@ public class Photo extends Item
 
     /**
      * Generates a link to full and preview location
-     *
+     * @deprecated Paths still not yet fixed
      */
     private void SetLocation()
     {

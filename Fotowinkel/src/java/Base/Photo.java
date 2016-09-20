@@ -7,6 +7,8 @@ package Base;
 
 import Exceptions.UploadFailed;
 import java.awt.image.BufferedImage;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
@@ -14,6 +16,7 @@ import java.awt.image.BufferedImage;
  */
 public class Photo extends Item
 {
+    private static String DefaultImage = "at some point";
     private String previewLocation = "Image not found";
     private String fullLocation = "Image not found";
     private BufferedImage photo;
@@ -57,21 +60,57 @@ public class Photo extends Item
 
     /**
      * Generates a link to full and preview location
+     *
      * @deprecated Paths still not yet fixed
      */
     private void SetLocation()
     {
         //TODO
         //Get the server location and photo from it
-        this.previewLocation = "Somewhere/From/Server/555-1.jpg";
-        this.fullLocation = "Somewhere/Else/555-1.png";
+        try
+        {
+        if (Photo.hasAtLocation("Preview Location"))
+        {
+            this.previewLocation = "Somewhere/From/Server/555-1.jpg";
+        }
+        if (Photo.hasAtLocation("Full location"))
+        {
+            this.fullLocation = "Somewhere/Else/555-1.png";
+        }
+        }
+        catch (Exception e)
+        {
+            this.previewLocation = Photo.DefaultImage;
+            this.fullLocation = Photo.DefaultImage;
+        }
+    }
+
+    /**
+     * Finds an image at a specified location
+     *
+     * @param location The relative location of the image
+     */
+    private static boolean hasAtLocation(final String location) throws Exception
+    {
+        boolean has = false;
+        HttpURLConnection conn = null;
+        URL url = new URL(location);
+        
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("HEAD");
+        
+        String contentType = conn.getContentType();
+        
+        has = contentType.contains("image");
+
+        return has;
     }
 
     public String GetFullLocation()
     {
         return this.fullLocation;
     }
-    
+
     public String getPreviewLocation()
     {
         return this.previewLocation;

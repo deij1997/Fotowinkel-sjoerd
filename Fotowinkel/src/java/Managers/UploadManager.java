@@ -8,7 +8,9 @@ package Managers;
 import Base.Encoder;
 import Base.Photo;
 import Exceptions.UploadFailed;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import org.apache.tomcat.util.http.fileupload.FileUpload;
 
 /**
  *
@@ -16,6 +18,19 @@ import java.util.ArrayList;
  */
 public class UploadManager
 {
+    
+    public static String[] CreatePhotosFromUploads(ArrayList<FileUpload> files)
+    {
+        //TODO
+        //Create photos from files
+        for (FileUpload file : files)
+        {   
+            //BufferedImage k = file;
+            //Photo toadd = new Photo(5.00, k);
+        }
+        
+        throw new UnsupportedOperationException("Not yet implemented");
+    }    
 
     /**
      * Uploads a photo to the server

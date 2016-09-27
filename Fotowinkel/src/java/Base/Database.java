@@ -6,6 +6,8 @@
 package Base;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -82,5 +84,48 @@ public class Database
         {
             System.out.print("QQQQQQQQQQQQQQQQQQQQQ, tranen vol gestacked!");
         }
+    }
+    
+    public List<String> GetPhotoLocation(String code) throws SQLException
+    {
+        List<String> locations = new ArrayList<String>();
+        Connection con = null;
+        Statement state1 = null;
+        ResultSet rs1 = null;
+        PreparedStatement state2 = null;
+        ResultSet rs2 = null;
+        String query = "Select Naam From Item Where Naam Like '" + code + "%'";
+        try
+        {
+            con = Database.SetConnection();
+            state2 = con.prepareStatement(query);
+            rs2 = state2.executeQuery();
+            while (rs2.next())
+            {
+                locations.add(rs2.getString(1));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs2 != null)
+            {
+                rs2.close();;
+            }
+            if (state2 != null)
+            {
+                state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+        
+        return locations;
+        
     }
 }

@@ -6,10 +6,12 @@
 package Base;
 
 import Exceptions.UploadFailed;
+import Helpers.WaterMarker;
 import static Servlets.UploadServlet.FULL_UPLOAD_DIRECTORY;
 import static Servlets.UploadServlet.PREVIEW_UPLOAD_DIRECTORY;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,7 +24,9 @@ import javax.imageio.ImageIO;
 public class Photo extends Item
 {
     public static final double DEFAULT_PRICE = 5.00;
-    private static String DefaultImage = "at some point";
+    private static final String WATERMARK_LOCATION = "/Images/watermark.png";
+    private static BufferedImage WaterMarkImage;
+    private static final String MISSING_LOCATION = "???";
     private String previewLocation = "Image not found";
     private String fullLocation = "Image not found";
     private BufferedImage photo;
@@ -31,6 +35,20 @@ public class Photo extends Item
     public Photo(double price, String code)
     {
         super(price, code);
+        if (WaterMarkImage == null)
+        {
+            //Get new watermark image
+            File file = new File(WATERMARK_LOCATION);
+            try
+            {
+                WaterMarkImage = ImageIO.read(new FileInputStream(file));
+            }
+            catch (IOException e)
+            {
+                System.out.println("[ERROR] Could not retrieve watermark image");
+            }
+        }
+
         SetLocation();
     }
 
@@ -65,6 +83,7 @@ public class Photo extends Item
                 ImageIO.write(photo, "png", fulloutputfile);
 
                 //Crop and make the preview, then save it to PREVIEW_UPLOAD_DIRECTORY
+                WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
                 File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg");
                 ImageIO.write(photo, "jpg", prevoutputfile);
                 //Clear the photo to save memory
@@ -96,8 +115,8 @@ public class Photo extends Item
         }
         catch (Exception e)
         {
-            this.previewLocation = Photo.DefaultImage;
-            this.fullLocation = Photo.DefaultImage;
+            this.previewLocation = Photo.MISSING_LOCATION;
+            this.fullLocation = Photo.MISSING_LOCATION;
         }
     }
 

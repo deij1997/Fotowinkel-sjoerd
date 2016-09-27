@@ -7,10 +7,16 @@ package Managers;
 
 import Base.Encoder;
 import Base.Photo;
+import Exceptions.NotOfCorrectType;
 import Exceptions.UploadFailed;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -18,19 +24,36 @@ import org.apache.tomcat.util.http.fileupload.FileUpload;
  */
 public class UploadManager
 {
-    
-    public static String[] CreatePhotosFromUploads(ArrayList<FileUpload> files)
+    public static ArrayList<Photo> CreatePhotosFromUploads(ArrayList<File> files) throws NotOfCorrectType
     {
-        //TODO
-        //Create photos from files
-        for (FileUpload file : files)
-        {   
-            //BufferedImage k = file;
-            //Photo toadd = new Photo(5.00, k);
-        }
+        ArrayList<Photo> photos = new ArrayList<Photo>();
         
-        throw new UnsupportedOperationException("Not yet implemented");
-    }    
+        //Create photos from files
+        for (File file : files)
+        {
+            try
+            {
+                BufferedImage in = ImageIO.read(file);
+                
+                /*
+                BufferedImage newImage = new BufferedImage(
+                in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                
+                Graphics2D g = newImage.createGraphics();
+                g.drawImage(in, 0, 0, null);
+                g.dispose();
+                */
+                
+                photos.add(new Photo(Photo.DEFAULT_PRICE, in));
+            }
+            catch (Exception ex)
+            {
+                throw new NotOfCorrectType();
+            }
+        }
+
+        return photos;
+    }
 
     /**
      * Uploads a photo to the server

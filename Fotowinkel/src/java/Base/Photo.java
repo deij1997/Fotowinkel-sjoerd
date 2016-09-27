@@ -6,9 +6,14 @@
 package Base;
 
 import Exceptions.UploadFailed;
+import static Servlets.UploadServlet.FULL_UPLOAD_DIRECTORY;
+import static Servlets.UploadServlet.PREVIEW_UPLOAD_DIRECTORY;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -16,6 +21,7 @@ import java.net.URL;
  */
 public class Photo extends Item
 {
+    public static final double DEFAULT_PRICE = 5.00;
     private static String DefaultImage = "at some point";
     private String previewLocation = "Image not found";
     private String fullLocation = "Image not found";
@@ -51,32 +57,42 @@ public class Photo extends Item
     {
         if (this.photo != null)
         {
-            //TODO
             //Save the photo to the server
-            //Clear the photo to save memory
-            photo = null;
+            try
+            {
+                //Save the full to FULL_UPLOAD_DIRECTORY
+                File fulloutputfile = new File(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png");
+                ImageIO.write(photo, "png", fulloutputfile);
+
+                //Crop and make the preview, then save it to PREVIEW_UPLOAD_DIRECTORY
+                File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg");
+                ImageIO.write(photo, "jpg", prevoutputfile);
+                //Clear the photo to save memory
+                photo = null;
+            }
+            catch (IOException ex)
+            {
+                throw new UploadFailed();
+            }
         }
     }
 
     /**
      * Generates a link to full and preview location
-     *
-     * @deprecated Paths still not yet fixed
      */
     private void SetLocation()
     {
-        //TODO
         //Get the server location and photo from it
         try
         {
-        if (Photo.imagePresentAt("Preview Location"))
-        {
-            this.previewLocation = "Somewhere/From/Server/555-1.jpg";
-        }
-        if (Photo.imagePresentAt("Full location"))
-        {
-            this.fullLocation = "Somewhere/Else/555-1.png";
-        }
+            if (Photo.imagePresentAt(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
+            {
+                this.previewLocation = PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg";
+            }
+            if (Photo.imagePresentAt(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
+            {
+                this.fullLocation = FULL_UPLOAD_DIRECTORY + "\\" + code + ".png";
+            }
         }
         catch (Exception e)
         {
@@ -97,12 +113,12 @@ public class Photo extends Item
         boolean has = false;
         HttpURLConnection conn = null;
         URL url = new URL(location);
-        
+
         conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("HEAD");
-        
+
         String contentType = conn.getContentType();
-        
+
         has = contentType.contains("image");
 
         return has;

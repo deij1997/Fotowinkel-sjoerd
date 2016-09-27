@@ -86,15 +86,15 @@ public class Database
         }
     }
     
-    public List<String> GetPhotoLocation(String code) throws SQLException
+    public List<Photo> GetPhotos(String code) throws SQLException
     {
-        List<String> locations = new ArrayList<String>();
+        List<Photo> photos = new ArrayList<Photo>();
         Connection con = null;
         Statement state1 = null;
         ResultSet rs1 = null;
         PreparedStatement state2 = null;
         ResultSet rs2 = null;
-        String query = "Select Naam From Item Where Naam Like '" + code + "%'";
+        String query = "Select * From Item Where Naam Like '" + code + "%'";
         try
         {
             con = Database.SetConnection();
@@ -102,7 +102,7 @@ public class Database
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                locations.add(rs2.getString(1));
+                photos.add(new Photo(rs2.getDouble("Prijs"), rs2.getString("Naam")));
             }
         }
         catch (Exception e)
@@ -125,7 +125,7 @@ public class Database
             }
         }
         
-        return locations;
+        return photos;
         
     }
 }

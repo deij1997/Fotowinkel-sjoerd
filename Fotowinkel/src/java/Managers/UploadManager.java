@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -24,9 +25,9 @@ import javax.imageio.ImageIO;
  */
 public class UploadManager
 {
-    public static ArrayList<Photo> CreatePhotosFromUploads(ArrayList<File> files) throws NotOfCorrectType
+    public static List<Photo> CreatePhotosFromUploads(List<File> files) throws NotOfCorrectType
     {
-        ArrayList<Photo> photos = new ArrayList<Photo>();
+        List<Photo> photos = new ArrayList<Photo>();
         
         //Create photos from files
         for (File file : files)
@@ -62,7 +63,7 @@ public class UploadManager
      * @return The code to give to the customer
      * @throws Exceptions.UploadFailed
      */
-    public static String[] UploadPhotos(ArrayList<Photo> photos) throws UploadFailed
+    public static String[] UploadPhotos(List<Photo> photos) throws UploadFailed
     {
         String[] usedCodes = Encoder.GenerateCodeStrings(photos.size());
         for (Photo p : photos)

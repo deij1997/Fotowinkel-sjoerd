@@ -6,6 +6,7 @@
 package Base;
 
 import static Base.Encoder.GenerateCodeStrings;
+import Exceptions.RandomiserFail;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
@@ -24,7 +25,7 @@ public class EncoderTest
     }
 
     @Test
-    public void TestUniqueness()
+    public void TestUniqueness() throws RandomiserFail
     {
         Set<String> codes = new HashSet<String>();
         long start = System.nanoTime();

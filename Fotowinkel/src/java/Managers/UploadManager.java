@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,25 +27,16 @@ import javax.imageio.ImageIO;
  */
 public class UploadManager
 {
-    public static List<Photo> CreatePhotosFromUploads(List<File> files) throws NotOfCorrectType
+    public static List<Photo> CreatePhotosFromUploads(List<InputStream> files) throws NotOfCorrectType
     {
         List<Photo> photos = new ArrayList<Photo>();
         
         //Create photos from files
-        for (File file : files)
+        for (InputStream file : files)
         {
             try
             {
                 BufferedImage in = ImageIO.read(file);
-                
-                /*
-                BufferedImage newImage = new BufferedImage(
-                in.getWidth(), in.getHeight(), BufferedImage.TYPE_INT_ARGB);
-                
-                Graphics2D g = newImage.createGraphics();
-                g.drawImage(in, 0, 0, null);
-                g.dispose();
-                */
                 
                 photos.add(new Photo(Photo.DEFAULT_PRICE, in));
             }

@@ -9,6 +9,7 @@ import Exceptions.UploadFailed;
 import Helpers.WaterMarker;
 import static Servlets.UploadServlet.FULL_UPLOAD_DIRECTORY;
 import static Servlets.UploadServlet.PREVIEW_UPLOAD_DIRECTORY;
+import static Servlets.UploadServlet.WATERMARK_LOCATION;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +25,6 @@ import javax.imageio.ImageIO;
 public class Photo extends Item
 {
     public static final double DEFAULT_PRICE = 5.00;
-    private static final String WATERMARK_LOCATION = "/Images/watermark.png";
     private static BufferedImage WaterMarkImage;
     private static final String MISSING_LOCATION = "???";
     private String previewLocation = "Image not found";
@@ -35,19 +35,6 @@ public class Photo extends Item
     public Photo(double price, String code)
     {
         super(price, code);
-        if (WaterMarkImage == null)
-        {
-            //Get new watermark image
-            File file = new File(WATERMARK_LOCATION);
-            try
-            {
-                WaterMarkImage = ImageIO.read(new FileInputStream(file));
-            }
-            catch (IOException e)
-            {
-                System.out.println("[ERROR] Could not retrieve watermark image");
-            }
-        }
 
         SetLocation();
     }
@@ -61,7 +48,20 @@ public class Photo extends Item
      */
     public Photo(double price, BufferedImage photoBitmap)
     {
-        super(price, false);
+        super(price, true);
+        if (WaterMarkImage == null)
+        {
+            //Get new watermark image
+            File file = new File(WATERMARK_LOCATION);
+            try
+            {
+                WaterMarkImage = ImageIO.read(new FileInputStream(file));
+            }
+            catch (IOException e)
+            {
+                System.out.println("[ERROR] Could not retrieve watermark image");
+            }
+        }
         photo = photoBitmap;
         SetLocation();
     }
@@ -79,19 +79,22 @@ public class Photo extends Item
             try
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
-                File fulloutputfile = new File(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png");
+                File fulloutputfile = new File(FULL_UPLOAD_DIRECTORY + "/" + code + ".png");                
+                fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
                 //Crop and make the preview, then save it to PREVIEW_UPLOAD_DIRECTORY
-                WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
-                File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg");
+                photo = WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
+                File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "/" + code + ".jpg");
+                prevoutputfile.createNewFile();
                 ImageIO.write(photo, "jpg", prevoutputfile);
                 //Clear the photo to save memory
                 photo = null;
+                SetLocation();
             }
             catch (IOException ex)
             {
-                throw new UploadFailed();
+                throw new UploadFailed(ex.getMessage());
             }
         }
     }

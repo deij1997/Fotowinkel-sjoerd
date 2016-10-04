@@ -43,8 +43,9 @@ public class UploadServlet extends HttpServlet
     final int MAX_FILE_SIZE = 5000 * 1024;
     final int MAX_REQUEST_SIZE = 5000 * 1024;
     final int THRESHOLD_SIZE = 5000 * 1024;
-    public static final String FULL_UPLOAD_DIRECTORY = "/fullimages";
-    public static final String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
+    public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
+    public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
+    public static String WATERMARK_LOCATION;
 
 
     /**
@@ -59,6 +60,10 @@ public class UploadServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
+        PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
+        WATERMARK_LOCATION = request.getServletContext().getRealPath("") + "/Images/watermark.png";
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -104,15 +109,10 @@ public class UploadServlet extends HttpServlet
             try
             {
                 // parses the request's content to extract file data
-                Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-                List<File> files = new ArrayList<File>();
-                for (Part part : request.getParts()) {
-                  File uploadedFile= new File(part.getName()) ;
-                  uploadedFile.createNewFile();
-                  FileOutputStream fileFiller = new FileOutputStream(uploadedFile); 
-                 fileFiller.write(part.getInputStream().read());
-                    fileFiller.close(); 
-                    files.add(uploadedFile);
+                List<InputStream> files = new ArrayList<InputStream>();
+                for (Part part : request.getParts())
+                {
+                    files.add(part.getInputStream());
                 }
 
                 //Call UploadManager to convert them

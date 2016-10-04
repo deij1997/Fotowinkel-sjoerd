@@ -23,15 +23,39 @@ public final class WaterMarker
         int y = isYScale ? scale : ImageToModify.getWidth() * scale / ImageToModify.getHeight();
         int x = !isYScale ? scale : ImageToModify.getHeight() * scale / ImageToModify.getWidth();
 
-        BufferedImage r = (BufferedImage) ImageToModify.getScaledInstance(y, x, Image.SCALE_DEFAULT);
+        BufferedImage r = toBufferedImage(ImageToModify.getScaledInstance(y, x, Image.SCALE_DEFAULT));
         //Add watermark
         BufferedImage bufferedImage = new BufferedImage(r.getWidth(), r.getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
-        g2d.drawImage(r, 0, 0, null);
+        //g2d.drawImage(r, 0, 0, null);
         g2d.drawImage(WaterMark, 0, 0, null);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         return bufferedImage;
     }
 
+    /**
+     * Converts a given Image into a BufferedImage
+     *
+     * @param img The Image to be converted
+     * @return The converted BufferedImage
+     */
+    static BufferedImage toBufferedImage(Image img)
+    {
+        if (img instanceof BufferedImage)
+        {
+            return (BufferedImage) img;
+        }
+
+        // Create a buffered image with transparency
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Draw the image on to the buffered image
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        // Return the buffered image
+        return bimage;
+    }
 }

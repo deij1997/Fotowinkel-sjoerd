@@ -15,12 +15,16 @@
 	<title>Fotowinkel Sjoerd</title>
 
 	<link rel="stylesheet" href="CSS/stylesheet.css">
+        <link rel="stylesheet" href="CSS/bootstrap.min.css">
+
 	<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
-	<<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
         <%@include file="header.html" %>
+        <div class="container">
         <h1>Hello World!</h1>
+        </div>
         <%@include file="footer.html" %>
     </body>
 </html>

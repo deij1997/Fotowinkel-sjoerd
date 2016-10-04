@@ -5,6 +5,7 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
 import Exceptions.UploadFailed;
 import java.awt.image.BufferedImage;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class PhotoTest
     }
 
     @Test
-    public void TestCodeGeneration()
+    public void TestCodeGeneration() throws RandomiserFail
     {
         String olds = p.code;
         String news = p.GenerateNewCode();

@@ -15,4 +15,9 @@ public class UploadFailed extends Exception
     {
         super("Upload failed. Try again, if the issue persists, contact an administrator.");
     }
+    
+    public UploadFailed(String s)
+    {
+        super(s);
+    }
 }

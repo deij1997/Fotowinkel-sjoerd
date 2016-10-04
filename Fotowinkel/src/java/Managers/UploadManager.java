@@ -8,6 +8,7 @@ package Managers;
 import Base.Encoder;
 import Base.Photo;
 import Exceptions.NotOfCorrectType;
+import Exceptions.RandomiserFail;
 import Exceptions.UploadFailed;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -65,12 +66,17 @@ public class UploadManager
      */
     public static String[] UploadPhotos(List<Photo> photos) throws UploadFailed
     {
-        String[] usedCodes = Encoder.GenerateCodeStrings(photos.size());
-        for (Photo p : photos)
-        {
-            p.Upload();
+        try {
+            String[] usedCodes = Encoder.GenerateCodeStrings(photos.size());
+            for (Photo p : photos)
+            {
+                p.Upload();
+            }
+            
+            return usedCodes;
+        } catch (RandomiserFail ex) {
+            Logger.getLogger(UploadManager.class.getName()).log(Level.SEVERE, null, ex);
+            throw new UploadFailed();
         }
-
-        return usedCodes;
     }
 }

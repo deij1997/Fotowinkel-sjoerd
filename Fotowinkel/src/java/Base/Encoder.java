@@ -5,6 +5,8 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
+import Exceptions.UploadFailed;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
@@ -25,14 +27,14 @@ public class Encoder
      * @param amount The amount of serial codes to generate
      * @return A series of serial codes
      */
-    public static String[] GenerateCodeStrings(int amount)
+    public static String[] GenerateCodeStrings(int amount) throws RandomiserFail
     {
         try
         {
             MessageDigest md = MessageDigest.getInstance("MD5");
 
             byte[] generated = md.digest(GenerateRandomByteArray());
-            String number = Arrays.toString(generated).replaceAll("\\D+","");;
+            String number = Arrays.toString(generated).replaceAll("\\D+", "");;
 
             String[] ret = new String[amount];
             for (int i = 0; i < amount; i++)
@@ -44,9 +46,22 @@ public class Encoder
         }
         catch (Exception ex)
         {
-            Logger.getLogger(Encoder.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RandomiserFail();
         }
-        return null;
+    }
+
+    public static String GetHash(String input) throws RandomiserFail
+    {
+        try
+        {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            return md.digest(input.getBytes("UTF-8")).toString();
+        }
+        catch (Exception ex)
+        {
+            throw new RandomiserFail();
+        }
     }
 
     private static byte[] GenerateRandomByteArray()

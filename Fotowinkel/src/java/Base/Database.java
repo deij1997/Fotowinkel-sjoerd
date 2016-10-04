@@ -6,6 +6,8 @@
 package Base;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -82,5 +84,91 @@ public class Database
         {
             System.out.print("QQQQQQQQQQQQQQQQQQQQQ, tranen vol gestacked!");
         }
+    }
+    
+    public List<Photo> GetPhotos(String code) throws SQLException
+    {
+        List<Photo> photos = new ArrayList<Photo>();
+        Connection con = null;
+        Statement state1 = null;
+        ResultSet rs1 = null;
+        PreparedStatement state2 = null;
+        ResultSet rs2 = null;
+        String query = "Select * From Item Where Naam Like '" + code + "%'";
+        try
+        {
+            con = Database.SetConnection();
+            state2 = con.prepareStatement(query);
+            rs2 = state2.executeQuery();
+            while (rs2.next())
+            {
+                photos.add(new Photo(rs2.getDouble("Prijs"), rs2.getString("Naam")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs2 != null)
+            {
+                rs2.close();;
+            }
+            if (state2 != null)
+            {
+                state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+        
+        return photos;
+        
+    }
+    
+    public List<Photo> GetPhotosByKlantHashedId(int Klantid) throws SQLException
+    {
+        List<Photo> photos = new ArrayList<Photo>();
+        Connection con = null;
+        Statement state1 = null;
+        ResultSet rs1 = null;
+        PreparedStatement state2 = null;
+        ResultSet rs2 = null;
+        String query = "Select * From Item Where Klanthashedid = " + Klantid + "";
+        try
+        {
+            con = Database.SetConnection();
+            state2 = con.prepareStatement(query);
+            rs2 = state2.executeQuery();
+            while (rs2.next())
+            {
+                photos.add(new Photo(rs2.getDouble("Prijs"), rs2.getString("Naam")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs2 != null)
+            {
+                rs2.close();;
+            }
+            if (state2 != null)
+            {
+                state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+        
+        return photos;
+        
     }
 }

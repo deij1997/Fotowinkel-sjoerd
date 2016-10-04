@@ -27,7 +27,7 @@
         </div>
         <%@include file="footer.jsp" %>
 
-		    <!-- jQuery -->
+    <!-- jQuery -->
     <script src="JS/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->

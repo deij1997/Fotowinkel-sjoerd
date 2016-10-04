@@ -8,10 +8,52 @@ and open the template in the editor.
     Author     : Tu
 */
 
-html{
-	background-color: #eaf0f2;
+html{   
+    background-color: #eaf0f2;
 }
 /*HEADER*/
+.slide-image {
+    width: 100%;
+}
+
+.carousel-holder {
+    margin-bottom: 30px;
+}
+
+.carousel-control,
+.item {
+    border-radius: 4px;
+}
+
+.caption {
+    height: 130px;
+    overflow: hidden;
+}
+
+.caption h4 {
+    white-space: nowrap;
+}
+
+.thumbnail img {
+    width: 100%;
+}
+
+
+
+.thumbnail {
+    padding: 0;
+}
+
+.thumbnail .caption-full {
+    padding: 9px;
+    color: #333;
+}
+
+.block{
+	padding: 40px 100px;
+	height: 80px;
+	color: #black;
+}
 .header-login-signup{
 	background-color:#292c2f;
 	box-shadow:0 1px 1px #ccc;
@@ -136,9 +178,10 @@ html{
 
 body {
 	margin:0;
-	padding:0;
+	padding-top: 0px;
 }
-/* End header */
+
+
 
 
 .footer-distributed{
@@ -309,5 +352,4 @@ body {
 	}
 
 }
-
 

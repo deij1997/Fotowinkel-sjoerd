@@ -178,6 +178,5 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="JS/bootstrap.min.js"></script>
 
-
     </body>
 </html>

@@ -21,10 +21,17 @@
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.html" %>
+        <%@include file="header.jsp" %>
         <div class="container">
         <h1>Hello World!</h1>
         </div>
-        <%@include file="footer.html" %>
+        <%@include file="footer.jsp" %>
+
+		    <!-- jQuery -->
+    <script src="JS/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="JS/bootstrap.min.js"></script>
+
     </body>
 </html>

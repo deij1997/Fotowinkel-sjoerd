@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.html" %>
+        <%@include file="header.jsp" %>
         <div class="container">
 
         <div class="row">
@@ -171,11 +171,13 @@
 
     </div>
     <!-- /.container -->
-    <%@include file="footer.html" %>
-    		    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <%@include file="footer.jsp" %>
+		    <!-- jQuery -->
+    <script src="JS/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="JS/bootstrap.min.js"></script>
+
+
     </body>
 </html>

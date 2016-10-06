@@ -7,8 +7,8 @@ package Base;
 
 import Exceptions.UploadFailed;
 import Helpers.WaterMarker;
-import static Servlets.UploadServlet.FULL_UPLOAD_DIRECTORY;
-import static Servlets.UploadServlet.PREVIEW_UPLOAD_DIRECTORY;
+import Servlets.OrderServlet;
+import Servlets.UploadServlet;
 import static Servlets.UploadServlet.WATERMARK_LOCATION;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -79,13 +79,13 @@ public class Photo extends Item
             try
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
-                File fulloutputfile = new File(FULL_UPLOAD_DIRECTORY + "/" + code + ".png");                
+                File fulloutputfile = new File(UploadServlet.FULL_UPLOAD_DIRECTORY + "/" + code + ".png");
                 fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
                 //Crop and make the preview, then save it to PREVIEW_UPLOAD_DIRECTORY
                 photo = WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
-                File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "/" + code + ".jpg");
+                File prevoutputfile = new File(UploadServlet.PREVIEW_UPLOAD_DIRECTORY + "/" + code + ".jpg");
                 prevoutputfile.createNewFile();
                 ImageIO.write(photo, "jpg", prevoutputfile);
                 //Clear the photo to save memory
@@ -107,13 +107,13 @@ public class Photo extends Item
         //Get the server location and photo from it
         try
         {
-            if (Photo.imagePresentAt(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
+            if (Photo.imagePresentAt(OrderServlet.PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
             {
-                this.previewLocation = PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg";
+                this.previewLocation = "previewimages" + "/" + code + ".jpg";
             }
-            if (Photo.imagePresentAt(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
+            if (Photo.imagePresentAt(OrderServlet.FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
             {
-                this.fullLocation = FULL_UPLOAD_DIRECTORY + "\\" + code + ".png";
+                this.fullLocation = "fullimages" + "/" + code + ".png";
             }
         }
         catch (Exception e)
@@ -134,14 +134,24 @@ public class Photo extends Item
     {
         boolean has = false;
         HttpURLConnection conn = null;
-        URL url = new URL(location);
+        URL url = null;
+        try
+        {
+            url = new URL(location);
 
-        conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("HEAD");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("HEAD");
 
-        String contentType = conn.getContentType();
+            String contentType = conn.getContentType();
 
-        has = contentType.contains("image");
+            has = contentType.contains("image");
+        }
+        catch (Exception e)
+        {
+            // it's probably a file
+            File f = new File(location);
+            return f.exists();
+        }
 
         return has;
     }

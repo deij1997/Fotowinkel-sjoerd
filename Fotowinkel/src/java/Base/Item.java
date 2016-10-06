@@ -58,6 +58,11 @@ public class Item
     {
         this.price = newPrice;
     }
+    
+    public double GetPrice()
+    {
+        return this.price;
+    }
 
     /**
      * Generates a new code for the item

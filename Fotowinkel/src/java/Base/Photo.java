@@ -30,6 +30,8 @@ public class Photo extends Item
     private String previewLocation = "Image not found";
     private String fullLocation = "Image not found";
     private BufferedImage photo;
+    private String title;
+    private String description;
 
     //For the viewmanager; only used to get the location, code and price
     public Photo(double price, String code)
@@ -37,6 +39,14 @@ public class Photo extends Item
         super(price, code);
 
         SetLocation();
+    }
+    
+        //For the viewmanager; only used to get the location, code and price
+    public Photo(double price, String code, String title, String description)
+    {
+        super(price, code);
+        title=this.title;
+        description=this.description;
     }
 
     /**
@@ -164,5 +174,14 @@ public class Photo extends Item
     public String getPreviewLocation()
     {
         return this.previewLocation;
+    }
+    
+    public String GetTitle()
+    {
+        return this.title;
+    }
+    public String GetDescription()
+    {
+        return this.description;
     }
 }

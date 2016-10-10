@@ -138,7 +138,7 @@ public class Database
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("naam")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code")));
             }
         }
         catch (Exception e)
@@ -154,6 +154,49 @@ public class Database
             if (state2 != null)
             {
                 state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+        
+        return photos;
+        
+    }
+    
+ public List<Photo> GetAllPhotos() throws SQLException
+    {
+        List<Photo> photos = new ArrayList<Photo>();
+
+        
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try
+        {
+            con = DriverManager.getConnection(url1, user1, pass1);
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM ITEM");
+
+            while (rs.next())
+            {
+                photos.add(new Photo(rs.getDouble("prijs"), rs.getString("code"), rs.getString("title"),rs.getString("description")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.close();
+            }
+            if (st != null)
+            {
+                st.close();
             }
             if (con != null)
             {

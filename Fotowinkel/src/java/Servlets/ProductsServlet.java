@@ -24,6 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ProductsServlet", urlPatterns = {"/ProductsServlet"})
 public class ProductsServlet extends HttpServlet {
 
+
+    public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
+    public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,37 +38,52 @@ public class ProductsServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
+
+        FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
+        PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try {
+        try
+        {
+
             Database db = new Database();
 
             List<Photo> photos = db.GetAllPhotos();
-            for (Photo p : photos) {
-                out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
-                        + "<div class=\"thumbnail\">"
-                        + "<img src=\"http://www.ceramics-sa-cape.co.za/wp-content/uploads/2015/07/profile3-320x150.jpg\" alt=\"\">"
-                        + "<div class=\"caption\">"
-                        + "<h4 class=\"pull-right\">" + p.GetPrice()+"</h4>"
-                        + "<h4><a href=\"#\">"+p.GetTitle()+"</a></h4>"
-                        + "<p>"+p.GetDescription()+"</p>"
-                        + "</div>"
-                        + "<div class=\"ratings\">"
-                        + "<p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Buy</a></p>"
-                        + "<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>"
-                        + "</div>"
-                        + "</div>"
-                        + "</div>");
+
+            for (Photo p : photos)
+            {
+                String imgurl = p.getPreviewLocation();
+                double price = p.GetPrice();
+                String title = "test";
+                String description = "een mooie foto.";
+                
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n" +
+"                        <div class=\"thumbnail\">\n" +
+"                            <img src=\""+imgurl+" alt=\"\">\n" +
+"                            <div class=\"caption\">\n" +
+"                                <h4 class=\"pull-right\">"+ price+"</h4>\n" +
+"                                <h4><a href=\"#\">"+title+"</a>\n" +
+"                                </h4>\n" +
+"                                <p>"+description+"</p>\n" +
+"                            </div>\n" +
+"                            <div class=\"ratings\">\n" +
+"                                <p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Buy</a></p>\n" +
+"                                <p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n" +
+"                            </div>\n" +
+"                        </div>\n" +
+"                    </div>");
             }
 
-        }        
-        catch (SQLException sql)
+        }
+        catch (SQLException ehroar)
         {
-            out.println(sql.getMessage());
-        } 
-        
-        finally {
+            out.println(ehroar.getMessage());
+        }
+        finally
+        {
             out.close();
         }
     }
@@ -80,7 +99,8 @@ public class ProductsServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -94,7 +114,8 @@ public class ProductsServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -104,8 +125,8 @@ public class ProductsServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
-
 }

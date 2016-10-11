@@ -88,18 +88,14 @@ public class UploadServlet extends HttpServlet
             upload.setFileSizeMax(MAX_FILE_SIZE);
             upload.setSizeMax(MAX_REQUEST_SIZE);
 
-            //Constructs the directory path to store upload file
-            String uploadPath = getServletContext().getRealPath("") + File.separator + FULL_UPLOAD_DIRECTORY;
             //Creates the directory if it does not exist
-            File uploadDir = new File(uploadPath);
+            File uploadDir = new File(FULL_UPLOAD_DIRECTORY);
             if (!uploadDir.exists())
             {
                 uploadDir.mkdir();
             }
-            //Constructs the directory path to store upload file
-            uploadPath = getServletContext().getRealPath("") + File.separator + PREVIEW_UPLOAD_DIRECTORY;
             //Creates the directory if it does not exist
-            uploadDir = new File(uploadPath);
+            uploadDir = new File(PREVIEW_UPLOAD_DIRECTORY);
             if (!uploadDir.exists())
             {
                 uploadDir.mkdir();

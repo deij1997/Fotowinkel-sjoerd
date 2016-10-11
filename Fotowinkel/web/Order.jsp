@@ -37,8 +37,22 @@
                 
                 <div class="col-md-9">
                 
-                <div class="row">
+                <div class="row" id="demo">
+                    <h2>test</h2>
+                    <script>
+                        window.onload = function loadDoc() {
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    document.getElementById("demo").innerHTML = this.responseText;// + "<h2>test1</h2>";
+                                }
+                            };
+                            xhttp.open("GET", "OrderServlet", true);
+                            xhttp.send();
+                        }
+                    </script>
                     
+                    <!--
                     <div class="col-sm-4 col-md-12">
                         
                         <div class="thumbnail">
@@ -130,7 +144,7 @@
                         </div>
                     
                     </div>              
-                
+                -->
                 </div>
                     
                     <div class="row">

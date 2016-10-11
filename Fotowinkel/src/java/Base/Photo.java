@@ -152,6 +152,11 @@ public class Photo extends Item
 
         return has;
     }
+    
+    public void SetCode(String newCode)
+    {
+        this.code = newCode;
+    }
 
     public String GetFullLocation()
     {

@@ -7,8 +7,9 @@ package Base;
 
 import Exceptions.UploadFailed;
 import Helpers.WaterMarker;
-import static Servlets.UploadServlet.FULL_UPLOAD_DIRECTORY;
-import static Servlets.UploadServlet.PREVIEW_UPLOAD_DIRECTORY;
+import Servlets.OrderServlet;
+import Servlets.UploadServlet;
+import static Servlets.UploadServlet.WATERMARK_LOCATION;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,17 +25,40 @@ import javax.imageio.ImageIO;
 public class Photo extends Item
 {
     public static final double DEFAULT_PRICE = 5.00;
-    private static final String WATERMARK_LOCATION = "/Images/watermark.png";
     private static BufferedImage WaterMarkImage;
     private static final String MISSING_LOCATION = "???";
     private String previewLocation = "Image not found";
     private String fullLocation = "Image not found";
     private BufferedImage photo;
+    private String title;
+    private String description;
 
     //For the viewmanager; only used to get the location, code and price
     public Photo(double price, String code)
     {
         super(price, code);
+
+        SetLocation();
+    }
+    
+        //For the viewmanager; only used to get the location, code and price
+    public Photo(double price, String code, String title, String description)
+    {
+        super(price, code);
+        title=this.title;
+        description=this.description;
+    }
+
+    /**
+     * Creates a photo for the photographer to upload A code is not generated
+     * with this
+     *
+     * @param price The price of the photo
+     * @param photoBitmap The image of the photo
+     */
+    public Photo(double price, BufferedImage photoBitmap)
+    {
+        super(price, true);
         if (WaterMarkImage == null)
         {
             //Get new watermark image
@@ -48,20 +72,6 @@ public class Photo extends Item
                 System.out.println("[ERROR] Could not retrieve watermark image");
             }
         }
-
-        SetLocation();
-    }
-
-    /**
-     * Creates a photo for the photographer to upload A code is not generated
-     * with this
-     *
-     * @param price The price of the photo
-     * @param photoBitmap The image of the photo
-     */
-    public Photo(double price, BufferedImage photoBitmap)
-    {
-        super(price, false);
         photo = photoBitmap;
         SetLocation();
     }
@@ -79,19 +89,22 @@ public class Photo extends Item
             try
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
-                File fulloutputfile = new File(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png");
+                File fulloutputfile = new File(UploadServlet.FULL_UPLOAD_DIRECTORY + "/" + code + ".png");
+                fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
                 //Crop and make the preview, then save it to PREVIEW_UPLOAD_DIRECTORY
-                WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
-                File prevoutputfile = new File(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg");
+                photo = WaterMarker.AddToImage(photo, WaterMarkImage, 500, true);
+                File prevoutputfile = new File(UploadServlet.PREVIEW_UPLOAD_DIRECTORY + "/" + code + ".jpg");
+                prevoutputfile.createNewFile();
                 ImageIO.write(photo, "jpg", prevoutputfile);
                 //Clear the photo to save memory
                 photo = null;
+                SetLocation();
             }
             catch (IOException ex)
             {
-                throw new UploadFailed();
+                throw new UploadFailed(ex.getMessage());
             }
         }
     }
@@ -104,13 +117,13 @@ public class Photo extends Item
         //Get the server location and photo from it
         try
         {
-            if (Photo.imagePresentAt(PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
+            if (Photo.imagePresentAt(OrderServlet.PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
             {
-                this.previewLocation = PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg";
+                this.previewLocation = "previewimages" + "/" + code + ".jpg";
             }
-            if (Photo.imagePresentAt(FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
+            if (Photo.imagePresentAt(OrderServlet.FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
             {
-                this.fullLocation = FULL_UPLOAD_DIRECTORY + "\\" + code + ".png";
+                this.fullLocation = "fullimages" + "/" + code + ".png";
             }
         }
         catch (Exception e)
@@ -131,14 +144,24 @@ public class Photo extends Item
     {
         boolean has = false;
         HttpURLConnection conn = null;
-        URL url = new URL(location);
+        URL url = null;
+        try
+        {
+            url = new URL(location);
 
-        conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("HEAD");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("HEAD");
 
-        String contentType = conn.getContentType();
+            String contentType = conn.getContentType();
 
-        has = contentType.contains("image");
+            has = contentType.contains("image");
+        }
+        catch (Exception e)
+        {
+            // it's probably a file
+            File f = new File(location);
+            return f.exists();
+        }
 
         return has;
     }
@@ -151,5 +174,14 @@ public class Photo extends Item
     public String getPreviewLocation()
     {
         return this.previewLocation;
+    }
+    
+    public String GetTitle()
+    {
+        return this.title;
+    }
+    public String GetDescription()
+    {
+        return this.description;
     }
 }

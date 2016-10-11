@@ -15,9 +15,10 @@ import java.util.List;
  */
 public class Database
 {
-    private static String url1 = "jdbc:mysql://188.166.100.75:3306/S32CDB";
-    private static String user1 = "S32C";
-    private static String pass1 = "proftaak";
+    private final static String url1 = "jdbc:mysql://web0095.zxcs.nl/u4951p4091_fotowinkel";
+    private final static String user1 = "u4951p4091_prof";
+    private final static String pass1 = "fotos";
+    private final static String driver = "com.mysql.jdbc.Driver";
     private Connection con;
 
     public Connection getCon()
@@ -27,24 +28,21 @@ public class Database
 
     public Database()
     {
+        createConnection();
+    }
+    
+    public void createConnection()
+    {
         try
         {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url1, user1, pass1);
+            Class.forName(driver).newInstance();
+            con = DriverManager.getConnection(url1, user1, pass1);
 
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-    }
-
-    //Sets the connection that needs to be used when collecting data from the database
-    //Returns the connection
-    public static Connection SetConnection() throws SQLException
-    {
-        Connection connection;
-        return connection = DriverManager.getConnection(url1, user1, pass1);
     }
 
     //Test the connection of the database using a simple query
@@ -54,8 +52,6 @@ public class Database
         boolean succes = false;
         try
         {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url1, user1, pass1);
             Statement state = con.createStatement();
             ResultSet result = state.executeQuery("Select * From Test");
             while (result.next())
@@ -89,20 +85,18 @@ public class Database
     public List<Photo> GetPhotos(String code) throws SQLException
     {
         List<Photo> photos = new ArrayList<Photo>();
-        Connection con = null;
         Statement state1 = null;
         ResultSet rs1 = null;
         PreparedStatement state2 = null;
         ResultSet rs2 = null;
-        String query = "Select * From Item Where Naam Like '" + code + "%'";
+        String query = "Select * From item Where klantid Like '" + code + "%'";
         try
         {
-            con = Database.SetConnection();
             state2 = con.prepareStatement(query);
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                photos.add(new Photo(rs2.getDouble("Prijs"), rs2.getString("Naam")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("naam")));
             }
         }
         catch (Exception e)
@@ -137,15 +131,14 @@ public class Database
         ResultSet rs1 = null;
         PreparedStatement state2 = null;
         ResultSet rs2 = null;
-        String query = "Select * From Item Where Klanthashedid = " + Klantid + "";
+        String query = "Select * From item Where klanthashedid = " + Klantid + "";
         try
         {
-            con = Database.SetConnection();
             state2 = con.prepareStatement(query);
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                photos.add(new Photo(rs2.getDouble("Prijs"), rs2.getString("Naam")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code")));
             }
         }
         catch (Exception e)
@@ -161,6 +154,49 @@ public class Database
             if (state2 != null)
             {
                 state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+        
+        return photos;
+        
+    }
+    
+ public List<Photo> GetAllPhotos() throws SQLException
+    {
+        List<Photo> photos = new ArrayList<Photo>();
+
+        
+        Connection con = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try
+        {
+            con = DriverManager.getConnection(url1, user1, pass1);
+            st = con.createStatement();
+            rs = st.executeQuery("SELECT * FROM ITEM");
+
+            while (rs.next())
+            {
+                photos.add(new Photo(rs.getDouble("prijs"), rs.getString("code"), rs.getString("title"),rs.getString("description")));
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs != null)
+            {
+                rs.close();
+            }
+            if (st != null)
+            {
+                st.close();
             }
             if (con != null)
             {

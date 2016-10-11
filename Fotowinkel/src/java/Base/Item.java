@@ -5,6 +5,10 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Rowan
@@ -24,7 +28,12 @@ public class Item
     {
         if (generateCode)
         {
-            GenerateNewCode();
+            
+            try {
+                GenerateNewCode();
+            } catch (RandomiserFail ex) {
+        throw new UnsupportedOperationException("GenerateNewCode gaat fout.");
+            }
         }
     }
 
@@ -49,13 +58,18 @@ public class Item
     {
         this.price = newPrice;
     }
+    
+    public double GetPrice()
+    {
+        return this.price;
+    }
 
     /**
      * Generates a new code for the item
      *
      * @return The new code of the product
      */
-    public String GenerateNewCode()
+    public String GenerateNewCode() throws RandomiserFail
     {
         String[] codes = Encoder.GenerateCodeStrings(1);
         this.code = codes[0];

@@ -65,8 +65,21 @@
 
                 </div>
 
-                <div class="row">
-
+                <div class="row" id="demo">
+                    
+                        <script>
+                        window.onload = function loadDoc() {
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    document.getElementById("demo").innerHTML = this.responseText;>";
+                                }
+                            };
+                            xhttp.open("GET", "ProductsServlet", true);
+                            xhttp.send();
+                        }
+                    </script>
+<%-- 
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
                             <img src="http://www.ceramics-sa-cape.co.za/wp-content/uploads/2015/07/profile3-320x150.jpg" alt="">
@@ -161,7 +174,7 @@
                                 <p> Quantity: <input type="number" name="aantal"style="width:50px;height:30px;"></p>
                             </div>
                         </div>
-                    </div>
+                    </div> --%> 
 
                 </div>
 

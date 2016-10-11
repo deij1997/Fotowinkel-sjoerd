@@ -129,7 +129,7 @@ and open the template in the editor.
 
 #upload-button{
     display: block;
-    margin: auto;
+    margin: 10px auto;
     width: 40%;
     height: 40px;
     background: rgb(220, 220,225);
@@ -141,4 +141,58 @@ and open the template in the editor.
     background: rgb(235, 235,240);
     cursor: pointer;    
 
+}
+
+#uploadedImages{
+    width: 80%;
+    margin: 10px auto;
+    background: rgb(255, 255, 255);
+    border:solid rgb(240,240,240) 10px;
+    position: relative;
+    padding: 50px;
+    text-align: center;
+}
+
+#imageRow{
+        width: 100%;
+        border: solid 1px #999;
+        height: 100px;
+    
+}
+
+#leftArrow{
+    float:left;
+        background-image: url("../Images/leftArrow.gif");
+
+}
+
+#rightArrow{
+    float:right;
+    background-image: url("../Images/rightArrow.gif");
+
+}
+
+.arrow{
+    opacity: 0.7;
+    background-size: contain;
+    background-repeat: no-repeat;
+   background-position: center;
+    height: 100%;
+    width: 40px;
+    cursor: pointer;
+    border: double #999 1px;
+}
+.arrow:hover{
+    opacity: 0.9;
+}
+
+.standardImageBox{
+    border: solid 2px #737373;
+    margin:3px;
+    height: calc(100% - 6px);
+    width: 100px;
+    float:left;
+    background-image: url("../Images/defaultPicture.gif");
+    background-size: cover;
+    cursor: pointer;
 }

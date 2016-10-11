@@ -91,6 +91,11 @@ public class Photo extends Item
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
                 File fulloutputfile = new File(UploadServlet.FULL_UPLOAD_DIRECTORY + "/" + code + ".png");
+                if (fulloutputfile.exists())
+                {
+                    throw new UploadFailed("Er is een fout opgetreden. Probeer het opnieuw\r\nFoto met code bestaat al");
+                }
+                
                 fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 

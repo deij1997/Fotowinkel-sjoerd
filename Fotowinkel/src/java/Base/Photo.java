@@ -116,22 +116,8 @@ public class Photo extends Item
     private void SetLocation()
     {
         //Get the server location and photo from it
-        try
-        {
-            if (Photo.imagePresentAt(OrderServlet.PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
-            {
-                this.previewLocation = "previewimages" + "/" + code + ".jpg";
-            }
-            if (Photo.imagePresentAt(OrderServlet.FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
-            {
-                this.fullLocation = "fullimages" + "/" + code + ".png";
-            }
-        }
-        catch (Exception e)
-        {
-            this.previewLocation = Photo.MISSING_LOCATION;
-            this.fullLocation = Photo.MISSING_LOCATION;
-        }
+        this.previewLocation = "previewimages" + "/" + code + ".jpg";
+        this.fullLocation = "fullimages" + "/" + code + ".png";
     }
 
     /**
@@ -186,10 +172,10 @@ public class Photo extends Item
     {
         return this.description;
     }
-    
+
     public String GetPriceAsString()
     {
         return "€ " + String.format("%.2f", this.GetPrice());
     }
-    
+
 }

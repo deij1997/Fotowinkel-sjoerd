@@ -157,40 +157,4 @@ public class OrderServlet extends HttpServlet
     {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo()
-    {
-        return "Short description";
-    }// </editor-fold>
-
 }
-/*
-<div class="col-sm-4 col-md-12">
-                        
-                        <div class="thumbnail">
-                            <img src="http://www.smart-promotions.nl/upload/800x600/Chocolate_Chip_Koekje.jpg" style="max-width: 15%" class="pull-left" alt="">
-                            
-                            <div class="caption">
-                                <h4 class="pull-right">€4.99</h4>
-                                <h4>
-                                    <a href="#">koekske</a>
-                                </h4>
-                                <p>lekker koekske.</p>
-                                
-                                <div class="ratings">
-                                    <p class="pull-right"> Stuks </p>
-                                    <p class="pull-right">3&nbsp&nbsp</p>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                        
-                    </div>
- */

@@ -131,4 +131,3 @@ public final class WaterMarker {
         return bimage;
     }
 }
->>>>>>> 24838d45e6971b248a53eba1a6fc5de878fd3cd7

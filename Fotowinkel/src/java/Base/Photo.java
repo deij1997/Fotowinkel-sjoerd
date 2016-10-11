@@ -45,8 +45,8 @@ public class Photo extends Item
     public Photo(double price, String code, String title, String description)
     {
         super(price, code);
-        title = this.title;
-        description = this.description;
+        this.title = title;
+        this.description = description;
         SetLocation();
     }
 

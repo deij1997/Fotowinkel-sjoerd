@@ -186,4 +186,10 @@ public class Photo extends Item
     {
         return this.description;
     }
+    
+    public String GetPriceAsString()
+    {
+        return "€ " + String.format("%.2f", this.GetPrice());
+    }
+    
 }

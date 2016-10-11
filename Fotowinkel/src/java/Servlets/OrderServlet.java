@@ -9,7 +9,6 @@ import Base.Database;
 import Base.Photo;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,11 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 })
 public class OrderServlet extends HttpServlet
 {
-    public static String imgurl = "";
-    public static double price = 0;
-    public static String title = "";
-    public static String description = "";
-    public static String amount = "";
     public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
 
@@ -62,11 +56,11 @@ public class OrderServlet extends HttpServlet
 
             for (Photo p : photos)
             {
-                imgurl = p.getPreviewLocation();
-                price = p.GetPrice();
-                title = "test";
-                description = "een mooie foto.";
-                amount = "1";
+                String imgurl = p.getPreviewLocation();
+                String price = p.GetPriceAsString();
+                String title = "test";
+                String description = "een mooie foto.";
+                String amount = "1";
                 
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-sm-4 col-md-12\">\n"
@@ -94,7 +88,7 @@ public class OrderServlet extends HttpServlet
             }
 
         }
-        catch (SQLException ehroar)
+        catch (Exception ehroar)
         {
             out.println(ehroar.getMessage());
         }

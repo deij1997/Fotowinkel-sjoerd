@@ -9,6 +9,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
     <script src="http://malsup.github.com/jquery.form.js"></script> 
     <script src="JS/Upload.js"></script>
@@ -39,6 +41,19 @@
 </form>
     </div>
     
+    <div id="uploadedImages" >
+        <div id="imageRow"><div id="leftArrow"class="arrow"></div>
+            <div class="standardImageBox">
+                        </div>
+
+            <div id="rightArrow" class="arrow"></div>
+        
+    </div>
+        
+        <div id="imageData">
+            <span> <label for="imagename">Bestandnaam:</label></span> <span> <input type="text" ></span>
+        </div>
+    </div>
     <script > 
     var inputs = document.querySelectorAll( '.inputfile' );
 Array.prototype.forEach.call( inputs, function( input )

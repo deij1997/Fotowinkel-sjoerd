@@ -40,13 +40,14 @@ public class Photo extends Item
 
         SetLocation();
     }
-    
-        //For the viewmanager; only used to get the location, code and price
+
+    //For the viewmanager; only used to get the location, code and price
     public Photo(double price, String code, String title, String description)
     {
         super(price, code);
-        title=this.title;
-        description=this.description;
+        title = this.title;
+        description = this.description;
+        SetLocation();
     }
 
     /**
@@ -175,11 +176,12 @@ public class Photo extends Item
     {
         return this.previewLocation;
     }
-    
+
     public String GetTitle()
     {
         return this.title;
     }
+
     public String GetDescription()
     {
         return this.description;

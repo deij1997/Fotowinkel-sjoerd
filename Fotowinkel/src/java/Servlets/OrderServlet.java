@@ -54,6 +54,8 @@ public class OrderServlet extends HttpServlet
 
             List<Photo> photos = db.GetPhotos(klantcode);
 
+            double dtprice = 0;
+            
             for (Photo p : photos)
             {
                 String imgurl = p.getPreviewLocation();
@@ -61,7 +63,7 @@ public class OrderServlet extends HttpServlet
                 String title = "test";
                 String description = "een mooie foto.";
                 String amount = "1";
-                
+
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-sm-4 col-md-12\">\n"
                             + "                        \n"
@@ -85,7 +87,34 @@ public class OrderServlet extends HttpServlet
                             + "                        </div>\n"
                             + "                        \n"
                             + "                    </div>");
+                dtprice += p.GetPrice();
             }
+            String tprice = "€ " + String.format("%.2f", dtprice);
+            out.println(
+                    "                    \n"
+                    + "                    <div class=\"col-sm-12 col-md-12\">\n"
+                    + "                        \n"
+                    + "                        <div class=\"col-sm-4 col-lg-12 col-md-4\">\n"
+                    + "                            \n"
+                    + "                            <div class=\"thumbnail\">\n"
+                    + "                                \n"
+                    + "                                <div class=\"caption\">\n"
+                    + "                                    <h4 class=\"pull-left\">Total</h4>\n"
+                    + "                                    <h4 class=\"pull-right\">" + tprice + "</h4>\n"
+                    + "                                </div>\n"
+                    + "                                \n"
+                    + "                                <div class=\"ratings\">\n"
+                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Buy</a></p>\n"
+                    + "                                    <!--<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>-->\n"
+                    + "                                </div>\n"
+                    + "                            \n"
+                    + "                            </div>\n"
+                    + "                        \n"
+                    + "                        </div>\n"
+                    + "                    \n"
+                    + "                    </div>\n"
+                    + "                \n"
+                    + "                </div>");
 
         }
         catch (Exception ehroar)
@@ -164,4 +193,4 @@ public class OrderServlet extends HttpServlet
                         </div>
                         
                     </div>
-*/
+ */

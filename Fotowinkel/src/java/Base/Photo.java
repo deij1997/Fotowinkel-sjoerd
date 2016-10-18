@@ -40,13 +40,14 @@ public class Photo extends Item
 
         SetLocation();
     }
-    
-        //For the viewmanager; only used to get the location, code and price
+
+    //For the viewmanager; only used to get the location, code and price
     public Photo(double price, String code, String title, String description)
     {
         super(price, code);
-        title=this.title;
-        description=this.description;
+        this.title = title;
+        this.description = description;
+        SetLocation();
     }
 
     /**
@@ -90,6 +91,11 @@ public class Photo extends Item
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
                 File fulloutputfile = new File(UploadServlet.FULL_UPLOAD_DIRECTORY + "/" + code + ".png");
+                if (fulloutputfile.exists())
+                {
+                    throw new UploadFailed("Er is een fout opgetreden. Probeer het opnieuw\r\nFoto met code bestaat al");
+                }
+                
                 fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
@@ -115,22 +121,8 @@ public class Photo extends Item
     private void SetLocation()
     {
         //Get the server location and photo from it
-        try
-        {
-            if (Photo.imagePresentAt(OrderServlet.PREVIEW_UPLOAD_DIRECTORY + "\\" + code + ".jpg"))
-            {
-                this.previewLocation = "previewimages" + "/" + code + ".jpg";
-            }
-            if (Photo.imagePresentAt(OrderServlet.FULL_UPLOAD_DIRECTORY + "\\" + code + ".png"))
-            {
-                this.fullLocation = "fullimages" + "/" + code + ".png";
-            }
-        }
-        catch (Exception e)
-        {
-            this.previewLocation = Photo.MISSING_LOCATION;
-            this.fullLocation = Photo.MISSING_LOCATION;
-        }
+        this.previewLocation = "previewimages" + "/" + code + ".jpg";
+        this.fullLocation = "fullimages" + "/" + code + ".png";
     }
 
     /**
@@ -165,6 +157,11 @@ public class Photo extends Item
 
         return has;
     }
+    
+    public void SetCode(String newCode)
+    {
+        this.code = newCode;
+    }
 
     public String GetFullLocation()
     {
@@ -175,13 +172,20 @@ public class Photo extends Item
     {
         return this.previewLocation;
     }
-    
+
     public String GetTitle()
     {
         return this.title;
     }
+
     public String GetDescription()
     {
         return this.description;
     }
+
+    public String GetPriceAsString()
+    {
+        return "€ " + String.format("%.2f", this.GetPrice());
+    }
+
 }

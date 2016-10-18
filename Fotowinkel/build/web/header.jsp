@@ -19,7 +19,7 @@
 		</nav>
 
 		<ul>
-			<li><a href="#">Login</a></li>
+			<li><a href="upload.jsp">Login</a></li>
 			<li><a href="#">Sign up</a></li>
 		</ul>
 

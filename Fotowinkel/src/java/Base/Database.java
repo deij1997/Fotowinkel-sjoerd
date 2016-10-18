@@ -30,7 +30,7 @@ public class Database
     {
         createConnection();
     }
-    
+
     public void createConnection()
     {
         try
@@ -81,22 +81,20 @@ public class Database
             System.out.print("QQQQQQQQQQQQQQQQQQQQQ, tranen vol gestacked!");
         }
     }
-    
+
     public List<Photo> GetPhotos(String code) throws SQLException
     {
         List<Photo> photos = new ArrayList<Photo>();
-        Statement state1 = null;
-        ResultSet rs1 = null;
         PreparedStatement state2 = null;
         ResultSet rs2 = null;
-        String query = "Select * From item Where klantid Like '" + code + "%'";
+        String query = "Select * From `item` Where klantid Like '" + code + "%'";
         try
         {
             state2 = con.prepareStatement(query);
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("naam")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
             }
         }
         catch (Exception e)
@@ -118,17 +116,14 @@ public class Database
                 con.close();
             }
         }
-        
+
         return photos;
-        
+
     }
-    
+
     public List<Photo> GetPhotosByKlantHashedId(int Klantid) throws SQLException
     {
         List<Photo> photos = new ArrayList<Photo>();
-        Connection con = null;
-        Statement state1 = null;
-        ResultSet rs1 = null;
         PreparedStatement state2 = null;
         ResultSet rs2 = null;
         String query = "Select * From item Where klanthashedid = " + Klantid + "";
@@ -138,7 +133,7 @@ public class Database
             rs2 = state2.executeQuery();
             while (rs2.next())
             {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
             }
         }
         catch (Exception e)
@@ -160,28 +155,24 @@ public class Database
                 con.close();
             }
         }
-        
+
         return photos;
-        
+
     }
-    
- public List<Photo> GetAllPhotos() throws SQLException
+
+    public List<Photo> GetAllPhotos() throws SQLException
     {
         List<Photo> photos = new ArrayList<Photo>();
-
-        
-        Connection con = null;
-        Statement st = null;
-        ResultSet rs = null;
+        PreparedStatement state2 = null;
+        ResultSet rs2 = null;
+        String query = "Select * From `item`";
         try
         {
-            con = DriverManager.getConnection(url1, user1, pass1);
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM ITEM");
-
-            while (rs.next())
+            state2 = con.prepareStatement(query);
+            rs2 = state2.executeQuery();
+            while (rs2.next())
             {
-                photos.add(new Photo(rs.getDouble("prijs"), rs.getString("code"), rs.getString("title"),rs.getString("description")));
+                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
             }
         }
         catch (Exception e)
@@ -190,21 +181,20 @@ public class Database
         }
         finally
         {
-            if (rs != null)
+            if (rs2 != null)
             {
-                rs.close();
+                rs2.close();;
             }
-            if (st != null)
+            if (state2 != null)
             {
-                st.close();
+                state2.close();
             }
             if (con != null)
             {
                 con.close();
             }
         }
-        
+
         return photos;
-        
     }
 }

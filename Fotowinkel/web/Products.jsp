@@ -39,8 +39,8 @@
                     <div class="col-md-12">
                         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
-                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="0" ></li>
+                                <li data-target="#carousel-example-generic" data-slide-to="1" class="active"></li>
                                 <li data-target="#carousel-example-generic" data-slide-to="2"></li>
                             </ol>
                             <div class="carousel-inner">
@@ -67,12 +67,12 @@
 
                 <div class="row" id="demo">
                     
-                        <script>
+                    <script>
                         window.onload = function loadDoc() {
                             var xhttp = new XMLHttpRequest();
                             xhttp.onreadystatechange = function() {
                                 if (this.readyState == 4 && this.status == 200) {
-                                    document.getElementById("demo").innerHTML = this.responseText;>";
+                                    document.getElementById("demo").innerHTML = this.responseText;
                                 }
                             };
                             xhttp.open("GET", "ProductsServlet", true);

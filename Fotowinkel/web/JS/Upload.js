@@ -9,13 +9,12 @@
         $('#upload-form').ajaxForm({
 success: function( response)
         {
-            if(typeof response === 'undefined')
+            if(typeof response === 'Upload has been done successfully!')
             {
                 // Success so call function to process the form
                // submitForm(event, data);
                 console.log(response);
-                               console.log('ERRORS: ' + response);
-
+                
             }
             else
             {

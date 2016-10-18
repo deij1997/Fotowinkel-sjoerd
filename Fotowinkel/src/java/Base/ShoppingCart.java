@@ -1,6 +1,7 @@
 package Base;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -8,19 +9,21 @@ import java.util.HashMap;
  * oh god, I have no idea what I'm doing
  */
 public class ShoppingCart {
-    HashMap hm = new HashMap();
-    String CookieHash;
-    
-    
-    
-    public String GetCookieHash()
+    Map hm = new HashMap();
+ 
+    public ShoppingCart()
     {
-        return CookieHash;
+        
     }
     
     public void AddItemToBasket(Item product, int amount)
     {
-        hm.put(product, amount);
+        hm.put(product.code, amount);
+    }
+    
+    public Map getAllProducts()
+    {
+        return hm;
     }
     
 

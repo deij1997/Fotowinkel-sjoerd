@@ -353,3 +353,18 @@ body {
 
 }
 
+
+
+/*Images*/
+
+.previewPhoto{
+    height: 250px;   
+    background-image: url("../previewimages/1.jpg"), url("../Images/notfound.png");
+    background-size:  contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    width:100%;
+    
+    
+}

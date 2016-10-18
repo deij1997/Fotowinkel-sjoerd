@@ -21,7 +21,7 @@
         <%@include file="header.jsp" %>
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3" id="detailbox">
                     <p class="lead">Details</p>
                     <p class="pull-right">test</p><p>Name: </p>
                     <p class="pull-right">test</p><p>Last name: </p>

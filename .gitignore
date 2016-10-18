@@ -14,5 +14,5 @@ hs_err_pid*
 /Fotowinkel/dist/
 /Fotowinkel/.jacocoverage/
 /Fotowinkel/build/
-Fotowinkel/build/
+/Fotowinkel/build/web
 /Fotowinkel/.idea

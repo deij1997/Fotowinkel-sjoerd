@@ -197,4 +197,45 @@ public class Database
 
         return photos;
     }
+
+    public void UpdatePhotos(List<Photo> photos) throws SQLException
+    {
+        PreparedStatement state2 = null;
+        ResultSet rs2 = null;
+        try
+        {
+            for (Photo p : photos)
+            {
+                String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
+                state2 = con.prepareStatement(query);
+                rs2 = state2.executeQuery();
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            if (rs2 != null)
+            {
+                rs2.close();;
+            }
+            if (state2 != null)
+            {
+                state2.close();
+            }
+            if (con != null)
+            {
+                con.close();
+            }
+        }
+    }
+
+    public void UpdatePhoto(Photo photo) throws SQLException
+    {
+        List<Photo> photos = new ArrayList<Photo>();
+        photos.add(photo);
+        UpdatePhotos(photos);
+    }
 }

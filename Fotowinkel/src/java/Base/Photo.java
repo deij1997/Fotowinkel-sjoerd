@@ -7,7 +7,6 @@ package Base;
 
 import Exceptions.UploadFailed;
 import Helpers.WaterMarker;
-import Servlets.OrderServlet;
 import Servlets.UploadServlet;
 import static Servlets.UploadServlet.WATERMARK_LOCATION;
 import java.awt.image.BufferedImage;
@@ -134,14 +133,12 @@ public class Photo extends Item
      */
     public static boolean imagePresentAt(final String location) throws Exception
     {
-        boolean has = false;
-        HttpURLConnection conn = null;
-        URL url = null;
+        boolean has;
         try
         {
-            url = new URL(location);
+            URL url = new URL(location);
 
-            conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("HEAD");
 
             String contentType = conn.getContentType();
@@ -152,9 +149,8 @@ public class Photo extends Item
         {
             // it's probably a file
             File f = new File(location);
-            return f.exists();
+            has = f.exists();
         }
-
         return has;
     }
     

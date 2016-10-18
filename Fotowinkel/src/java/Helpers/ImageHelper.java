@@ -19,11 +19,12 @@ public class ImageHelper
 {
     public static int CALCULATE_LIGHT_LEVEL = 404;
     static Color sepia = new Color(70, 50, 5);
+    static Color rose = new Color(140, 40, 40);
 
     public static void main(String[] args) throws IOException
     {
         BufferedImage in = ImageIO.read(new File("E:\\Google Drive\\Google Photos\\singing hamster.png"));
-        BufferedImage i = ToColourScale(in, sepia, 0);
+        BufferedImage i = ToColourScale(in, rose, CALCULATE_LIGHT_LEVEL);
         BufferedImage in2 = ImageIO.read(new File("E:\\Google Drive\\Google Photos\\singing hamster.png"));
         BufferedImage i2 = ToSepia(in2);
 
@@ -90,7 +91,7 @@ public class ImageHelper
         if (lightenwith == CALCULATE_LIGHT_LEVEL)
         {
             int r = colour.getRed(), b = colour.getBlue(), g = colour.getGreen();
-            lightenwith = r > b ? (b > g ? b / 2 : g / 2) : (r > g ? r / 2 : g / 2);
+            lightenwith = r > b ? (b < g ? b / 2 : g / 2) : (r < g ? r / 2 : g / 2);
 
         }
 

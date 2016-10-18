@@ -72,8 +72,8 @@ public class ProductsServlet extends HttpServlet
 
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
-                            + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img src=\"" + imgurl + "\" style=\"width: 99%\" alt=\"\">\n"
+                            + "                        <div class=\"thumbnail\" style=\"max-height: 380px\">\n"
+                            + "                            <img src=\"" + imgurl + "\" style=\"width: 99%\" alt=\"\" onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
                             + "                                <h4><a href=\"#\">" + title + "</a>\n"

@@ -102,11 +102,10 @@ public class Database
         {
             //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
             String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
-            String[] parameters = new String[]
+            dab.sendQuery(pquery, new String[]
             {
                 p.GetTitle(), p.GetDescription(), p.code
-            };
-            dab.sendQuery(pquery, parameters);
+            });
         }
         dab.close();
     }
@@ -121,11 +120,10 @@ public class Database
     {
         dab = new LowerDatabase();
         String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
-        String[] parameters = new String[]
-        {
-            email, password
-        };
-        dab.sendQuery(query, parameters);
+        dab.sendQuery(query, new String[]
+              {
+                  email, password
+        });
         boolean ret = dab.hasFoundData();
         dab.close();
         return ret;

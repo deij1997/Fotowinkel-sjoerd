@@ -143,32 +143,28 @@ public class Database
      * Inserts a customer into the database
      *
      * @param email the customer email to add
-     * @return whether the customer was added, or already existed
      * @throws SQLException
      * @throws Exceptions.RandomiserFail
      */
-    public boolean InsertCustomer(String email) throws SQLException, RandomiserFail
+    public void InsertCustomer(String email) throws SQLException, RandomiserFail
     {
-        if (CheckIfCustomerExists(email))
+        dab = new LowerDatabase();
+        String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
+        String[] parameters = new String[]
         {
-            return true;
-        }
-        else
-        {
-            dab = new LowerDatabase();
-            String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
-            String[] parameters = new String[]
-            {
-                Encoder.GetHash(email), email
-            };
-            dab.sendQuery(query, parameters);
-            dab.close();
-            return false;
-        }
+            Encoder.GetHash(email), email
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
     }
 
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
     {
+        if (!CheckIfCustomerExists(customer))
+        {
+            InsertCustomer(customer);
+        }
+
         dab = new LowerDatabase();
         for (Photo p : photos)
         {

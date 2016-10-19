@@ -5,7 +5,8 @@
  */
 package Base;
 
-import static Base.Database.con;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +17,19 @@ import java.sql.SQLException;
  */
 public class LowerDatabase
 {
+    final static String CONNECTION_URL = "jdbc:mysql://web0095.zxcs.nl/u4951p4091_fotowinkel";
+    final static String ACCOUNT_NAME = "u4951p4091_prof";
+    final static String PASSWORD = "fotos";
+    static Connection con;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
-    public LowerDatabase()
+    public LowerDatabase() throws SQLException
     {
-
+        if (con == null || con.isClosed())
+        {
+            con = DriverManager.getConnection(CONNECTION_URL, ACCOUNT_NAME, PASSWORD);
+        }
     }
 
     /**

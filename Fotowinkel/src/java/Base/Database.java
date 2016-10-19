@@ -17,43 +17,32 @@ import java.util.List;
  */
 public class Database
 {
-    private final static String CONNECTION_URL = "jdbc:mysql://web0095.zxcs.nl/u4951p4091_fotowinkel";
-    private final static String ACCOUNT_NAME = "u4951p4091_prof";
-    private final static String PASSWORD = "fotos";
-    private final static String DRIVER = "com.mysql.jdbc.Driver";
-    static Connection con;
-
+    final static String DRIVER = "com.mysql.jdbc.Driver";
     LowerDatabase dab;
-
-    public Connection getCon()
-    {
-        return con;
-    }
 
     public Database()
     {
         try
         {
-            createConnection();
+            Class.forName(DRIVER).newInstance();
+            setUpConnection();
         }
         catch (Exception e)
         {
         }
     }
-
-    private void createConnection() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException
+    
+    public void setUpConnection() throws SQLException
     {
-        if (con != null && !con.isClosed())
+        if (dab == null)
         {
-            return;
+            dab = new LowerDatabase();
         }
-        Class.forName(DRIVER).newInstance();
-        con = DriverManager.getConnection(CONNECTION_URL, ACCOUNT_NAME, PASSWORD);
     }
 
     public List<Photo> GetPhotos(String code) throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         List<Photo> photos = new ArrayList<Photo>();
         String query = "Select * From `item` Where klantid Like '" + code + "%'";
         ResultSet rs2 = dab.getData(query, null);
@@ -68,9 +57,9 @@ public class Database
 
     public List<Photo> GetPhotosByKlantHashedId(int Klantid) throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         List<Photo> photos = new ArrayList<Photo>();
-        String query = "Select * From `item` Where klantid = " + Klantid + "";
+        String query = "Select * From `item` Where klantid = " + Klantid;
         ResultSet rs2 = dab.getData(query, null);
         while (rs2.next())
         {
@@ -83,7 +72,7 @@ public class Database
 
     public List<Photo> GetAllPhotos() throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         List<Photo> photos = new ArrayList<Photo>();
         String query = "Select * From `item`";
         ResultSet rs2 = dab.getData(query, null);
@@ -98,7 +87,7 @@ public class Database
 
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         for (Photo p : photos)
         {
             //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
@@ -118,7 +107,7 @@ public class Database
 
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
         dab.sendQuery(query, new String[]
               {
@@ -131,11 +120,10 @@ public class Database
 
     public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
         dab.sendQuery(query, null);
         boolean ret = dab.hasFoundData();
-        dab.close();
         return ret;
     }
 
@@ -146,16 +134,15 @@ public class Database
      * @throws SQLException
      * @throws Exceptions.RandomiserFail
      */
-    public void InsertCustomer(String email) throws SQLException, RandomiserFail
+    private void InsertCustomer(String email) throws SQLException, RandomiserFail
     {
-        dab = new LowerDatabase();
+        setUpConnection();
         String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
         String[] parameters = new String[]
         {
             Encoder.GetHash(email), email
         };
         dab.sendQuery(query, parameters);
-        dab.close();
     }
 
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
@@ -165,7 +152,6 @@ public class Database
             InsertCustomer(customer);
         }
 
-        dab = new LowerDatabase();
         for (Photo p : photos)
         {
             String pquery = "Insert into `item`(`code`, `klantid`, `prijs`, `fotograafid`, `title`, `description`) VALUES(?,?,?,?,?,?)";

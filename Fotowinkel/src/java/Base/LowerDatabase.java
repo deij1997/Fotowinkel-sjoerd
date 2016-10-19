@@ -106,15 +106,15 @@ public class LowerDatabase
      */
     protected void close() throws SQLException
     {
-        if (result != null && !result.isClosed())
+        if (result != null || !result.isClosed())
         {
             result.close();
         }
-        if (statement != null && !statement.isClosed())
+        if (statement != null || !statement.isClosed())
         {
             statement.close();
         }
-        if (con != null && !con.isClosed())
+        if (con != null || !con.isClosed())
         {
             con.close();
         }
@@ -123,6 +123,7 @@ public class LowerDatabase
     @Override
     protected void finalize() throws Throwable
     {
+        this.close();
         super.finalize();
     }
 }

@@ -31,7 +31,7 @@ public class Encoder
             MessageDigest md = MessageDigest.getInstance("MD5");
 
             byte[] generated = md.digest(GenerateRandomByteArray());
-            String number = Arrays.toString(generated).replaceAll("\\D+", "");;
+            String number = Arrays.toString(generated).replaceAll("\\D+", "");
 
             String[] ret = new String[amount];
             for (int i = 0; i < amount; i++)
@@ -53,7 +53,7 @@ public class Encoder
         {
             MessageDigest md = MessageDigest.getInstance("MD5");
 
-            return md.digest(input.getBytes("UTF-8")).toString();
+            return Arrays.toString(md.digest(input.getBytes("UTF-8"))).replaceAll("\\D+", "");
         }
         catch (Exception ex)
         {

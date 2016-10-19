@@ -5,6 +5,7 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,7 +70,7 @@ public class Database
     {
         dab = new LowerDatabase();
         List<Photo> photos = new ArrayList<Photo>();
-        String query = "Select * From item Where klanthashedid = " + Klantid + "";
+        String query = "Select * From `item` Where klantid = " + Klantid + "";
         ResultSet rs2 = dab.getData(query, null);
         while (rs2.next())
         {
@@ -103,8 +104,8 @@ public class Database
             //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
             String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
             dab.sendQuery(pquery, new String[]
-            {
-                p.GetTitle(), p.GetDescription(), p.code
+                  {
+                      p.GetTitle(), p.GetDescription(), p.code
             });
         }
         dab.close();
@@ -112,8 +113,7 @@ public class Database
 
     public void UpdatePhoto(Photo photo) throws SQLException
     {
-        List<Photo> photos = Arrays.asList(photo);
-        UpdatePhotos(photos);
+        UpdatePhotos(Arrays.asList(photo));
     }
 
     public boolean ValidateCredentials(String email, String password) throws SQLException
@@ -129,8 +129,62 @@ public class Database
         return ret;
     }
 
-    public boolean CheckIfCustomerExists(String email)
+    public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
-        return false;
+        dab = new LowerDatabase();
+        String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
+        dab.sendQuery(query, null);
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
+
+    /**
+     * Inserts a customer into the database
+     *
+     * @param email the customer email to add
+     * @return whether the customer was added, or already existed
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    public boolean InsertCustomer(String email) throws SQLException, RandomiserFail
+    {
+        if (CheckIfCustomerExists(email))
+        {
+            return true;
+        }
+        else
+        {
+            dab = new LowerDatabase();
+            String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
+            String[] parameters = new String[]
+            {
+                Encoder.GetHash(email), email
+            };
+            dab.sendQuery(query, parameters);
+            dab.close();
+            return false;
+        }
+    }
+
+    public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
+    {
+        dab = new LowerDatabase();
+        for (Photo p : photos)
+        {
+            String pquery = "Insert into `item`(`code`, `klantid`, `prijs`, `fotograafid`, `title`, `description`) VALUES(?,?,?,?,?,?)";
+            dab.sendQuery(pquery, new String[]
+                  {
+                      //TODO Please note that price can differ in dots and commas, depending on OS language
+                      p.code, (customer.contains("@") ? Encoder.GetHash(customer) : customer), String.format(".2%f%n", p.price),
+                      (photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), p.GetTitle(), p.GetDescription()
+            });
+        }
+        dab.close();
+    }
+
+    public void InsertPhoto(Photo photo, String customer, String photograhper) throws SQLException, RandomiserFail
+    {
+        InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
 }

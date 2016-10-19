@@ -26,6 +26,7 @@ public class LowerDatabase
 
     /**
      * Sends a query to the database
+     * @deprecated DOES NOT CHECK FOR SQL INJECTION. DO ONLY USE IF 100% THAT NO SQL INJECTIONS WILL BE POSSIBLE, EVEN IN THE FUTURE
      * @param query The query to send, does not check for injection
      * @throws SQLException
      */
@@ -67,6 +68,7 @@ public class LowerDatabase
 
     /**
      * Returns the data given by a query
+     * @deprecated DOES NOT CHECK FOR SQL INJECTION. DO ONLY USE IF 100% THAT NO SQL INJECTIONS WILL BE POSSIBLE, EVEN IN THE FUTURE
      * @param query The query that needs to be sent, does not check for injection
      * @return A resultset containing the data received from the query
      * @throws SQLException 

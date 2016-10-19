@@ -120,8 +120,12 @@ public class Database
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
         dab = new LowerDatabase();
-        String query = "Select * From `fotograaf` where email = '" + email + "', wachtwoord = '" + password + "'";
-        dab.sendQuery(query);
+        String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
+        String[] parameters = new String[]
+        {
+            email, password
+        };
+        dab.sendQuery(query, parameters);
         boolean ret = dab.hasFoundData();
         dab.close();
         return ret;

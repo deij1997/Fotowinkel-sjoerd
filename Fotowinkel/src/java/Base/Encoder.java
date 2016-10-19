@@ -6,12 +6,9 @@
 package Base;
 
 import Exceptions.RandomiserFail;
-import Exceptions.UploadFailed;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -69,5 +66,28 @@ public class Encoder
         byte[] b = new byte[RANDOMISER.nextInt(50) + 50];
         RANDOMISER.nextBytes(b);
         return b;
+    }
+
+    public static String HTMLEntityEncode(String input)
+    {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < input.length(); i++)
+        {
+            char ch = input.charAt(i);
+
+            if (Character.isLetterOrDigit(ch) || Character.isWhitespace(ch))
+            {
+                sb.append(ch);
+            }
+            else
+            {
+                sb.append("&#").append((int) ch).append(";");
+            }
+        }
+
+        return sb.toString();
+
     }
 }

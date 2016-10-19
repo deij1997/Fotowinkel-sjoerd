@@ -6,6 +6,7 @@
 package Servlets;
 
 import Base.Database;
+import Base.Encoder;
 import Base.Photo;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -81,9 +82,9 @@ public class OrderServlet extends HttpServlet
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
                             + "                                <h4>\n"
-                            + "                                    <a href=\"#\">" + title + "</a>\n"
+                            + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
-                            + "                                <p>" + description + "</p>\n"
+                            + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\"> Stuks </p>\n"

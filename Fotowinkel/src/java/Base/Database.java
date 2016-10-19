@@ -55,7 +55,7 @@ public class Database
         dab = new LowerDatabase();
         List<Photo> photos = new ArrayList<Photo>();
         String query = "Select * From `item` Where klantid Like '" + code + "%'";
-        ResultSet rs2 = dab.getData(query);
+        ResultSet rs2 = dab.getData(query, null);
         while (rs2.next())
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
@@ -70,7 +70,7 @@ public class Database
         dab = new LowerDatabase();
         List<Photo> photos = new ArrayList<Photo>();
         String query = "Select * From item Where klanthashedid = " + Klantid + "";
-        ResultSet rs2 = dab.getData(query);
+        ResultSet rs2 = dab.getData(query, null);
         while (rs2.next())
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
@@ -85,7 +85,7 @@ public class Database
         dab = new LowerDatabase();
         List<Photo> photos = new ArrayList<Photo>();
         String query = "Select * From `item`";
-        ResultSet rs2 = dab.getData(query);
+        ResultSet rs2 = dab.getData(query, null);
         while (rs2.next())
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));

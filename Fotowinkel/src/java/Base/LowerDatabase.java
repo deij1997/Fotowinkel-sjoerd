@@ -26,18 +26,7 @@ public class LowerDatabase
 
     /**
      * Sends a query to the database
-     * @deprecated DOES NOT CHECK FOR SQL INJECTION. DO ONLY USE IF 100% THAT NO SQL INJECTIONS WILL BE POSSIBLE, EVEN IN THE FUTURE
-     * @param query The query to send, does not check for injection
-     * @throws SQLException
-     */
-    public void sendQuery(String query) throws SQLException
-    {
-        statement = con.prepareStatement(query);
-        result = statement.executeQuery();
-    }
-    
-    /**
-     * Sends a query to the database
+     *
      * @param query The query to send
      * @param parameters The query string parameters
      * @throws SQLException
@@ -46,41 +35,33 @@ public class LowerDatabase
     {
         statement = con.prepareStatement(query);
         int i = 0;
-        for(String s : parameters)
+        if (parameters != null)
         {
-            statement.setString(++i, s);
+            for (String s : parameters)
+            {
+                statement.setString(++i, s);
+            }
         }
         result = statement.executeQuery();
     }
-    
+
     /**
      * Returns the data given by a query
+     *
      * @param query The query that needs to be sent
      * @param parameters The query string parameters
      * @return A resultset containing the data received from the query
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public ResultSet getData(String query , String[] parameters) throws SQLException
+    public ResultSet getData(String query, String[] parameters) throws SQLException
     {
         this.sendQuery(query, parameters);
         return result;
     }
 
     /**
-     * Returns the data given by a query
-     * @deprecated DOES NOT CHECK FOR SQL INJECTION. DO ONLY USE IF 100% THAT NO SQL INJECTIONS WILL BE POSSIBLE, EVEN IN THE FUTURE
-     * @param query The query that needs to be sent, does not check for injection
-     * @return A resultset containing the data received from the query
-     * @throws SQLException 
-     */
-    public ResultSet getData(String query) throws SQLException
-    {
-        this.sendQuery(query);
-        return result;
-    }
-
-    /**
      * Returns the last resultset of data
+     *
      * @return the resultset
      */
     public ResultSet getData()
@@ -90,12 +71,16 @@ public class LowerDatabase
 
     /**
      * Returns whether the resultset contains data. False if null
+     *
      * @return Whether the set is empty or not.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean hasFoundData() throws SQLException
     {
-        if (result == null) return false;
+        if (result == null)
+        {
+            return false;
+        }
         boolean datafound = false;
         while (result.next())
         {
@@ -108,7 +93,8 @@ public class LowerDatabase
 
     /**
      * Closes the connection to the database
-     * @throws SQLException 
+     *
+     * @throws SQLException
      */
     protected void close() throws SQLException
     {

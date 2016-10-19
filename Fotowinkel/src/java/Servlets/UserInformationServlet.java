@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Base.Encoder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -47,14 +48,14 @@ public class UserInformationServlet extends HttpServlet
         {
             out.println("\n"
                         + "                    <p class=\"lead\">Details</p>\n"
-                        + "                    <p class=\"pull-right\">" + name + "</p><p>Name:</p>\n"
-                        + "                    <p class=\"pull-right\">" + surname + "  </p><p>Last name: </p>\n"
-                        + "                    <p class=\"pull-right\">" + country + " </p><p>Country:  </p>\n"
-                        + "                    <p class=\"pull-right\">" + city + " </p><p>City:  </p>\n"
-                        + "                    <p class=\"pull-right\">" + street + " </p><p>Street:  </p>\n"
-                        + "                    <p class=\"pull-right\">" + housenr + " </p><p>House Nr:  </p>\n"
-                        + "                    <p class=\"pull-right\">" + postalcode + " </p><p>Postcode:  </p>\n"
-                        + "                    <p class=\"pull-right\">" + payment + " </p><p>Payment method:  </p>");
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(name) + "</p><p>Name:</p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(surname) + "  </p><p>Last name: </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(country) + " </p><p>Country:  </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(city) + " </p><p>City:  </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(street) + " </p><p>Street:  </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(housenr) + " </p><p>House Nr:  </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(postalcode) + " </p><p>Postcode:  </p>\n"
+                        + "                    <p class=\"pull-right\">" + Encoder.HTMLEntityEncode(payment) + " </p><p>Payment method:  </p>");
         }
         finally
         {

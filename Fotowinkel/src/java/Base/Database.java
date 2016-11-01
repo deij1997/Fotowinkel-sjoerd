@@ -128,12 +128,28 @@ public class Database
         dab.close();
         return ret;
     }
+    
+    public boolean  CheckIfPhotographerExists(String emailorcode) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select id From `fotograaf` where " + (emailorcode.contains("@") ? "email=?" : "hash=?");
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
+        });
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
 
     public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
         setUpConnection();
         String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
-        dab.sendQuery(query, null);
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
+        });
         boolean ret = dab.hasFoundData();
         return ret;
     }

@@ -4,6 +4,7 @@
     Author     : Tu
 --%>
 
+<%@page import="Managers.UserHandler"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -68,16 +69,19 @@
                 <div class="row" id="demo">
                     
                     <script>
+                        <%
+                            UserHandler.setUser(request.getParameter("id"), request, response);
+                        %>
                         window.onload = function loadDoc() {
                             var xhttp = new XMLHttpRequest();
                             xhttp.onreadystatechange = function() {
-                                if (this.readyState == 4 && this.status == 200) {
+                                if (this.readyState === 4 && this.status === 200) {
                                     document.getElementById("demo").innerHTML = this.responseText;
                                 }
                             };
                             xhttp.open("GET", "ProductsServlet", true);
                             xhttp.send();
-                        }
+                        };
                     </script>
 <%-- 
                     <div class="col-sm-4 col-lg-4 col-md-4">

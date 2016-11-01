@@ -6,6 +6,7 @@
 $(document).on("click", "#myImg", function () {
     $('#img01')[0].src = this.style.backgroundImage.split("\"")[1];
     $('#myModal')[0].style.display = "block";
+    $('#caption')[0].innerHTML = jQuery(this).next().find("div")[0].innerHTML;
 });
 
 $(document).on("click", ".close", function () {

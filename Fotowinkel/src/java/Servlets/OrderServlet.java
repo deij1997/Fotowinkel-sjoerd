@@ -55,7 +55,7 @@ public class OrderServlet extends HttpServlet
             List<Photo> photos = db.GetPhotos(klantcode);
 
             double dtprice = 0;
-            
+
             for (Photo p : photos)
             {
                 String imgurl = p.getPreviewLocation();
@@ -68,7 +68,7 @@ public class OrderServlet extends HttpServlet
                 out.println("<div class=\"col-sm-4 col-md-12\">\n"
                             + "                        \n"
                             + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img src=\" " + imgurl + " \" style=\"max-width: 15%\" class=\"pull-left\" alt=\"\">\n"
+                            + "                            <a href=\"#myPopup\" data-rel=\"popup\" data-position-to=\"window\"><img src=\" " + imgurl + " \" style=\"max-width: 15%\" class=\"pull-left\" alt=\"\"></a>\n"
                             + "                            \n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"

@@ -6,6 +6,7 @@
 package Servlets;
 
 import Base.Database;
+import Base.Encoder;
 import Base.Photo;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,9 +22,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tu
  */
-@WebServlet(name = "ProductsServlet", urlPatterns = {"/ProductsServlet"})
-public class ProductsServlet extends HttpServlet {
-
+@WebServlet(name = "ProductsServlet", urlPatterns =
+    {
+        "/ProductsServlet"
+})
+public class ProductsServlet extends HttpServlet
+{
 
     public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
@@ -55,26 +59,35 @@ public class ProductsServlet extends HttpServlet {
             for (Photo p : photos)
             {
                 String imgurl = p.getPreviewLocation();
-                double price = p.GetPrice();
-                String title = "test";
-                String description = "een mooie foto.";
-                
+                String price = p.GetPriceAsString();
+                String title = p.GetTitle();
+                String description = p.GetDescription();
+                if (title == null)
+                {
+                    title = "Geen titel opgegeven";
+                }
+                if (description == null)
+                {
+                    description = "Zonder beschrijving";
+                }
+
                 /* TODO output your page here. You may use following sample code. */
-                out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n" +
-"                        <div class=\"thumbnail\">\n" +
-"                            <img src=\""+imgurl+"\" style=\"max-width: 15%\" alt=\"\">\n" +
-"                            <div class=\"caption\">\n" +
-"                                <h4 class=\"pull-right\">"+ price+"</h4>\n" +
-"                                <h4><a href=\"#\">"+title+"</a>\n" +
-"                                </h4>\n" +
-"                                <p>"+description+"</p>\n" +
-"                            </div>\n" +
-"                            <div class=\"ratings\">\n" +
-"                                <p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Buy</a></p>\n" +
-"                                <p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n" +
-"                            </div>\n" +
-"                        </div>\n" +
-"                    </div>");
+                out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
+                            + "                        <div class=\"thumbnail\">\n"
+                            + "                            <div class=\"previewPhoto\"  style=\"background-image: url(\'"+ imgurl+"\'), url(\'Images/notfound.png\');\n" +"\" > </div>\n"
+                        
+                            + "                            <div class=\"caption\">\n"
+                            + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
+                            + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                            + "                                </h4>\n"
+                            + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
+                            + "                            </div>\n"
+                            + "                            <div class=\"ratings\">\n"
+                            + "                                <p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Bestel</a></p>\n"
+                            + "                                <p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
+                            + "                            </div>\n"
+                            + "                        </div>\n"
+                            + "                    </div>");
             }
 
         }

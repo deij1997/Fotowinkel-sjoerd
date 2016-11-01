@@ -7,7 +7,6 @@ package Base;
 
 import Exceptions.UploadFailed;
 import Helpers.WaterMarker;
-import Servlets.OrderServlet;
 import Servlets.UploadServlet;
 import static Servlets.UploadServlet.WATERMARK_LOCATION;
 import java.awt.image.BufferedImage;
@@ -45,8 +44,8 @@ public class Photo extends Item
     public Photo(double price, String code, String title, String description)
     {
         super(price, code);
-        title = this.title;
-        description = this.description;
+        this.title = title;
+        this.description = description;
         SetLocation();
     }
 
@@ -91,6 +90,11 @@ public class Photo extends Item
             {
                 //Save the full to FULL_UPLOAD_DIRECTORY
                 File fulloutputfile = new File(UploadServlet.FULL_UPLOAD_DIRECTORY + "/" + code + ".png");
+                if (fulloutputfile.exists())
+                {
+                    throw new UploadFailed("Er is een fout opgetreden. Probeer het opnieuw\r\nFoto met code bestaat al");
+                }
+
                 fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
@@ -129,14 +133,12 @@ public class Photo extends Item
      */
     public static boolean imagePresentAt(final String location) throws Exception
     {
-        boolean has = false;
-        HttpURLConnection conn = null;
-        URL url = null;
+        boolean has;
         try
         {
-            url = new URL(location);
+            URL url = new URL(location);
 
-            conn = (HttpURLConnection) url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("HEAD");
 
             String contentType = conn.getContentType();
@@ -147,10 +149,14 @@ public class Photo extends Item
         {
             // it's probably a file
             File f = new File(location);
-            return f.exists();
+            has = f.exists();
         }
-
         return has;
+    }
+
+    public void SetCode(String newCode)
+    {
+        this.code = newCode;
     }
 
     public String GetFullLocation()

@@ -60,8 +60,11 @@ public class UploadManager
     {
         try {
             String[] usedCodes = Encoder.GenerateCodeStrings(photos.size());
+            
+            int index = 0;
             for (Photo p : photos)
             {
+                p.SetCode(usedCodes[index++]);
                 p.Upload();
             }
             

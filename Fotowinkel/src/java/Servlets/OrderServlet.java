@@ -6,6 +6,7 @@
 package Servlets;
 
 import Base.Database;
+import Base.Encoder;
 import Base.Photo;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,12 +61,20 @@ public class OrderServlet extends HttpServlet
             {
                 String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();
-                String title = "test";
-                String description = "een mooie foto.";
+                String title = p.GetTitle();
+                String description = p.GetDescription();
+                if (title == null)
+                {
+                    title = "Geen titel opgegeven";
+                }
+                if (description == null)
+                {
+                    description = "Zonder beschrijving";
+                }
                 String amount = "1";
 
                 /* TODO output your page here. You may use following sample code. */
-                out.println("<div class=\"col-sm-4 col-md-12\">\n"
+                out.println("<div class=\"col-md-12\">\n"
                             + "                        \n"
                             + "                        <div class=\"thumbnail\">\n"
                             + "                            <a href=\"#myPopup\" data-rel=\"popup\" data-position-to=\"window\"><img src=\" " + imgurl + " \" style=\"max-width: 15%\" class=\"pull-left\" alt=\"\"></a>\n"
@@ -73,9 +82,9 @@ public class OrderServlet extends HttpServlet
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
                             + "                                <h4>\n"
-                            + "                                    <a href=\"#\">" + title + "</a>\n"
+                            + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
-                            + "                                <p>" + description + "</p>\n"
+                            + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\"> Stuks </p>\n"
@@ -99,12 +108,12 @@ public class OrderServlet extends HttpServlet
                     + "                            <div class=\"thumbnail\">\n"
                     + "                                \n"
                     + "                                <div class=\"caption\">\n"
-                    + "                                    <h4 class=\"pull-left\">Total</h4>\n"
+                    + "                                    <h4 class=\"pull-left\">Totaalprijs</h4>\n"
                     + "                                    <h4 class=\"pull-right\">" + tprice + "</h4>\n"
                     + "                                </div>\n"
                     + "                                \n"
                     + "                                <div class=\"ratings\">\n"
-                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Buy</a></p>\n"
+                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Afrekenen</a></p>\n"
                     + "                                    <!--<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>-->\n"
                     + "                                </div>\n"
                     + "                            \n"

@@ -77,7 +77,7 @@ public class OrderServlet extends HttpServlet
                 out.println("<div class=\"col-md-12\">\n"
                             + "                        \n"
                             + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img id=\"myImg\" src=\" \" "+ imgurl + " \" \" style=\"width: 15%\" class=\"pull-left\" alt=\"\" onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                            + "                            <img id=\"myImg\" src='"+ imgurl + "' style=\"width: 15%\" class=\"pull-left\" alt=\"\" onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
                             + "                            \n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"

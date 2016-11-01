@@ -13,16 +13,15 @@
         <link rel="stylesheet" href="CSS/stylesheet.css">
         <link rel="stylesheet" href="CSS/bootstrap.min.css">
         <script src="JS/Order.js"></script>
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <link rel="stylesheet" href="CSS/PopupImg.css">
+        <script src="JS/PopupImg.js"></script>
 
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <div id="pageone" class="container">
+        <div class="container">
             <div class="row">
                 <div class="col-md-3" id="detailbox">
                     <p class="lead">Details</p>
@@ -41,12 +40,38 @@
                 </div>
             </div>
 
-            <div data-role="popup" id="myPopup">
-                <p>This is my picture!</p>
-                <a href="#pageone" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src=" + imgurl + " style="width:800px;height:400px;" alt="Skaret View">
+            <div id="myModal" class="modal">
+                <span class="close" onclick="document.getElementById('myModal').style.display = 'none'">&times;</span>
+
+                <img class="modal-content" id="img01">
+
+                <div id="caption"></div>
+
             </div>
 
         </div>
         <%@include file="footer.jsp" %>
+        <script>
+            // Get the modal
+            var modal = document.getElementById('myModal');
+
+            // Get the image and insert it inside the modal - use its "alt" text as a caption
+            var img = document.getElementById('myImg');
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            img.onclick = function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt;
+            };
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            };
+        </script>
     </body>
 </html>

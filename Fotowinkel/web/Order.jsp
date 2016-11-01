@@ -12,7 +12,10 @@
         <title>Fotowinkel Sjoerd</title>
         <link rel="stylesheet" href="CSS/stylesheet.css">
         <link rel="stylesheet" href="CSS/bootstrap.min.css">
+        <link rel="stylesheet" href="CSS/PopupImg.css">
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
         <script src="JS/Order.js"></script>
+        <script src="JS/PopupImg.js"></script>
 
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
@@ -37,6 +40,16 @@
                     </div>
                 </div>
             </div>
+
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+
+                <img class="modal-content" id="img01">
+
+                <div id="caption"></div>
+
+            </div>
+
         </div>
         <%@include file="footer.jsp" %>
     </body>

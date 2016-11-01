@@ -171,7 +171,7 @@ public class Photo extends Item
 
     public String GetTitle()
     {
-        return this.title;
+        return (this.title == null || "".equals(this.title))? code : this.title;
     }
 
     public String GetDescription()

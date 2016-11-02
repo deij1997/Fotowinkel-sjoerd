@@ -50,7 +50,7 @@
                                   <input type="email" class="form-control" id="email" name="email" value="" required="" title="Please enter youremail">
                                   <span class="help-block"></span>
                               </div>
-                              <div id="loginErrorMsg" class="alert alert-error hide">Wrong username og password</div>
+                              <div id="loginErrorMsg" class="alert alert-error hide">Wrong username of password</div>
                               <div class="checkbox">
                                   <label>
                                       <input type="checkbox" name="remember" id="remember"> Remember login

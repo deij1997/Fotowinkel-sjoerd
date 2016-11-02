@@ -95,7 +95,7 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
-            out.println(ehroar.getMessage());
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" +ehroar.getMessage());
         }
         finally
         {

@@ -172,12 +172,13 @@ public class Database
     
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
     {
-        return CheckIfPhotoBelongsToUser(photocode, user, false);
+        return CheckIfPhotoBelongsToUser(photocode, user, CheckIfPhotographerExists(user));
     }
 
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user, boolean isPhotographer) throws SQLException
     {
         setUpConnection();
+        
         String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant") + " where id = (select `klantid` from `item` where code = ?)";
         ResultSet rs2 = dab.getData(query, new String[]
               {

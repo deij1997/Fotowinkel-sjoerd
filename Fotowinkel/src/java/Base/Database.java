@@ -34,10 +34,7 @@ public class Database
 
     public void setUpConnection() throws SQLException
     {
-        if (dab == null)
-        {
-            dab = new LowerDatabase();
-        }
+        dab = new LowerDatabase();
     }
 
     public List<Photo> GetPhotos(String code) throws SQLException
@@ -95,13 +92,32 @@ public class Database
 
         return photos;
     }
+    
+    public Photo GetPhoto(String hashId) throws SQLException
+    {
+        setUpConnection();
+        Photo ret = null;
+        String query = "Select * From `item` where code = ?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                hashId
+        });
+        
+        while (rs2.next())
+        {
+            ret = new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description"));
+            break;
+        }
+        dab.close();
+        
+        return ret;
+    }
 
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
         setUpConnection();
         for (Photo p : photos)
         {
-            //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
             String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
             dab.sendQuery(pquery, new String[]
                   {
@@ -119,7 +135,7 @@ public class Database
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
         setUpConnection();
-        String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
+        String query = "Select * From `fotograaf` where `email` =? and `wachtwoord` =?";
         dab.sendQuery(query, new String[]
               {
                   email, password
@@ -156,26 +172,19 @@ public class Database
 
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
     {
-
         setUpConnection();
-        String query = "Select id, hash from `klant` where " + (user.contains("@") ? "email" : "id") + " = (select `klantid` from `item` where code = ?)";
-        dab.sendQuery(query, new String[]
+        String query = "Select id, hash, email from `klant` where id = (select `klantid` from `item` where code = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
               {
                   photocode
         });
-        boolean belongsToAUser = dab.hasFoundData();
-
-        ResultSet rs2 = dab.getData();
-        if (belongsToAUser)
+        boolean belongsToAUser = false;
+        while (rs2.next())
         {
-            belongsToAUser = false;
-            while (rs2.next())
+            if (String.valueOf(rs2.getInt("id")).equals(user) || rs2.getString("hash").equals(user) || rs2.getString("email").equals(user))
             {
-                if (String.valueOf(rs2.getInt("id")).equals(user) || rs2.getString("hash").equals(user))
-                {
-                    belongsToAUser = true;
-                    break;
-                }
+                belongsToAUser = true;
+                break;
             }
         }
         dab.close();

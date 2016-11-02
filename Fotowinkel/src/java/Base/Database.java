@@ -5,8 +5,10 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,227 +17,183 @@ import java.util.List;
  */
 public class Database
 {
-    private final static String url1 = "jdbc:mysql://web0095.zxcs.nl/u4951p4091_fotowinkel";
-    private final static String user1 = "u4951p4091_prof";
-    private final static String pass1 = "fotos";
-    private final static String driver = "com.mysql.jdbc.Driver";
-    private Connection con;
-
-    public Connection getCon()
-    {
-        return con;
-    }
+    final static String DRIVER = "com.mysql.jdbc.Driver";
+    LowerDatabase dab;
 
     public Database()
     {
-        createConnection();
-    }
-
-    public void createConnection()
-    {
         try
         {
-            Class.forName(driver).newInstance();
-            con = DriverManager.getConnection(url1, user1, pass1);
-
+            Class.forName(DRIVER).newInstance();
+            setUpConnection();
         }
         catch (Exception e)
         {
-            e.printStackTrace();
         }
     }
 
-    //Test the connection of the database using a simple query
-    //Return a boolean indicating if the test was succesfull
-    private boolean TestConnection()
+    public void setUpConnection() throws SQLException
     {
-        boolean succes = false;
-        try
+        if (dab == null)
         {
-            Statement state = con.createStatement();
-            ResultSet result = state.executeQuery("Select * From Test");
-            while (result.next())
-            {
-                System.out.print(result.getInt("lel"));
-            }
-            succes = true;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-
-        }
-        return succes;
-    }
-
-    //Test the connection of the database using the TestConnection method
-    public void Test()
-    {
-        if (TestConnection())
-        {
-            System.out.print("Het werkt!!!!!!11111!!!");
-
-        }
-        else
-        {
-            System.out.print("QQQQQQQQQQQQQQQQQQQQQ, tranen vol gestacked!");
+            dab = new LowerDatabase();
         }
     }
 
     public List<Photo> GetPhotos(String code) throws SQLException
     {
         List<Photo> photos = new ArrayList<Photo>();
-        PreparedStatement state2 = null;
-        ResultSet rs2 = null;
-        String query = "Select * From `item` Where klantid Like '" + code + "%'";
-        try
+        if (code == null || code.isEmpty())
         {
-            state2 = con.prepareStatement(query);
-            rs2 = state2.executeQuery();
-            while (rs2.next())
-            {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-            }
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally
-        {
-            if (rs2 != null)
-            {
-                rs2.close();;
-            }
-            if (state2 != null)
-            {
-                state2.close();
-            }
-            if (con != null)
-            {
-                con.close();
-            }
+            return photos;
         }
 
+        setUpConnection();
+        String query = "Select * From `item` Where klantid Like ?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                code + "%"
+        });
+        while (rs2.next())
+        {
+            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
+        }
+        dab.close();
         return photos;
 
     }
 
-    public List<Photo> GetPhotosByKlantHashedId(int Klantid) throws SQLException
+    public List<Photo> GetPhotosByKlantHashedId(String Klantid) throws SQLException
     {
+        setUpConnection();
         List<Photo> photos = new ArrayList<Photo>();
-        PreparedStatement state2 = null;
-        ResultSet rs2 = null;
-        String query = "Select * From item Where klanthashedid = " + Klantid + "";
-        try
+        String query = "Select * From `item` Where klantid = (Select `id` from `klant` where hash = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                Klantid
+        });
+        while (rs2.next())
         {
-            state2 = con.prepareStatement(query);
-            rs2 = state2.executeQuery();
-            while (rs2.next())
-            {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-            }
+            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
         }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally
-        {
-            if (rs2 != null)
-            {
-                rs2.close();;
-            }
-            if (state2 != null)
-            {
-                state2.close();
-            }
-            if (con != null)
-            {
-                con.close();
-            }
-        }
-
+        dab.close();
         return photos;
 
     }
 
     public List<Photo> GetAllPhotos() throws SQLException
     {
+        setUpConnection();
         List<Photo> photos = new ArrayList<Photo>();
-        PreparedStatement state2 = null;
-        ResultSet rs2 = null;
         String query = "Select * From `item`";
-        try
+        ResultSet rs2 = dab.getData(query, null);
+        while (rs2.next())
         {
-            state2 = con.prepareStatement(query);
-            rs2 = state2.executeQuery();
-            while (rs2.next())
-            {
-                photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-            }
+            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
         }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally
-        {
-            if (rs2 != null)
-            {
-                rs2.close();;
-            }
-            if (state2 != null)
-            {
-                state2.close();
-            }
-            if (con != null)
-            {
-                con.close();
-            }
-        }
+        dab.close();
 
         return photos;
     }
 
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
-        PreparedStatement state2 = null;
-        ResultSet rs2 = null;
-        try
+        setUpConnection();
+        for (Photo p : photos)
         {
-            for (Photo p : photos)
-            {
-                String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
-                state2 = con.prepareStatement(query);
-                rs2 = state2.executeQuery();
-            }
+            //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
+            String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
+            dab.sendQuery(pquery, new String[]
+                  {
+                      p.GetTitle(), p.GetDescription(), p.code
+            });
         }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally
-        {
-            if (rs2 != null)
-            {
-                rs2.close();;
-            }
-            if (state2 != null)
-            {
-                state2.close();
-            }
-            if (con != null)
-            {
-                con.close();
-            }
-        }
+        dab.close();
     }
 
     public void UpdatePhoto(Photo photo) throws SQLException
     {
-        List<Photo> photos = new ArrayList<Photo>();
-        photos.add(photo);
-        UpdatePhotos(photos);
+        UpdatePhotos(Arrays.asList(photo));
+    }
+
+    public boolean ValidateCredentials(String email, String password) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
+        dab.sendQuery(query, new String[]
+              {
+                  email, password
+        });
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
+    
+    public boolean  CheckIfPhotographerExists(String emailorcode) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select id From `fotograaf` where " + (emailorcode.contains("@") ? "email=?" : "hash=?");
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
+        });
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
+
+    public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
+        });
+        boolean ret = dab.hasFoundData();
+        return ret;
+    }
+
+    /**
+     * Inserts a customer into the database
+     *
+     * @param email the customer email to add
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    private void InsertCustomer(String email) throws SQLException, RandomiserFail
+    {
+        setUpConnection();
+        String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
+        String[] parameters = new String[]
+        {
+            Encoder.GetHash(email), email
+        };
+        dab.sendQuery(query, parameters);
+    }
+
+    public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
+    {
+        if (!CheckIfCustomerExists(customer))
+        {
+            InsertCustomer(customer);
+        }
+
+        for (Photo p : photos)
+        {
+            String pquery = "Insert into `item`(`code`, `klantid`, `prijs`, `fotograafid`, `title`, `description`) VALUES(?,?,?,?,?,?)";
+            dab.sendQuery(pquery, new String[]
+                  {
+                      //TODO Please note that price can differ in dots and commas, depending on OS language
+                      p.code, (customer.contains("@") ? Encoder.GetHash(customer) : customer), String.format(".2%f%n", p.price),
+                      (photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), p.GetTitle(), p.GetDescription()
+            });
+        }
+        dab.close();
+    }
+
+    public void InsertPhoto(Photo photo, String customer, String photograhper) throws SQLException, RandomiserFail
+    {
+        InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
 }

@@ -6,10 +6,11 @@
 package Servlets;
 
 import Base.Database;
+import Base.Encoder;
 import Base.Photo;
+import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,17 +44,20 @@ public class ProductsServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try
         {
-
             Database db = new Database();
+            String id = UserHandler.getUserAsString(request);
+            List<Photo> photos = db.GetPhotosByKlantHashedId(id);
 
-            List<Photo> photos = db.GetAllPhotos();
+            if (photos.isEmpty())
+            {
+                throw new Exception("<b>Geen fotos gevonden!</b>");
+            }
 
             for (Photo p : photos)
             {
@@ -72,13 +76,13 @@ public class ProductsServlet extends HttpServlet
 
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
-                            + "                        <div class=\"thumbnail\" style=\"max-height: 380px\">\n"
-                            + "                            <img src=\"" + imgurl + "\" style=\"width: 99%\" alt=\"\" onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                            + "                        <div class=\"thumbnail\">\n"
+                            + "                            <div id=\"myImg\" class=\"previewPhoto\" style=\"background-image: url(\'" + imgurl + "\'), url(\'Images/notfound.png\');\n" + "\" > </div>\n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
-                            + "                                <h4><a href=\"#\">" + title + "</a>\n"
+                            + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
-                            + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + description + "</div>\n"
+                            + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
                             + "                                <p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Bestel</a></p>\n"
@@ -89,7 +93,7 @@ public class ProductsServlet extends HttpServlet
             }
 
         }
-        catch (SQLException ehroar)
+        catch (Exception ehroar)
         {
             out.println(ehroar.getMessage());
         }

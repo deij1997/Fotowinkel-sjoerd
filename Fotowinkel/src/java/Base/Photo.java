@@ -94,7 +94,7 @@ public class Photo extends Item
                 {
                     throw new UploadFailed("Er is een fout opgetreden. Probeer het opnieuw\r\nFoto met code bestaat al");
                 }
-                
+
                 fulloutputfile.createNewFile();
                 ImageIO.write(photo, "png", fulloutputfile);
 
@@ -153,7 +153,7 @@ public class Photo extends Item
         }
         return has;
     }
-    
+
     public void SetCode(String newCode)
     {
         this.code = newCode;
@@ -171,7 +171,7 @@ public class Photo extends Item
 
     public String GetTitle()
     {
-        return this.title;
+        return (this.title == null || "".equals(this.title))? code : this.title;
     }
 
     public String GetDescription()

@@ -6,6 +6,7 @@
 package Servlets;
 
 import Base.Database;
+import Base.Encoder;
 import Base.Photo;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -55,7 +56,7 @@ public class OrderServlet extends HttpServlet
             List<Photo> photos = db.GetPhotos(klantcode);
 
             double dtprice = 0;
-            
+
             for (Photo p : photos)
             {
                 String imgurl = p.getPreviewLocation();
@@ -76,14 +77,14 @@ public class OrderServlet extends HttpServlet
                 out.println("<div class=\"col-md-12\">\n"
                             + "                        \n"
                             + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img src=\" " + imgurl + " \" style=\"width: 15%\" class=\"pull-left\" alt=\"\" onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                            + "                            <img id=\"myImg\" src='"+ imgurl + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
                             + "                            \n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
                             + "                                <h4>\n"
-                            + "                                    <a href=\"#\">" + title + "</a>\n"
+                            + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
-                            + "                                <p>" + description + "</p>\n"
+                            + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\"> Stuks </p>\n"

@@ -52,4 +52,14 @@ public class EncoderTest
         double elapsed = (end - start) / 1000000000;
         System.out.println(LOOPS + " unique codes generated in " + elapsed + "s. (" + (end - start) / LOOPS + "ns per code)");
     }
+    
+    @Test
+    public void TestHash() throws RandomiserFail
+    {
+        String aString = "koekjes@fotograaf.be";
+        String t1 = Encoder.GetHash(aString);
+        String t2 = Encoder.GetHash(aString);
+        
+        Assert.assertEquals("Hashes should be the same!", t1, t2);
+    }
 }

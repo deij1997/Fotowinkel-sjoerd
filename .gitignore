@@ -13,6 +13,6 @@ hs_err_pid*
 /Fotowinkel/nbproject/private/
 /Fotowinkel/dist/
 /Fotowinkel/.jacocoverage/
-/Fotowinkel/build/web/fullimages
-/Fotowinkel/build/web/previewimages
+/Fotowinkel/build/
+/Fotowinkel/build/web
 /Fotowinkel/.idea

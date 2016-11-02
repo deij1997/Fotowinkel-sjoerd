@@ -19,8 +19,8 @@
 		</nav>
 
 		<ul>
-			<li><a href="upload.jsp">Login</a></li>
-			<li><a href="#">Sign up</a></li>
+			<li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
+			<li><a href="#" data-toggle="modal" data-target="#register-modal">Sign up</a></li>
 		</ul>
 
 	</div>

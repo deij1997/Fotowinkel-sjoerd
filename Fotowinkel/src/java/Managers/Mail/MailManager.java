@@ -59,8 +59,9 @@ public class MailManager
 
         String body = MailDataStorage.EMAIL_BODY;
 
-        message.setText(String.format(body, content));
-
+        //message.setText(String.format(body, content));
+        message.setContent(body.replace("%s", content), "text/html; charset=utf-8");
+        message.saveChanges();
         Transport.send(message);
     }
 }

@@ -34,6 +34,10 @@
                         {
                             //disregard our current cartID and get a new one
                             out.println("we didn't have a cart for your id");
+                    cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
+                    out.println("new cookie is:");
+                    out.println(cookie.getName() + ":" + cookie.getValue() + "<br>");
+                    response.addCookie(cookie);
                         } else {
                             out.println("cart found");
                             Map cc = cart.getAllProducts();

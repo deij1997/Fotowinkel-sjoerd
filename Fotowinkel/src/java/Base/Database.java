@@ -128,8 +128,8 @@ public class Database
         dab.close();
         return ret;
     }
-    
-    public boolean  CheckIfPhotographerExists(String emailorcode) throws SQLException
+
+    public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
     {
         setUpConnection();
         String query = "Select id From `fotograaf` where " + (emailorcode.contains("@") ? "email=?" : "hash=?");
@@ -152,6 +152,35 @@ public class Database
         });
         boolean ret = dab.hasFoundData();
         return ret;
+    }
+
+    public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
+    {
+
+        setUpConnection();
+        String query = "Select id, hash from `klant` where " + (user.contains("@") ? "email" : "id") + " = (select `klantid` from `item` where code = ?)";
+        dab.sendQuery(query, new String[]
+              {
+                  photocode
+        });
+        boolean belongsToAUser = dab.hasFoundData();
+
+        ResultSet rs2 = dab.getData();
+        if (belongsToAUser)
+        {
+            belongsToAUser = false;
+            while (rs2.next())
+            {
+                if (String.valueOf(rs2.getInt("id")).equals(user) || rs2.getString("hash").equals(user))
+                {
+                    belongsToAUser = true;
+                    break;
+                }
+            }
+        }
+        dab.close();
+
+        return belongsToAUser;
     }
 
     /**

@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserHandler
 {
-    private static boolean isPhotographer = false;
-    
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;

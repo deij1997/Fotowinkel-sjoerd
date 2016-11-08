@@ -50,7 +50,15 @@ public class LowerDatabase
                 statement.setString(++i, s);
             }
         }
-        result = statement.executeQuery();
+
+        if (query.toLowerCase().startsWith("insert into"))
+        {
+            statement.executeUpdate();
+        }
+        else
+        {
+            result = statement.executeQuery();
+        }
     }
 
     /**

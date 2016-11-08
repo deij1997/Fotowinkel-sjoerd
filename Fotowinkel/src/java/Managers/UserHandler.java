@@ -38,7 +38,23 @@ public class UserHandler
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
     {
-        response.addCookie(new Cookie("user", user));
+        boolean doSet = true;
+
+        if (getUser(request) != null)
+        {
+            try
+            {
+                doSet = !userIsPhotographer(request);
+            }
+            catch (SQLException ex)
+            {
+                doSet = false;
+            }
+        }
+        if (doSet)
+        {
+            response.addCookie(new Cookie("user", user));
+        }
     }
 
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
@@ -48,7 +64,7 @@ public class UserHandler
         {
             return false;
         }
-        
+
         //Check if this user is a photographer
         return new Database().CheckIfPhotographerExists(user.getValue());
     }

@@ -319,11 +319,11 @@ public class Database
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
 
-    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail
+    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
         String query = "";
         String[] parameters;
-        
+
         if (items.isEmpty())
         {
             return;
@@ -337,7 +337,16 @@ public class Database
             customer, paymentmethod
         };
         dab.sendQuery(query, parameters);
-        int ID = dab.getMutatedData();
+        ResultSet IDs = dab.getMutatedData();
+        int ID = 0;
+        if (IDs.next())
+        {
+            ID = IDs.getInt("id");
+        }
+        if (ID == 0)
+        {
+            throw new Exception("No order could be inserted");
+        }
 
         //Insert bestelling
         for (String i : items)

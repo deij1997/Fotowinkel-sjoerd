@@ -77,9 +77,9 @@ public class LowerDatabase
         return result;
     }
     
-    public int getMutatedData()
+    public ResultSet getMutatedData() throws SQLException
     {
-        return mutation;
+        return statement.getGeneratedKeys();
     }
 
     /**

@@ -323,6 +323,11 @@ public class Database
     {
         String query = "";
         String[] parameters;
+        
+        if (items.isEmpty())
+        {
+            return;
+        }
 
         setUpConnection();
         //Insert order

@@ -147,6 +147,11 @@ public class Database
 
     public String GetEmailFromHash(String Hash) throws SQLException, Exception
     {
+        if (Hash.contains("@"))
+        {
+            return Hash;
+        }
+
         String who = "", ret = "";
         if (CheckIfCustomerExists(Hash))
         {

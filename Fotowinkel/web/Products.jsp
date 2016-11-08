@@ -8,6 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <%@include file="header.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Fotowinkel Sjoerd</title>
@@ -17,7 +18,7 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.jsp" %>
+        
         <div class="container">
 
             <div class="row">

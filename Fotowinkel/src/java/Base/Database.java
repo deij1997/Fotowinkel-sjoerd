@@ -317,4 +317,16 @@ public class Database
     {
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
+    
+    public void InsertCustomerDetails(String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail
+    {
+        setUpConnection();
+        String query = "Insert into `adresgegevens`(`voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
+        String[] parameters = new String[]
+        {
+            name, lastname, housenr, street, street, city, country, postcode
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
+    }
 }

@@ -25,7 +25,7 @@ public class MailTest
     {
         try
         {
-            new MailManager().Mail("test@biepbot.uu.me", "test", "test");
+            new MailManager().Mail("jessedeij@hotmail.com", "test", "test");
         }
         catch (Exception e)
         {

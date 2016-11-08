@@ -92,7 +92,7 @@ public class Database
 
         return photos;
     }
-    
+
     public Photo GetPhoto(String hashId) throws SQLException
     {
         setUpConnection();
@@ -102,14 +102,14 @@ public class Database
                             {
                                 hashId
         });
-        
+
         while (rs2.next())
         {
             ret = new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description"));
             break;
         }
         dab.close();
-        
+
         return ret;
     }
 
@@ -145,6 +145,45 @@ public class Database
         return ret;
     }
 
+    public String GetEmailFromHash(String Hash) throws SQLException, Exception
+    {
+        String who = "", ret = "";
+        if (CheckIfCustomerExists(Hash))
+        {
+            who = "klant";
+        }
+        else
+        {
+            if (CheckIfPhotographerExists(Hash))
+            {
+                who = "fotograaf";
+            }
+            else
+            {
+                throw new Exception("Given ID does not exist!");
+            }
+        }
+        setUpConnection();
+        String query = "Select email From `" + who + "` where hash=?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                Hash
+        });
+        while (rs2.next())
+        {
+            ret = rs2.getString("email");
+            break;
+        }
+
+        dab.close();
+
+        if (ret.equals(""))
+        {
+            throw new Exception("Given ID does not exist!");
+        }
+        return ret;
+    }
+
     public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
     {
         setUpConnection();
@@ -167,16 +206,23 @@ public class Database
                   emailorcode
         });
         boolean ret = dab.hasFoundData();
+        dab.close();
         return ret;
     }
 
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
     {
+        return CheckIfPhotoBelongsToUser(photocode, user, CheckIfPhotographerExists(user));
+    }
+
+    public boolean CheckIfPhotoBelongsToUser(String photocode, String user, boolean isPhotographer) throws SQLException
+    {
         setUpConnection();
-        String query = "Select id, hash, email from `klant` where id = (select `klantid` from `item` where code = ?)";
+
+        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `klantid` from `item` where code = ?)";
         ResultSet rs2 = dab.getData(query, new String[]
-              {
-                  photocode
+                            {
+                                photocode
         });
         boolean belongsToAUser = false;
         while (rs2.next())

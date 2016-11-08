@@ -6,17 +6,14 @@
 package Servlets;
 
 import Base.Photo;
+import Base.Upload;
 import Managers.UploadManager;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -24,10 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -47,7 +42,6 @@ public class UploadServlet extends HttpServlet
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
     public static String WATERMARK_LOCATION;
 
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -66,7 +60,7 @@ public class UploadServlet extends HttpServlet
 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         try
         {
             //Handle the file data here
@@ -113,16 +107,22 @@ public class UploadServlet extends HttpServlet
 
                 //Call UploadManager to convert them
                 List<Photo> photos = UploadManager.CreatePhotosFromUploads(files);
-                //Upload all files
-                UploadManager.UploadPhotos(photos);
-            out.print("Upload has been done successfully!");
+
+                //Create an Upload
+                //TODO: ADD EMAIL FIELD AT THE UPLOAD
+                //GET WITH "REQUEST.GETPARAMETER("NAMEOFTHEEMAILFIELD, NOT ID")
+                Upload pupload = new Upload();
+
+                pupload.AddPhotos(photos);
+                pupload.Push(request);
+
+                out.print("Upload successvol!");
 
             }
             catch (Exception ex)
             {
-                out.print("There was an error: " + ex.getMessage());
+                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
             }
-
         }
         finally
         {

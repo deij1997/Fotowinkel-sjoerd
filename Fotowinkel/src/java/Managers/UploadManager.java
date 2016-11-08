@@ -5,20 +5,17 @@
  */
 package Managers;
 
+import Base.Database;
 import Base.Encoder;
 import Base.Photo;
 import Exceptions.NotOfCorrectType;
 import Exceptions.RandomiserFail;
 import Exceptions.UploadFailed;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -30,14 +27,14 @@ public class UploadManager
     public static List<Photo> CreatePhotosFromUploads(List<InputStream> files) throws NotOfCorrectType
     {
         List<Photo> photos = new ArrayList<Photo>();
-        
+
         //Create photos from files
         for (InputStream file : files)
         {
             try
             {
                 BufferedImage in = ImageIO.read(file);
-                
+
                 photos.add(new Photo(Photo.DEFAULT_PRICE, in));
             }
             catch (Exception ex)
@@ -53,24 +50,32 @@ public class UploadManager
      * Uploads a photo to the server
      *
      * @param photos The photos to upload
+     * @param useremail The email of the photographer
+     * @param customer The email of the customer
      * @return The code to give to the customer
      * @throws Exceptions.UploadFailed
+     * @throws java.sql.SQLException
      */
-    public static String[] UploadPhotos(List<Photo> photos) throws UploadFailed
+    public static String[] UploadPhotos(List<Photo> photos, String useremail, String customer) throws UploadFailed, SQLException
     {
-        try {
+        Database db = new Database();
+
+        try
+        {
             String[] usedCodes = Encoder.GenerateCodeStrings(photos.size());
-            
+
             int index = 0;
             for (Photo p : photos)
             {
                 p.SetCode(usedCodes[index++]);
                 p.Upload();
             }
-            
+            db.InsertPhotos(photos, customer, customer);
+
             return usedCodes;
-        } catch (RandomiserFail ex) {
-            Logger.getLogger(UploadManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (RandomiserFail ex)
+        {
             throw new UploadFailed();
         }
     }

@@ -5,9 +5,14 @@
  */
 package Servlets;
 
+import Base.Database;
+import Base.Photo;
 import Managers.ParameterHolder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,9 +36,10 @@ public class ProductDetailServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
+        Database db = new Database();
         String productID = ParameterHolder.getViewingProduct(request).getValue();
-        
+        Photo p = db.GetPhoto(productID);
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -45,6 +51,8 @@ public class ProductDetailServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h2>photo:"+p.GetTitle()+" "+p.GetPriceAsString()+"</h2><br/>");
+            out.println("<img src=\""+p.getPreviewLocation()+"\"/>");
             out.println("</body>");
             out.println("</html>");
         } finally {
@@ -64,7 +72,11 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -78,7 +90,11 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

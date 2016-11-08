@@ -13,16 +13,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Fotowinkel Sjoerd</title>
-
+        <link rel="stylesheet" href="CSS/PopupImg.css">
         <link rel="stylesheet" href="CSS/stylesheet.css">
         <link rel="stylesheet" href="CSS/bootstrap.min.css">
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
+        <script src="JS/Login.js"></script>
 
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.jsp" %>
-
         <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content" style="max-width: 400px">
@@ -45,16 +45,16 @@
                                             <input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
                                             <span class="help-block"></span>
                                         </div>
-                                        <div id="loginErrorMsg" class="alert alert-error hide">Wrong username og password</div>
+
+                                        <div id="loginErrorMsg" class="alert alert-error hide" style="color:#E0492F">Wrong username or password</div>
                                         <div class="checkbox">
                                             <label>
                                                 <input type="checkbox" name="remember" id="remember"> Remember login
                                             </label>
                                             <p class="help-block">(if this is a private computer)</p>
                                         </div>
-                                        <button type="submit" class="btn btn-success btn-block" style="margin:3px">Login</button>
-                                        <p><a href="/new-customer/" class="btn btn-info btn-block" style="margin:3px">No account, register now!</a></p>
-
+                                        <button  id="login" class="btn btn-success btn-block" style="margin:3px">Login</button>
+                                        <p><a href="#"  data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" data-dismiss="modal" data-target="#login-modal" style="margin:3px">No account, register now!</a></p>
                                     </form>
                                 </div>
                             </div>
@@ -63,14 +63,6 @@
                 </div>
             </div>
         </div>
-
-        <%@include file="footer.jsp" %>
-
-        <!-- jQuery -->
-        <script src="JS/jquery.js"></script>
-
-        <!-- Bootstrap Core JavaScript -->
         <script src="JS/bootstrap.min.js"></script>
-
     </body>
 </html>

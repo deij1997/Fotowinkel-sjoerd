@@ -242,6 +242,38 @@ public class Database
 
         return belongsToAUser;
     }
+    
+    /**
+     * Registers a photographer
+     * @param email the photographer email
+     * @param password the password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    public void RegisterPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        InsertPhotographer(email, password);
+    }
+    
+    /**
+     * Inserts a photographer into the database
+     *
+     * @param email the photographer email to add
+     * @param password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    private void InsertPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        setUpConnection();
+        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES (?,?,?)";
+        String[] parameters = new String[]
+        {
+            password, email, Encoder.GetHash(email)
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
+    }
 
     /**
      * Inserts a customer into the database

@@ -44,8 +44,10 @@ public class RegisterServlet extends HttpServlet {
 
         String name=request.getParameter("usernameR");
         String pass=request.getParameter("passwordR");
-        
-        if(db.CheckIfPhotographerExists(name))
+        if(name.isEmpty() || pass.isEmpty()){
+            out.println("3");
+        }
+        else if(db.CheckIfPhotographerExists(name))
         {
             out.println("0"); 
         }

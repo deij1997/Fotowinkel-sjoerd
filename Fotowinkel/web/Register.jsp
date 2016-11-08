@@ -33,16 +33,16 @@
                           <form>
                               <div class="form-group">
                                   <label for="username" class="control-label">Username</label>
-                                  <input type="text" class="form-control" id="usernameR" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com">
+                                  <input type="text" class="form-control" id="usernameR" name="username" value="" required title="Please enter you username" placeholder="example@gmail.com">
                                   <span class="help-block"></span>
                               </div>
                               <div class="form-group">
                                   <label for="password" class="control-label">Password</label>
-                                  <input type="password" class="form-control" id="passwordR" name="password" value="" required="" title="Please enter your password">
+                                  <input type="password" class="form-control" id="passwordR" name="password" value="" required title="Please enter your password">
                                   <span class="help-block"></span>
                               </div>
 
-                              <div id="loginErrorMsg" class="alert alert-error hide">Wrong username of password</div>
+                              <div id="loginErrorMsgR" class="alert alert-error hide" style="color:#E0492F"></div>
                               <div class="checkbox">
                                   <label>
                                       <input type="checkbox" name="remember" id="remember"> Remember login

@@ -28,8 +28,14 @@ $(document).on("click", "#register", function loadDoc() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
+            var message = document.getElementById("loginErrorMsgR");
             if (this.responseText == 0) {
-                document.getElementById("loginErrorMsg").classList.remove("hide");
+                message.classList.remove("hide");
+                message.innerHTML = "Username already exist. Try a diffrent username.";
+            }
+            if (this.responseText == 3) {   
+                message.classList.remove("hide");
+                message.innerHTML = "Fill out all fields.";
             }
             if (this.responseText == 1) {
                 window.location.replace("index.jsp");

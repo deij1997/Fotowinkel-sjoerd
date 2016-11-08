@@ -54,7 +54,7 @@
                                             <p class="help-block">(if this is a private computer)</p>
                                         </div>
                                         <button  id="login" class="btn btn-success btn-block" style="margin:3px">Login</button>
-                                        <p><a href="" class="btn btn-info btn-block" style="margin:3px">No account, register now!</a></p>
+                                        <p><a href="#" data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" style="margin:3px">No account, register now!</a></p>
 
                                     </form>
                                 </div>

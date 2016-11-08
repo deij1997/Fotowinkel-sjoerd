@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -23,6 +24,7 @@ public class LowerDatabase
     static Connection con;
     private PreparedStatement statement = null;
     private ResultSet result = null;
+    private int mutation = -1;
 
     public LowerDatabase() throws SQLException
     {
@@ -53,7 +55,7 @@ public class LowerDatabase
 
         if (query.toLowerCase().startsWith("insert into"))
         {
-            statement.executeUpdate();
+            mutation = statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
         }
         else
         {
@@ -73,6 +75,11 @@ public class LowerDatabase
     {
         this.sendQuery(query, parameters);
         return result;
+    }
+    
+    public int getMutatedData()
+    {
+        return mutation;
     }
 
     /**

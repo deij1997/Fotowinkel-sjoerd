@@ -9,12 +9,7 @@ $(document).on("click", "#login", function loadDoc() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            if (this.responseText == 0) {
-                document.getElementById("loginErrorMsg").classList.remove("hide");
-            }
-            if (this.responseText == 1) {
-                window.location.replace("index.jsp");
-            }
+            console.log(this.responseText);
         }
 
     };

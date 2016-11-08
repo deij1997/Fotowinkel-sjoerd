@@ -242,9 +242,10 @@ public class Database
 
         return belongsToAUser;
     }
-    
+
     /**
      * Registers a photographer
+     *
      * @param email the photographer email
      * @param password the password
      * @throws SQLException
@@ -254,7 +255,7 @@ public class Database
     {
         InsertPhotographer(email, password);
     }
-    
+
     /**
      * Inserts a photographer into the database
      *
@@ -317,14 +318,38 @@ public class Database
     {
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
-    
-    public void InsertCustomerDetails(String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail
+
+    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail
     {
+        String query = "";
+        String[] parameters;
+
         setUpConnection();
-        String query = "Insert into `adresgegevens`(`voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
-        String[] parameters = new String[]
+        //Insert order
+        query = "Insert into `order` (`klantid`, `betaalmethode`) VALUES (?,?)";
+        parameters = new String[]
         {
-            name, lastname, housenr, street, street, city, country, postcode
+            customer, paymentmethod
+        };
+        dab.sendQuery(query, parameters);
+        int ID = dab.getMutatedData();
+
+        //Insert bestelling
+        for (String i : items)
+        {
+            query = "Insert into `bestelling` (`itemid`, `orderid`) VALUES (?,?)";
+            parameters = new String[]
+            {
+                String.valueOf(i), String.valueOf(ID)
+            };
+            dab.sendQuery(query, parameters);
+        }
+
+        //Insert adress with order
+        query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
+        parameters = new String[]
+        {
+            String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
         };
         dab.sendQuery(query, parameters);
         dab.close();

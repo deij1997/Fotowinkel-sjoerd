@@ -25,6 +25,15 @@ public class Upload
     private final List<Photo> photos = new ArrayList<Photo>();
     private final String customer;
 
+    private final String customerbody = "<h1>Hallo!</h1>\n"
+                                        + "<p>Uw fotos staan klaar!</p>\n"
+                                        + "<p>U kunt deze in de volgende link terugvinden:</p>\n"
+                                        + "<p>%s</p>\n"
+                                        + "<br />\n"
+                                        + "<p>Met vriendelijke groet,</p>\n"
+                                        + "<p>Team Fotowinkel Sjoerd</p>";
+    private final String uploaderbody = "";
+
     /**
      * @deprecated Email is required.
      * @throws Exception
@@ -33,17 +42,17 @@ public class Upload
     {
         throw new Exception("Email is required!");
     }
-    
+
     public Upload(String customer)
     {
         this.customer = customer;
     }
-    
+
     public void AddPhoto(Photo p)
     {
         photos.add(p);
     }
-    
+
     public void AddPhotos(List<Photo> photos)
     {
         for (Photo p : photos)
@@ -51,9 +60,10 @@ public class Upload
             AddPhoto(p);
         }
     }
-    
+
     /**
      * Pushes the upload to the server, database and e-mails the customer
+     *
      * @param request the server request
      * @throws Exceptions.UploadFailed
      * @throws java.sql.SQLException
@@ -64,21 +74,29 @@ public class Upload
     {
         //Get uploaderemail
         String uploaderEmail = new Database().GetEmailFromHash(UserHandler.getUserAsString(request));
-        UploadManager.UploadPhotos(photos, uploaderEmail, customer);
-        EmailCustomer();
+        String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
+        String id = ids[0].substring(0, ids[0].length() - 2);
+        EmailCustomer(id);
     }
-    
-    public void EmailCustomer() throws MessagingException, UnsupportedEncodingException
+
+    public void EmailCustomer(String uploadID) throws MessagingException, UnsupportedEncodingException
     {
-        //TODO: make something for the body
         MailManager mm = new MailManager();
-        mm.Mail(customer, "", "Uw fotos staan klaar!");
+        mm.Mail(customer, String.format(customerbody, "http://localhost:8080/Fotowinkel/Products.jsp?id=" + uploadID), "Uw fotos staan klaar!");
     }
-    
-    public void EmailUploader() throws UnsupportedEncodingException, MessagingException
+
+    public void EmailUploader(HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, Exception
     {
-        //TODO: make something for the body
+        String uploaderEmail;
+        try
+        {
+            uploaderEmail = new Database().GetEmailFromHash(UserHandler.getUserAsString(request));
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("No uploader found");
+        }
         MailManager mm = new MailManager();
-        mm.Mail("", "", "Uw fotos zijn geupload!");
+        mm.Mail(uploaderEmail, uploaderbody, "Uw fotos zijn geupload!");
     }
 }

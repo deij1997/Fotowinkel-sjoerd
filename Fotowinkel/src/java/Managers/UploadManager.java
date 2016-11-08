@@ -69,7 +69,6 @@ public class UploadManager
             {
                 p.SetCode(usedCodes[index++]);
                 p.Upload();
-
             }
             db.InsertPhotos(photos, customer, customer);
 

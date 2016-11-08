@@ -30,6 +30,11 @@ public class UserHandler
         }
         return user;
     }
+    
+    public static boolean isUserLoggedIn(HttpServletRequest request)
+    {
+        return (getUser(request) != null);
+    }
 
     public static String getUserAsString(HttpServletRequest request)
     {

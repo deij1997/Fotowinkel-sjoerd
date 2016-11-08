@@ -8,21 +8,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <%@include file="header.jsp" %>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Fotowinkel Sjoerd</title>
 
-        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
         <script src="JS/PopupImgCSS.js"></script>
-        <link rel="stylesheet" href="CSS/stylesheet.css">
-        <link rel="stylesheet" href="CSS/bootstrap.min.css">
-        <link rel="stylesheet" href="CSS/PopupImg.css">
-
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.jsp" %>
+        
         <div class="container">
 
             <div class="row">
@@ -101,11 +97,7 @@
             </div>
 
         </div>
-        <!-- /.container -->
         <%@include file="footer.jsp" %>
-
-        <!-- Bootstrap Core JavaScript -->
-        <script src="JS/bootstrap.min.js"></script>
 
     </body>
 </html>

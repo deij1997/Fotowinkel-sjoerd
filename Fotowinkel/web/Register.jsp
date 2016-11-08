@@ -49,7 +49,7 @@
                                   </label>
                               </div>
                               <button id="register" class="btn btn-success btn-block" style="margin:3px">Register</button>
-                              <p><a href="#" id="loginRedirect" data-toggle="modal" data-target="#login-modal" style="margin:3px">Already have an account? Login here.</a></p>
+                              <p><a href="#" data-toggle="modal" data-target="#login-modal" data-dismiss="modal" data-target="#register-modal" style="margin:3px">Already have an account? Login here.</a></p>
 
                           </form>
                       </div>

@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="CSS/bootstrap.min.css">
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
         <script src="JS/Login.js"></script>
-        
+
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
@@ -54,8 +54,7 @@
                                             <p class="help-block">(if this is a private computer)</p>
                                         </div>
                                         <button  id="login" class="btn btn-success btn-block" style="margin:3px">Login</button>
-                                        <p><a href="#" data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" style="margin:3px">No account, register now!</a></p>
-
+                                        <p><a href="#"  data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" data-dismiss="modal" data-target="#login-modal" style="margin:3px">No account, register now!</a></p>
                                     </form>
                                 </div>
                             </div>

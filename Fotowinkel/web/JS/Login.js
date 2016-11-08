@@ -33,7 +33,7 @@ $(document).on("click", "#register", function loadDoc() {
                 message.classList.remove("hide");
                 message.innerHTML = "Username already exist. Try a diffrent username.";
             }
-            if (this.responseText == 3) {   
+            if (this.responseText == 3) {
                 message.classList.remove("hide");
                 message.innerHTML = "Fill out all fields.";
             }
@@ -49,5 +49,6 @@ $(document).on("click", "#register", function loadDoc() {
     xhttp.send();
     return false;
 });
+
 
 

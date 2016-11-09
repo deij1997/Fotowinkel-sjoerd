@@ -6,9 +6,6 @@
 
 <%@page import="Managers.UserHandler"%>
 <!DOCTYPE html>
-<%@include file="Login.jsp" %>
-<%@include file="Register.jsp" %>
-
 <header class="header-login-signup">
 
     <div class="header-limiter">
@@ -47,13 +44,8 @@
                     } 
                     window.location.replace("index.jsp");
                 }
-               
-            
         </script>
-
-
     </div>
-
 </header>
 
 

@@ -16,7 +16,6 @@
         <link rel="stylesheet" href="CSS/PopupImg.css">
         <link rel="stylesheet" href="CSS/stylesheet.css">
         <link rel="stylesheet" href="CSS/bootstrap.min.css">
-        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
         <script src="JS/Login.js"></script>
 
         <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>

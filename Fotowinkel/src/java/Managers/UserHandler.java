@@ -5,6 +5,8 @@
  */
 package Managers;
 
+import Base.Database;
+import java.sql.SQLException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,11 @@ public class UserHandler
         }
         return user;
     }
+    
+    public static boolean isUserLoggedIn(HttpServletRequest request)
+    {
+        return (getUser(request) != null);
+    }
 
     public static String getUserAsString(HttpServletRequest request)
     {
@@ -36,6 +43,34 @@ public class UserHandler
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
     {
-        response.addCookie(new Cookie("user", user));
+        boolean doSet = true;
+
+        if (getUser(request) != null)
+        {
+            try
+            {
+                doSet = !userIsPhotographer(request);
+            }
+            catch (SQLException ex)
+            {
+                doSet = false;
+            }
+        }
+        if (doSet)
+        {
+            response.addCookie(new Cookie("user", user));
+        }
+    }
+
+    public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
+    {
+        Cookie user;
+        if ((user = getUser(request)) == null)
+        {
+            return false;
+        }
+
+        //Check if this user is a photographer
+        return new Database().CheckIfPhotographerExists(user.getValue());
     }
 }

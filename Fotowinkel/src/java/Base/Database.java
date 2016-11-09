@@ -34,10 +34,7 @@ public class Database
 
     public void setUpConnection() throws SQLException
     {
-        if (dab == null)
-        {
-            dab = new LowerDatabase();
-        }
+        dab = new LowerDatabase();
     }
 
     public List<Photo> GetPhotos(String code) throws SQLException
@@ -96,12 +93,31 @@ public class Database
         return photos;
     }
 
+    public Photo GetPhoto(String hashId) throws SQLException
+    {
+        setUpConnection();
+        Photo ret = null;
+        String query = "Select * From `item` where code = ?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                hashId
+        });
+
+        while (rs2.next())
+        {
+            ret = new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description"));
+            break;
+        }
+        dab.close();
+
+        return ret;
+    }
+
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
         setUpConnection();
         for (Photo p : photos)
         {
-            //String query = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=" + p.GetTitle() + ",`description`=" + p.GetDescription() + " WHERE `code`=" + p.code;
             String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
             dab.sendQuery(pquery, new String[]
                   {
@@ -119,10 +135,67 @@ public class Database
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
         setUpConnection();
-        String query = "Select * From `fotograaf` where email =?, wachtwoord =?";
+        String query = "Select * From `fotograaf` where `email` =? and `wachtwoord` =?";
         dab.sendQuery(query, new String[]
               {
                   email, password
+        });
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
+
+    public String GetEmailFromHash(String Hash) throws SQLException, Exception
+    {
+        if (Hash.contains("@"))
+        {
+            return Hash;
+        }
+
+        String who = "", ret = "";
+        if (CheckIfCustomerExists(Hash))
+        {
+            who = "klant";
+        }
+        else
+        {
+            if (CheckIfPhotographerExists(Hash))
+            {
+                who = "fotograaf";
+            }
+            else
+            {
+                throw new Exception("Given ID does not exist!");
+            }
+        }
+        setUpConnection();
+        String query = "Select email From `" + who + "` where hash=?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                Hash
+        });
+        while (rs2.next())
+        {
+            ret = rs2.getString("email");
+            break;
+        }
+
+        dab.close();
+
+        if (ret.equals(""))
+        {
+            throw new Exception("Given ID does not exist!");
+        }
+        return ret;
+    }
+
+    public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select id From `fotograaf` where " + (emailorcode.contains("@") ? "email=?" : "hash=?");
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
         });
         boolean ret = dab.hasFoundData();
         dab.close();
@@ -133,9 +206,74 @@ public class Database
     {
         setUpConnection();
         String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
-        dab.sendQuery(query, null);
+        dab.sendQuery(query, new String[]
+              {
+                  emailorcode
+        });
         boolean ret = dab.hasFoundData();
+        dab.close();
         return ret;
+    }
+
+    public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
+    {
+        return CheckIfPhotoBelongsToUser(photocode, user, CheckIfPhotographerExists(user));
+    }
+
+    public boolean CheckIfPhotoBelongsToUser(String photocode, String user, boolean isPhotographer) throws SQLException
+    {
+        setUpConnection();
+
+        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `klantid` from `item` where code = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                photocode
+        });
+        boolean belongsToAUser = false;
+        while (rs2.next())
+        {
+            if (String.valueOf(rs2.getInt("id")).equals(user) || rs2.getString("hash").equals(user) || rs2.getString("email").equals(user))
+            {
+                belongsToAUser = true;
+                break;
+            }
+        }
+        dab.close();
+
+        return belongsToAUser;
+    }
+
+    /**
+     * Registers a photographer
+     *
+     * @param email the photographer email
+     * @param password the password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    public void RegisterPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        InsertPhotographer(email, password);
+    }
+
+    /**
+     * Inserts a photographer into the database
+     *
+     * @param email the photographer email to add
+     * @param password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    private void InsertPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        setUpConnection();
+        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES (?,?,?)";
+        String[] parameters = new String[]
+        {
+            password, email, Encoder.GetHash(email)
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
     }
 
     /**
@@ -179,5 +317,55 @@ public class Database
     public void InsertPhoto(Photo photo, String customer, String photograhper) throws SQLException, RandomiserFail
     {
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
+    }
+
+    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
+    {
+        String query = "";
+        String[] parameters;
+
+        if (items.isEmpty())
+        {
+            return;
+        }
+
+        setUpConnection();
+        //Insert order
+        query = "Insert into `order` (`klantid`, `betaalmethode`) VALUES (?,?)";
+        parameters = new String[]
+        {
+            customer, paymentmethod
+        };
+        dab.sendQuery(query, parameters);
+        ResultSet IDs = dab.getMutatedData();
+        int ID = 0;
+        if (IDs.next())
+        {
+            ID = IDs.getInt("id");
+        }
+        if (ID == 0)
+        {
+            throw new Exception("No order could be inserted");
+        }
+
+        //Insert bestelling
+        for (String i : items)
+        {
+            query = "Insert into `bestelling` (`itemid`, `orderid`) VALUES (?,?)";
+            parameters = new String[]
+            {
+                String.valueOf(i), String.valueOf(ID)
+            };
+            dab.sendQuery(query, parameters);
+        }
+
+        //Insert adress with order
+        query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
+        parameters = new String[]
+        {
+            String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
     }
 }

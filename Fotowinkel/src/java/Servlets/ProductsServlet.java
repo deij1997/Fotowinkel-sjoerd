@@ -77,7 +77,7 @@ public class ProductsServlet extends HttpServlet
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
                             + "                        <div class=\"thumbnail\">\n"
-                            + "                            <div class=\"previewPhoto\"  style=\"background-image: url(\'" + imgurl + "\'), url(\'Images/notfound.png\');\n" + "\" > </div>\n"
+                            + "                            <div id=\"myImg\" class=\"previewPhoto\" style=\"background-image: url(\'" + imgurl + "\'), url(\'Images/notfound.png\');\n" + "\" > </div>\n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
                             + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
@@ -95,7 +95,7 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
-            out.println(ehroar.getMessage());
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" +ehroar.getMessage());
         }
         finally
         {

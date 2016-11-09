@@ -150,13 +150,13 @@ and open the template in the editor.
     border:solid rgb(240,240,240) 10px;
     position: relative;
     padding: 50px;
-    text-align: center;
 }
 
 #imageRow{
         width: 100%;
         border: solid 1px #999;
         height: 100px;
+        overflow-x: auto;
     
 }
 
@@ -192,7 +192,28 @@ and open the template in the editor.
     height: calc(100% - 6px);
     width: 100px;
     float:left;
-    background-image: url("../Images/defaultPicture.gif");
     background-size: cover;
     cursor: pointer;
+}
+
+#uploadedImages h4{
+    float:left;
+    cursor: pointer;
+    
+}
+#uploadedImages h4:hover{
+    color:#202775;
+    
+}
+
+.imageDetails{
+}
+.imageDetails input,.imageDetails textArea{
+    min-width: 100%;
+        max-width: 100%;
+
+}
+
+.hidden{
+    display: none;
 }

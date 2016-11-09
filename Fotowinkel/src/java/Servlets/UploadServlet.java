@@ -5,9 +5,11 @@
  */
 package Servlets;
 
+import Base.Database;
 import Base.Photo;
 import Base.Upload;
 import Managers.UploadManager;
+import Managers.UserHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +65,18 @@ public class UploadServlet extends HttpServlet
 
         try
         {
+            String user = UserHandler.getUserAsString(request);
+            if (user == null || user.isEmpty())
+            {
+                throw new Exception("U hebt niet de juiste machtigingen voor deze handeling");
+            }
+
+            Database db = new Database();
+            if (!db.CheckIfPhotographerExists(user))
+            {
+                throw new Exception("U hebt niet de juiste machtigingen voor deze handelingen");
+            }
+
             //Handle the file data here
             //Checks if the request actually contains upload file
             if (!ServletFileUpload.isMultipartContent(request))
@@ -102,15 +116,33 @@ public class UploadServlet extends HttpServlet
                 List<InputStream> files = new ArrayList<InputStream>();
                 for (Part part : request.getParts())
                 {
-                    files.add(part.getInputStream());
+                    if (part.getContentType().contains("image"));
+                    {
+                        files.add(part.getInputStream());
+                    }
                 }
+                String[] title = request.getParameterValues("imgtitle");
+                String[] descriptions = request.getParameterValues("imgDesc");
+                String[] prices = request.getParameterValues("imgprice");
 
                 //Call UploadManager to convert them
                 List<Photo> photos = UploadManager.CreatePhotosFromUploads(files);
-
+                
+                //Go through all photos to set the values
+                int i = 0;
+                for (Photo p : photos)
+                {
+                    //TODO: TEST
+                    p.SetPrice(Double.valueOf(prices[i]));
+                    p.setTitle(title[i]);
+                    p.setDescription(descriptions[i]);
+                    i++;
+                }
+                
                 //Create an Upload
-                //TODO: ADD EMAIL FIELD AT THE UPLOAD
-                //GET WITH "REQUEST.GETPARAMETER("NAMEOFTHEEMAILFIELD, NOT ID")
+                String email = request.getParameter("inputEmail");
+
+                //TODO: FILL IN AFTER TESTING IS A SUCCESS
                 Upload pupload = new Upload();
 
                 pupload.AddPhotos(photos);
@@ -123,6 +155,10 @@ public class UploadServlet extends HttpServlet
             {
                 out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
             }
+        }
+        catch (Exception ex)
+        {
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
         }
         finally
         {

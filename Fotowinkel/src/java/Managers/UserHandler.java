@@ -43,6 +43,11 @@ public class UserHandler
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
     {
+        if (user == null || user.isEmpty())
+        {
+            return;
+        }
+        
         boolean doSet = true;
 
         if (getUser(request) != null)

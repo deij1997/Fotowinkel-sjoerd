@@ -6,30 +6,17 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    
-
     <head>        
-        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>        
-
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="https://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
+        <%@include file="WEB-INF/head.jspf" %>
         <script src="JS/Upload.js"></script>
         <link rel="stylesheet" href="CSS/Uploadpage.css">
         <script src="https://1000hz.github.io/bootstrap-validator/assets/js/application.js"></script>
-
-        <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-        <link rel="icon" href="Images/icon.gif">
-
-
-
         <title>Upload pagina</title>
     </head>
     <body>
-            <%@include file="header.jsp" %>
+        <%@include file="WEB-INF/header.jsp" %>
+        <%@include file="WEB-INF/login.jspf" %>
+        <%@include file="WEB-INF/register.jspf" %>
 
         <div class="container">
             <form id="upload-form" data-toggle="validator" role="form" class="upload-box" action="UploadServlet" method="post" enctype="multipart/form-data">
@@ -75,12 +62,7 @@
                 </div>
 
             </form>
-
-
-
-
-
         </div>
-        <%@include file="footer.jsp" %>
+        <%@include file="WEB-INF/footer.jsp" %>
     </body>
 </html>

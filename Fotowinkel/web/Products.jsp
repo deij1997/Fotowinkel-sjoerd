@@ -10,6 +10,7 @@
 <html>
     <head>
     <%@include file="WEB-INF/head.jspf" %>
+    <script src="JS/PopupImgCSS.js" type="text/javascript"></script>
         <title>Fotowinkel Sjoerd</title>
     </head>
     <body>

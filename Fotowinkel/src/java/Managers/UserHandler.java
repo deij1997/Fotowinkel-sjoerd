@@ -20,15 +20,23 @@ public class UserHandler
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;
-        for (Cookie k : request.getCookies())
+        if (request != null)
         {
-            if (k.getName().equals("user"))
+            for (Cookie k : request.getCookies())
             {
-                user = k;
-                break;
+                if (k.getName().equals("user"))
+                {
+                    user = k;
+                    break;
+                }
             }
         }
         return user;
+    }
+
+    public static boolean isUserLoggedIn(HttpServletRequest request)
+    {
+        return (getUser(request) != null);
     }
 
     public static String getUserAsString(HttpServletRequest request)
@@ -38,6 +46,11 @@ public class UserHandler
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
     {
+        if (user == null || user.isEmpty())
+        {
+            return;
+        }
+
         boolean doSet = true;
 
         if (getUser(request) != null)

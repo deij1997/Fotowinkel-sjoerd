@@ -8,20 +8,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <%@include file="WEB-INF/head.jspf" %>
         <title>Fotowinkel Sjoerd</title>
-        <link rel="stylesheet" href="CSS/stylesheet.css">
-        <link rel="stylesheet" href="CSS/bootstrap.min.css">
-        <link rel="stylesheet" href="CSS/PopupImg.css">
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>
         <script src="JS/Order.js"></script>
         <script src="JS/PopupImg.js"></script>
-
-        <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     </head>
     <body>
-        <%@include file="header.jsp" %>
+        <%@include file="WEB-INF/header.jsp" %>
+        <%@include file="WEB-INF/login.jspf" %>
+        <%@include file="WEB-INF/register.jspf" %>
         <div class="container">
             <div class="row">
                 <div class="col-md-3" id="detailbox">
@@ -51,6 +46,6 @@
             </div>
 
         </div>
-        <%@include file="footer.jsp" %>
+        <%@include file="WEB-INF/footer.jsp" %>
     </body>
 </html>

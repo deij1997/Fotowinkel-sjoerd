@@ -147,6 +147,11 @@ public class Database
 
     public String GetEmailFromHash(String Hash) throws SQLException, Exception
     {
+        if (Hash.contains("@"))
+        {
+            return Hash;
+        }
+
         String who = "", ret = "";
         if (CheckIfCustomerExists(Hash))
         {
@@ -239,6 +244,39 @@ public class Database
     }
 
     /**
+     * Registers a photographer
+     *
+     * @param email the photographer email
+     * @param password the password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    public void RegisterPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        InsertPhotographer(email, password);
+    }
+
+    /**
+     * Inserts a photographer into the database
+     *
+     * @param email the photographer email to add
+     * @param password
+     * @throws SQLException
+     * @throws Exceptions.RandomiserFail
+     */
+    private void InsertPhotographer(String email, String password) throws SQLException, RandomiserFail
+    {
+        setUpConnection();
+        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES (?,?,?)";
+        String[] parameters = new String[]
+        {
+            password, email, Encoder.GetHash(email)
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
+    }
+
+    /**
      * Inserts a customer into the database
      *
      * @param email the customer email to add
@@ -279,5 +317,55 @@ public class Database
     public void InsertPhoto(Photo photo, String customer, String photograhper) throws SQLException, RandomiserFail
     {
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
+    }
+
+    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
+    {
+        String query = "";
+        String[] parameters;
+
+        if (items.isEmpty())
+        {
+            return;
+        }
+
+        setUpConnection();
+        //Insert order
+        query = "Insert into `order` (`klantid`, `betaalmethode`) VALUES (?,?)";
+        parameters = new String[]
+        {
+            customer, paymentmethod
+        };
+        dab.sendQuery(query, parameters);
+        ResultSet IDs = dab.getMutatedData();
+        int ID = 0;
+        if (IDs.next())
+        {
+            ID = IDs.getInt("id");
+        }
+        if (ID == 0)
+        {
+            throw new Exception("No order could be inserted");
+        }
+
+        //Insert bestelling
+        for (String i : items)
+        {
+            query = "Insert into `bestelling` (`itemid`, `orderid`) VALUES (?,?)";
+            parameters = new String[]
+            {
+                String.valueOf(i), String.valueOf(ID)
+            };
+            dab.sendQuery(query, parameters);
+        }
+
+        //Insert adress with order
+        query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
+        parameters = new String[]
+        {
+            String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
+        };
+        dab.sendQuery(query, parameters);
+        dab.close();
     }
 }

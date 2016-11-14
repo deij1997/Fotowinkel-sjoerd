@@ -26,7 +26,7 @@
         </script>
     </head>
     <body>
-        <%@include file="header.jsp" %>
+        <%@include file="WEB-INF/header.jsp" %>
         <div class="container">
             <h1>Product</h1>
 
@@ -49,7 +49,7 @@
                 </script>
             </div>
         </div>
-        <%@include file="footer.jsp" %>
+        <%@include file="WEB-INF/footer.jsp" %>
 
         <!-- jQuery -->
         <script src="JS/jquery.js"></script>

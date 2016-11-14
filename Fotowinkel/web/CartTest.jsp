@@ -15,7 +15,7 @@
         <h1>cart</h1>
 
         <%
-            Cookie cookie = null;
+ Cookie cookie = null;
             Cookie[] cookies = null;
             ShoppingCart cart;
             // Get an array of Cookies associated with this domain
@@ -30,45 +30,28 @@
                         f = true;
                         out.println("cartID: " + c.getValue());
                         cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
-                        if (cart == null)//checking if the cartID is one that we know
+                        if (cart != null)//checking if the cartID is one that we know
                         {
-                            //disregard our current cartID and get a new one
-                            out.println("we didn't have a cart for your id");
-                    cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
-                    cart = new ShoppingCart();
-                    ShoppingCartHolder.getInstance().AddCart(cart, cookie.getValue());
-                    out.println("new cookie is:");
-                    out.println(cookie.getName() + ":" + cookie.getValue() + "<br>");
-                    response.addCookie(cookie);
-                        } else {
-                            out.println("cart found");
                             Map cc = cart.getAllProducts();
                             Iterator it = cc.entrySet().iterator();
+                            //now we print all of the items in our cart
+                            out.println("<table><tr><th>Item code/ name</th><th>Amount</th></tr>");
+                            boolean e = false;
                             while (it.hasNext()) {
+                                e = true;
                                 Map.Entry pair = (Map.Entry) it.next();
-                                out.println(pair.getKey() + " = " + pair.getValue());
+                                out.println("<tr><td>"+pair.getKey() + "</td><td>" + pair.getValue()+"</td></tr>");
                             }
+                            if(!e)
+                            {
+                                out.println("<tr><td>No items found</td><td></td></tr>");
+                            }
+                            out.println("</table>");
                         }
                     }
 
                 }
-                if (!f) {
-                    //cartID does not exist, so we assign a random one
-                    out.println("Fuck<br>");
-                    cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
-                    out.println("new cookie is:");
-                    out.println(cookie.getName() + ":" + cookie.getValue() + "<br>");
-                    response.addCookie(cookie);
-                    //send this stuff to the cartManager
-                    cart = new ShoppingCart();
-                    ShoppingCartHolder.getInstance().AddCart(cart, cookie.getValue());
-                }
-
-            } else {
-                out.println("<h2>No cookies found, but the function was not called to make new ones</h2>");
-            }
-
-//make a func
+    }
 %>
 
 

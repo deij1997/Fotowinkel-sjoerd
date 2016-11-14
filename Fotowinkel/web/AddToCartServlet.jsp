@@ -30,7 +30,7 @@
                 }
                 ParameterHolder.setProductAmount(amount);
                 String redirectURL = "ProductDetail.jsp?id=" + ParameterHolder.getViewingProduct(request).getValue();
-                //response.sendRedirect(redirectURL);
+                response.sendRedirect(redirectURL);
             %>
         </script>
     </head>

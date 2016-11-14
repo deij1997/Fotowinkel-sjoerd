@@ -47,13 +47,14 @@ public class ProductDetailServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<script src=\"AddToCartScript.js\"></script>");
+            
             out.println("<title>Servlet ProductDetailServlet</title>");            
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
             out.println("<h2>photo:"+p.GetTitle()+" "+p.GetPriceAsString()+"</h2><br/>");
             out.println("<img src=\""+p.getPreviewLocation()+"\"/>");
+            out.println("<input type =\"number\" id=\"amount\" value=\"1\"/>");
             out.println("<button id=\"cart\"  text=\"Winkelwagen\" OnClick=\"AddToCart("+request.getParameter("id")+")\"/>");
             out.println("</html>");
         } finally {

@@ -3,6 +3,7 @@ package Servlets;
 import Base.Database;
 import Base.Item;
 import Base.ShoppingCart;
+import Managers.ParameterHolder;
 import Managers.ShoppingCartHolder;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,41 +34,59 @@ public class AddToCartServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        if (request.getMethod().equals("POST")) {
-PrintWriter out = response.getWriter();
-            Cookie cookie = null;
-            Cookie[] cookies = null;
-            ShoppingCart cart;
-            // Get an array of Cookies associated with this domain
-            // And we also check if there is a cartID
-            cookies = request.getCookies();
-            if (cookies != null) {
-                boolean f = false;
-                for (Cookie c : cookies) {
 
-                    if (c.getName().equals("cartID"))// cartID found, now we send the value
+        PrintWriter out = response.getWriter();
+        Cookie cookie = null;
+        Cookie[] cookies = null;
+        ShoppingCart cart;
+        // Get an array of Cookies associated with this domain
+        // And we also check if there is a cartID
+        out.println("check da cookies");
+        cookies = request.getCookies();
+        if (cookies != null) {
+            out.println("adding...");
+            boolean f = false;
+            for (Cookie c : cookies) {
+
+                if (c.getName().equals("cartID"))// cartID found, now we send the value
+                {
+                    f = true;
+                    cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
+                    if (cart == null)//checking if the cartID is one that we know
                     {
-                        f = true;
-                        cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
-                        if (cart == null)//checking if the cartID is one that we know
-                        {
-                            //disregard our current cartID and get a new one
-                            cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
-                            response.addCookie(cookie);
-                        } else {
-                            Item product = new Database().GetPhoto(request.getParameter("code"));
-                            if(product!=null) cart.AddItemToBasket(product, 0);
-                            else out.println("product is null: "+request.getParameter("code"));
+                        //disregard our current cartID and get a new one
+                        cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
+                        response.addCookie(cookie);
+                    } else {
+                        Item product = new Database().GetPhoto(ParameterHolder.getViewingProduct(request).getValue());
+                        if (product != null) {
+                            int amount = ParameterHolder.getProductAmount();
+                            if (amount > 0) {
+                                if(new Database().CheckIfPhotoBelongsToUser(ParameterHolder.getViewingProduct(request).getValue(), ParameterHolder.getUserID())){
+                                cart.AddItemToBasket(product, amount);
+                                out.println("can't spell success without succ");
+                                }
+                                else
+                                {
+                                    out.println("you're not allowed to do that.");
+                                }
+                            } else {
+                                out.println("invalid amount");
                             }
+                        } else {
+                            out.println("product is null: " + request.getParameter("code"));
                         }
                     }
-
                 }
             }
+
+        }
+    }
 //        String productname = "n";
 //        PrintWriter out = response.getWriter();
 //        try {
@@ -80,57 +99,52 @@ PrintWriter out = response.getWriter();
 //        } finally {
 //            out.close();
 //        }
-        }
 
-        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-        /**
-         * Handles the HTTP <code>GET</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doGet
-        (HttpServletRequest request, HttpServletResponse response)
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
-
-        /**
-         * Handles the HTTP <code>POST</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doPost
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        }
-
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-            () {
-        return "Short description";
-        }// </editor-fold>
-
     }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AddToCartServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

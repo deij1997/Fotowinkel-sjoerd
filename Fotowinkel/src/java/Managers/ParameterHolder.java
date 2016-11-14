@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Martijn
  */
 public class ParameterHolder {
+    
+    private static int ProductAmount = 0;
 
     public static void setViewingProduct(String product, HttpServletRequest request, HttpServletResponse response) {
         response.addCookie(new Cookie("product", product));
@@ -24,4 +26,20 @@ public class ParameterHolder {
         }
         return product;
     }
+    
+    public static void setProductAmount(int am)
+    {
+        ProductAmount = am;
+    }
+    
+    public static int getProductAmount()
+    {
+        return ProductAmount;
+    }
+    
+    public static String getUserID()
+    {
+        return "e";
+    }
+    
 }

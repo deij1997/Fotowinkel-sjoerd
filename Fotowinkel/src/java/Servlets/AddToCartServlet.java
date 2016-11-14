@@ -5,6 +5,7 @@ import Base.Item;
 import Base.ShoppingCart;
 import Managers.ParameterHolder;
 import Managers.ShoppingCartHolder;
+import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -67,9 +68,9 @@ public class AddToCartServlet extends HttpServlet {
                         if (product != null) {
                             int amount = ParameterHolder.getProductAmount();
                             if (amount > 0) {
-                                if(new Database().CheckIfPhotoBelongsToUser(ParameterHolder.getViewingProduct(request).getValue(), ParameterHolder.getUserID())){
+                                if(new Database().CheckIfPhotoBelongsToUser(ParameterHolder.getViewingProduct(request).getValue(), UserHandler.getUser(request).getValue())){
                                 cart.AddItemToBasket(product, amount);
-                                out.println("can't spell success without succ");
+                                out.println("added successfully");
                                 }
                                 else
                                 {

@@ -17,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserHandler
 {
+    private UserHandler()
+    {
+        
+    }
+    
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;
@@ -41,7 +46,7 @@ public class UserHandler
 
     public static String getUserAsString(HttpServletRequest request)
     {
-        return getUser(request).getValue();
+        return isUserLoggedIn(request) ? getUser(request).getValue() : "";
     }
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)

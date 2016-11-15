@@ -80,13 +80,13 @@ public class ProductsServlet extends HttpServlet
                             + "                            <div id=\"myImg\" class=\"previewPhoto\" style=\"background-image: url(\'" + imgurl + "\'), url(\'Images/notfound.png\');\n" + "\" > </div>\n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
-                            + "                                <h4><a href=\"ProductDetail.jsp?id="+p.GetCode()+"\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                            + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
-                            + "                                <p class=\"pull-right\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Bestel</a></p>\n"
-                            + "                                <p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
+                            + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" href=\"\">Bestel</a></p>\n"
+                            + "                                <p> Quantity: <input id='" + p.GetCode() + "_amnt' type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");
@@ -95,7 +95,7 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
-            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" +ehroar.getMessage());
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
         }
         finally
         {

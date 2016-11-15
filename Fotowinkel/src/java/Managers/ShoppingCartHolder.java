@@ -17,84 +17,84 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Martijn
  */
-public class ShoppingCartHolder {
-    
+public class ShoppingCartHolder
+{
+
     HashMap carts = new HashMap();
     private static SecureRandom random = new SecureRandom();
     private static final ShoppingCartHolder INSTANCE = new ShoppingCartHolder();
 
-    private ShoppingCartHolder() {
-        if (INSTANCE != null) {
+    private ShoppingCartHolder()
+    {
+        if (INSTANCE != null)
+        {
             throw new IllegalStateException("Already instantiated");
         }
     }
-    
-     public static ShoppingCartHolder getInstance() {
+
+    public static ShoppingCartHolder getInstance()
+    {
         return INSTANCE;
     }
-     
-    
+
     public void AddCart(ShoppingCart cart, String id)
     {
         carts.put(id, cart);
     }
-    
+
     public ShoppingCart GetCartByID(String ID)
     {
-        return (ShoppingCart)carts.get(ID);
+        return (ShoppingCart) carts.get(ID);
     }
-    
+
     public static String getRandomID()
     {
-         return new BigInteger(130, random).toString(32);
+        return new BigInteger(130, random).toString(32);
     }
-    
+
     public void checkIfNewCartNeeded(HttpServletRequest request, HttpServletResponse response)
     {
-         Cookie cookie = null;
-            Cookie[] cookies = null;
-            ShoppingCart cart;
-            // Get an array of Cookies associated with this domain
-            // And we also check if there is a cartID
-            cookies = request.getCookies();
-            boolean f = false;
-            if (cookies != null) {
-                
-                for (Cookie c : cookies) {
-
-                    if (c.getName().equals("cartID"))// cartID found, now we send the value
+        Cookie[] cookies = request.getCookies();
+        ShoppingCart cart;
+        boolean f = false;
+        if (cookies != null)
+        {
+            for (Cookie c : cookies)
+            {
+                if (c.getName().equals("cartID"))// cartID found, now we send the value
+                {
+                    f = true;
+                    cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
+                    if (cart == null)//checking if the cartID is one that we know
                     {
-                        f = true;
-                        cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
-                        if (cart == null)//checking if the cartID is one that we know
-                        {
-                            //disregard our current cartID and get a new one
-                    NewCookie(response);
-                        } else {
-                            return;//cart exists
-                            }
-                        }
+                        //disregard our current cartID and get a new one
+                        NewCookie(response);
                     }
-                return;
+                    else
+                    {
+                        return;//cart exists
+                    }
+                    break;
                 }
+            }
+        }
+        if (!f)
+        {
             //there are somehow no cookies for this domain, so we also give ourselves a new ID
             NewCookie(response);
-                
+        }
 
-                
-
-            } 
+    }
 
     private void NewCookie(HttpServletResponse response)
     {
-                            //cartID does not exist, so we assign a random one
-                    Cookie cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
+        //cartID does not exist, so we assign a random one
+        Cookie cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());
 
-                    response.addCookie(cookie);
-                    //send this stuff to the cartManager
-                    ShoppingCart cart = new ShoppingCart();
-                    ShoppingCartHolder.getInstance().AddCart(cart, cookie.getValue());
+        response.addCookie(cookie);
+        //send this stuff to the cartManager
+        ShoppingCart cart = new ShoppingCart();
+        ShoppingCartHolder.getInstance().AddCart(cart, cookie.getValue());
     }
-    
-    
+
 }

@@ -80,7 +80,7 @@ public class ProductsServlet extends HttpServlet
                             + "                            <div id=\"myImg\" class=\"previewPhoto\" style=\"background-image: url(\'" + imgurl + "\'), url(\'Images/notfound.png\');\n" + "\" > </div>\n"
                             + "                            <div class=\"caption\">\n"
                             + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
-                            + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                            + "                                <h4><a href=\"ProductDetail.jsp?id="+p.GetCode()+"\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"

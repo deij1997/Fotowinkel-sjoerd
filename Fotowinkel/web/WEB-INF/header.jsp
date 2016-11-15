@@ -4,12 +4,15 @@
     Author     : Tu
 --%>
 
+<%@page import="Managers.ShoppingCartHolder"%>
 <%@page import="Managers.UserHandler"%>
 <!DOCTYPE html>
 <header class="header-login-signup">
 
     <div class="header-limiter">
-
+        <%
+            ShoppingCartHolder.getInstance().checkIfNewCartNeeded(request, response);
+            %>
         <h1><a href="#">Fotowinkel<span>Sjoerd</span></a></h1>
 
         <nav>

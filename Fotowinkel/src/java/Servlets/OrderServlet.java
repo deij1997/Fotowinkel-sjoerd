@@ -50,8 +50,8 @@ public class OrderServlet extends HttpServlet
         try
         {
             String klantcode = "555";
-
             Database db = new Database();
+
 
             List<Photo> photos = db.GetPhotos(klantcode);
 

@@ -21,7 +21,7 @@
             <a href="Order.jsp" >Shopping Cart</a>
 
              <%
-            if (UserHandler.isUserLoggedIn(request)) {%>
+            if (UserHandler.userIsPhotographer(request)) {%>
             <a href="upload.jsp">Upload</a><%}%>
         </nav>
         <%

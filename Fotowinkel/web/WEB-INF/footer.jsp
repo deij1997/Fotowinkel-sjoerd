@@ -22,7 +22,7 @@
     </div>
 
     <div class="footer-center">
-
+        <h3><span>Contact</span></h3>
         <div>
             <i class="fa fa-map-marker"></i>
             <p><span>Rachelsmolen 1</span> Eindhoven, The Netherlands</p>
@@ -41,18 +41,19 @@
     </div>
 
     <div class="footer-right">
+        <h3><span>About</span></h3>
 
         <p class="footer-company-about">
             <span>About the company</span>
-            Fotowinkel Sjoerd is build by 5 of the best developers of the world. h4r4mb3 4l1f3
+            Fotowinkel Sjoerd is build by 5 developers of Fontys. This is a project for PTS4.
         </p>
 
         <div class="footer-icons">
 
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-github"></i></a>
+            <a href="https://www.facebook.com/FontysHogescholen/"><i class="fa fa-facebook"></i></a>
+            <a href="https://twitter.com/fontys"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.linkedin.com/start/join?session_redirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Ffontys-hogescholen&source=sentinel_org_block&trk=login_reg_redirect"><i class="fa fa-linkedin"></i></a>
+            <a href="https://github.com/fontys"><i class="fa fa-github"></i></a>
 
         </div>
 

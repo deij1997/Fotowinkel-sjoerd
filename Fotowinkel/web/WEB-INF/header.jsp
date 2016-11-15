@@ -13,16 +13,20 @@
         <%
             ShoppingCartHolder.getInstance().checkIfNewCartNeeded(request, response);
             %>
-        <h1><a href="#">Fotowinkel<span>Sjoerd</span></a></h1>
+        <h1><a href="index.jsp">Fotowinkel<span>Sjoerd</span></a></h1>
 
         <nav>
             <a href="index.jsp" class="selected">Home</a>
             <a href="Products.jsp" >Shop</a>
-            <a href="#" >About</a>
-            <a href="#">Contact</a>
+            <a href="Order.jsp" >Shopping Cart</a>
+
+             <%
+            if (UserHandler.isUserLoggedIn(request)) {%>
+            <a href="upload.jsp">Upload</a><%}%>
         </nav>
         <%
             if (!UserHandler.isUserLoggedIn(request)) {%>
+            
         <ul>
             <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
             <li><a href="#" data-toggle="modal" data-target="#register-modal">Sign up</a></li>

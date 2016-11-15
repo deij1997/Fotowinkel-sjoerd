@@ -8,9 +8,13 @@ package Servlets;
 import Base.Database;
 import Base.Encoder;
 import Base.Photo;
+import Base.ShoppingCart;
+import Managers.ShoppingCartHolder;
+import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,16 +53,23 @@ public class OrderServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            String klantcode = "555";
+            String klantcode = UserHandler.getUserAsString(request);
             Database db = new Database();
 
+            ShoppingCart cart = ShoppingCartHolder.getInstance().getCurrentCart(request, response);
 
-            List<Photo> photos = db.GetPhotos(klantcode);
-
+            //List<Photo> photos = db.GetPhotos(klantcode);
             double dtprice = 0;
 
-            for (Photo p : photos)
+            Map cc = cart.getAllProducts();
+            Iterator it = cc.entrySet().iterator();
+            
+            
+            while (it.hasNext())
             {
+                Map.Entry pair = (Map.Entry) it.next();
+                Photo p = db.GetPhoto(String.valueOf(pair.getKey()));
+            
                 String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();
                 String title = p.GetTitle();
@@ -71,24 +82,26 @@ public class OrderServlet extends HttpServlet
                 {
                     description = "Zonder beschrijving";
                 }
-                String amount = "1";
+                int amnt = (Integer)pair.getValue();
+                String amount = String.valueOf(amnt);
+                
+                String pricedetails = Photo.GetPriceAsString(p.GetPrice() * amnt);
 
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<div class=\"col-md-12\">\n"
                             + "                        \n"
                             + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img id=\"myImg\" src='"+ imgurl + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                            + "                            <img id=\"myImg\" src='" + imgurl + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
                             + "                            \n"
                             + "                            <div class=\"caption\">\n"
-                            + "                                <h4 class=\"pull-right\">" + price + "</h4>\n"
+                            + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
                             + "                                <h4>\n"
                             + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
                             + "                                </h4>\n"
                             + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
-                            + "                                    <p class=\"pull-right\"> Stuks </p>\n"
-                            + "                                    <p class=\"pull-right\">" + amount + "&nbsp&nbsp</p>\n"
+                            + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
                             + "                                </div>\n"
                             + "                                \n"
                             + "                            </div>\n"
@@ -96,7 +109,7 @@ public class OrderServlet extends HttpServlet
                             + "                        </div>\n"
                             + "                        \n"
                             + "                    </div>");
-                dtprice += p.GetPrice();
+                dtprice += (p.GetPrice() * amnt);
             }
             String tprice = "€ " + String.format("%.2f", dtprice);
             out.println(

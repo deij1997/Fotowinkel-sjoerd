@@ -86,7 +86,7 @@ public class ProductsServlet extends HttpServlet
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
                             + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" href=\"\">Bestel</a></p>\n"
-                            + "                                <p> Quantity: <input id='" + p.GetCode() + "_amnt' type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
+                            + "                                <p> Aantal: <input id='" + p.GetCode() + "_amnt' type=\"number\" value='1' name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");

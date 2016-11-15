@@ -15,21 +15,23 @@
         <h1>cart</h1>
 
         <%
- Cookie cookie = null;
+            Cookie cookie = null;
             Cookie[] cookies = null;
             ShoppingCart cart;
             // Get an array of Cookies associated with this domain
             // And we also check if there is a cartID
             cookies = request.getCookies();
-            if (cookies != null) {
+            if (cookies != null)
+            {
                 boolean f = false;
-                for (Cookie c : cookies) {
+                for (Cookie c : cookies)
+                {
 
                     if (c.getName().equals("cartID"))// cartID found, now we send the value
                     {
                         f = true;
                         out.println("cartID: " + c.getValue());
-                        cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
+                        cart = ShoppingCartHolder.getInstance().getCartByID(c.getValue());
                         if (cart != null)//checking if the cartID is one that we know
                         {
                             Map cc = cart.getAllProducts();
@@ -37,12 +39,13 @@
                             //now we print all of the items in our cart
                             out.println("<table><tr><th>Item code/ name</th><th>Amount</th></tr>");
                             boolean e = false;
-                            while (it.hasNext()) {
+                            while (it.hasNext())
+                            {
                                 e = true;
                                 Map.Entry pair = (Map.Entry) it.next();
-                                out.println("<tr><td>"+pair.getKey() + "</td><td>" + pair.getValue()+"</td></tr>");
+                                out.println("<tr><td>" + pair.getKey() + "</td><td>" + pair.getValue() + "</td></tr>");
                             }
-                            if(!e)
+                            if (!e)
                             {
                                 out.println("<tr><td>No items found</td><td></td></tr>");
                             }
@@ -51,8 +54,8 @@
                     }
 
                 }
-    }
-%>
+            }
+        %>
 
 
     </body>

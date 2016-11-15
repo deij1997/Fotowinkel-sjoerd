@@ -54,7 +54,7 @@ public class AddToCartServlet extends HttpServlet
             {
                 if (c.getName().equals("cartID"))// cartID found, now we send the value
                 {
-                    ShoppingCart cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
+                    ShoppingCart cart = ShoppingCartHolder.getInstance().getCartByID(c.getValue());
                     if (cart == null)//checking if the cartID is one that we know
                     {
                         //disregard our current cartID and get a new one

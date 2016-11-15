@@ -41,8 +41,25 @@ public class ShoppingCartHolder
     {
         carts.put(id, cart);
     }
+    
+    public ShoppingCart getCurrentCart(HttpServletRequest request, HttpServletResponse response)
+    {
+        String ret = null;
+        for (Cookie k : request.getCookies())
+        {
+            if (k.getName().equals("cartID"))
+            {
+                ret = k.getValue();
+            }
+        }
+        if (ret == null)
+        {
+            return null;
+        }
+        return getCartByID(ret);
+    }
 
-    public ShoppingCart GetCartByID(String ID)
+    public ShoppingCart getCartByID(String ID)
     {
         return (ShoppingCart) carts.get(ID);
     }
@@ -64,7 +81,7 @@ public class ShoppingCartHolder
                 if (c.getName().equals("cartID"))// cartID found, now we send the value
                 {
                     f = true;
-                    cart = ShoppingCartHolder.getInstance().GetCartByID(c.getValue());
+                    cart = ShoppingCartHolder.getInstance().getCartByID(c.getValue());
                     if (cart == null)//checking if the cartID is one that we know
                     {
                         //disregard our current cartID and get a new one

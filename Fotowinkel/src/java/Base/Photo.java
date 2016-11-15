@@ -196,7 +196,12 @@ public class Photo extends Item
 
     public String GetPriceAsString()
     {
-        return "€ " + String.format("%.2f", this.GetPrice());
+        return GetPriceAsString(this.price);
+    }
+    
+    public static String GetPriceAsString(double price)
+    {
+        return "€ " + String.format("%.2f", price);
     }
 
 }

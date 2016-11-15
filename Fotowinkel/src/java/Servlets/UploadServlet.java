@@ -10,9 +10,11 @@ import Base.Photo;
 import Base.Upload;
 import Managers.UploadManager;
 import Managers.UserHandler;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,21 +115,44 @@ public class UploadServlet extends HttpServlet
             try
             {
                 // parses the request's content to extract file data
+                String[] descriptions = new String[(int) (request.getParts().size() / 4)];
+                int l = 0;
                 List<InputStream> files = new ArrayList<InputStream>();
                 for (Part part : request.getParts())
                 {
-                    if (part.getContentType().contains("image"));
+                    if (part.getContentType() != null)
                     {
-                        files.add(part.getInputStream());
+                        if (part.getContentType().contains("image"));
+                        {
+                            InputStream x = part.getInputStream();
+                            if (x != null)
+                            {
+                                files.add(x);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (part.getName().equals("imgDesc"))
+                        {
+                            BufferedReader in = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
+                            String inputLine;
+                            StringBuilder a = new StringBuilder();
+                            while ((inputLine = in.readLine()) != null)
+                            {
+                                a.append(inputLine);
+                            }
+                            in.close();
+                            descriptions[l++] = a.toString();
+                        }
                     }
                 }
                 String[] title = request.getParameterValues("imgtitle");
-                String[] descriptions = request.getParameterValues("imgDesc");
                 String[] prices = request.getParameterValues("imgprice");
 
                 //Call UploadManager to convert them
                 List<Photo> photos = UploadManager.CreatePhotosFromUploads(files);
-                
+
                 //Go through all photos to set the values
                 int i = 0;
                 for (Photo p : photos)
@@ -138,12 +163,12 @@ public class UploadServlet extends HttpServlet
                     p.setDescription(descriptions[i]);
                     i++;
                 }
-                
+
                 //Create an Upload
                 String email = request.getParameter("inputEmail");
 
                 //TODO: FILL IN AFTER TESTING IS A SUCCESS
-                Upload pupload = new Upload();
+                Upload pupload = new Upload(email);
 
                 pupload.AddPhotos(photos);
                 pupload.Push(request);
@@ -153,12 +178,22 @@ public class UploadServlet extends HttpServlet
             }
             catch (Exception ex)
             {
-                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
+                String errormessage = ex.getMessage();
+                if (errormessage == null)
+                {
+                    errormessage = ex.getCause().toString();
+                }
+                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + errormessage);
             }
         }
         catch (Exception ex)
         {
-            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
+            String errormessage = ex.getMessage();
+            if (errormessage == null)
+            {
+                errormessage = ex.getCause().toString();
+            }
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + errormessage);
         }
         finally
         {

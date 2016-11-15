@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -41,7 +42,7 @@ public class LowerDatabase
      */
     public void sendQuery(String query, String[] parameters) throws SQLException
     {
-        statement = con.prepareStatement(query);
+        statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         int i = 0;
         if (parameters != null)
         {

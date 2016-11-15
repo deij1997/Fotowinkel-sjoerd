@@ -70,7 +70,7 @@ public class UploadManager
                 p.SetCode(usedCodes[index++]);
                 p.Upload();
             }
-            db.InsertPhotos(photos, customer, customer);
+            db.InsertPhotos(photos, customer, useremail);
 
             return usedCodes;
         }

@@ -5,6 +5,7 @@
  */
 package Base;
 
+import Exceptions.RandomiserFail;
 import Exceptions.UploadFailed;
 import Managers.Mail.MailManager;
 import Managers.UploadManager;
@@ -76,7 +77,13 @@ public class Upload
         String uploaderEmail = new Database().GetEmailFromHash(UserHandler.getUserAsString(request));
         String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
         String id = ids[0].substring(0, ids[0].length() - 2);
-        EmailCustomer(id);
+        EmailCustomer();
+    }
+    
+    public void EmailCustomer() throws MessagingException, UnsupportedEncodingException, RandomiserFail
+    {
+        MailManager mm = new MailManager();
+        mm.Mail(customer, String.format(customerbody, "http://localhost:8080/Fotowinkel/Products.jsp?id=" + Encoder.GetHash(customer)), "Uw fotos staan klaar!");
     }
 
     public void EmailCustomer(String uploadID) throws MessagingException, UnsupportedEncodingException

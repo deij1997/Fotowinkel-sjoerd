@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -192,6 +193,24 @@ public class Database
         }
         return ret;
     }
+    
+    private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
+    {
+        int ret = -1;
+        setUpConnection();
+        String query = "Select id from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where hash=?";
+        ResultSet r = dab.getData(query, new String[]
+        {
+            hash
+        });
+        
+        while(r.next())
+        {
+            ret = r.getInt("id");
+            break;
+        }
+        return ret;
+    }
 
     public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
     {
@@ -290,7 +309,7 @@ public class Database
     private void InsertCustomer(String email) throws SQLException, RandomiserFail
     {
         setUpConnection();
-        String query = "Insert into `klant`(`id`, `email`) VALUES (?,?)";
+        String query = "Insert into `klant`(`hash`, `email`) VALUES (?,?)";
         String[] parameters = new String[]
         {
             Encoder.GetHash(email), email
@@ -300,10 +319,12 @@ public class Database
 
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
     {
+        setUpConnection();
         if (!CheckIfCustomerExists(customer))
         {
             InsertCustomer(customer);
         }
+        setUpConnection();
 
         for (Photo p : photos)
         {
@@ -311,8 +332,8 @@ public class Database
             dab.sendQuery(pquery, new String[]
                   {
                       //TODO Please note that price can differ in dots and commas, depending on OS language
-                      p.code, (customer.contains("@") ? Encoder.GetHash(customer) : customer), String.format(".2%f%n", p.price),
-                      (photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), p.GetTitle(), p.GetDescription()
+                      p.code, String.valueOf(GetIDFromHash((customer.contains("@") ? Encoder.GetHash(customer) : customer), false)), String.format(Locale.ENGLISH,"%.02f", p.price),
+                      String.valueOf(GetIDFromHash((photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), true)), p.GetTitle(), p.GetDescription()
             });
         }
         dab.close();
@@ -338,7 +359,7 @@ public class Database
         query = "Insert into `order` (`klantid`, `betaalmethode`) VALUES (?,?)";
         parameters = new String[]
         {
-            customer, paymentmethod
+            String.valueOf(GetIDFromHash(customer, false)), paymentmethod
         };
         dab.sendQuery(query, parameters);
         ResultSet IDs = dab.getMutatedData();
@@ -351,6 +372,7 @@ public class Database
         {
             throw new Exception("No order could be inserted");
         }
+        setUpConnection();
 
         //Insert bestelling
         for (String i : items)
@@ -362,6 +384,7 @@ public class Database
             };
             dab.sendQuery(query, parameters);
         }
+        setUpConnection();
 
         //Insert adress with order
         query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";

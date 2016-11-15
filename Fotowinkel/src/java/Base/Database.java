@@ -19,12 +19,16 @@ public class Database
 {
     final static String DRIVER = "com.mysql.jdbc.Driver";
     LowerDatabase dab;
+    private static Object k = null;
 
     public Database()
     {
         try
         {
-            Class.forName(DRIVER).newInstance();
+            if (k == null)
+            {
+                k = Class.forName(DRIVER).newInstance();
+            }
             setUpConnection();
         }
         catch (Exception e)
@@ -267,7 +271,7 @@ public class Database
     private void InsertPhotographer(String email, String password) throws SQLException, RandomiserFail
     {
         setUpConnection();
-        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES (?,?,?)";
+        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES(?,?,?)";
         String[] parameters = new String[]
         {
             password, email, Encoder.GetHash(email)

@@ -27,9 +27,9 @@ public class UserHandler
         Cookie user = null;
         if (request != null)
         {
-            for (Cookie k : request.getCookies())
+            if (request.getCookies() != null)
             {
-                if (k != null)
+                for (Cookie k : request.getCookies())
                 {
                     if (k.getName().equals("user"))
                     {

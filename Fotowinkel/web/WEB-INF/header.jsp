@@ -18,27 +18,38 @@
         <nav>
             <a href="index.jsp" class="selected">Home</a>
             <a href="Products.jsp" >Shop</a>
-            <a href="Order.jsp" >Shopping Cart</a>
-
              <%
             if (UserHandler.userIsPhotographer(request)) {%>
             <a href="upload.jsp">Upload</a><%}%>
         </nav>
         <%
             if (!UserHandler.isUserLoggedIn(request)) {%>
-            
         <ul>
-            <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a></li>
-            <li><a href="#" data-toggle="modal" data-target="#register-modal">Sign up</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#login-modal"><img src="http://www.foodstarz.com/assets/images/login_icon.png" alt="" width="15" height="15">Login</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#register-modal"><img src="http://daytonsocialportal.com/wp-content/uploads/2014/06/signup-icon-white.png" alt="" width="15" height="15">Sign up</a></li>  
+            <li><a href="Order.jsp" >Shopping Cart<img src="http://www.vestsforservicedogs.com/product_images/cart.png" alt="" width="50" height="50"></a></li>
         </ul>
-        <%} else {%>
+
+
+        
+
+
+        <%} else if (UserHandler.userIsPhotographer(request)){%>
         <ul>
             <li>Welcome <% out.println(UserHandler.getUserAsString(request)); %></li>
-            <li><a href="#" id="logout" onclick="deleteAllCookies()">Logout</a></li>
+            <li><a href="#" id="logout" onclick="deleteAllCookies()">Logout<img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
+            <li><a href="Order.jsp" >Shopping Cart<img src="http://www.vestsforservicedogs.com/product_images/cart.png" alt="" width="50" height="50"></a></li>
+
 
         </ul>
 
-        <%}%>
+        <%} else {%>
+                <ul>
+            <li>Welcome Klant</li>
+            <li><a href="#" id="logout" onclick="deleteAllCookies()">Logout<img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
+            <li><a href="Order.jsp" >Shopping Cart<img src="http://www.vestsforservicedogs.com/product_images/cart.png" alt="" width="50" height="50"></a></li>
+
+        </ul><%}%>
         <script>
                 function deleteAllCookies() {
                     var cookies = document.cookie.split(";");

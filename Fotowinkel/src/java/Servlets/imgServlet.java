@@ -48,7 +48,7 @@ public class imgServlet extends HttpServlet
         String type = request.getParameter("type");
         String id = request.getParameter("id");
         
-        BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg");
+        BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
         
         try
         {

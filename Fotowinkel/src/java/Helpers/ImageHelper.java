@@ -40,10 +40,19 @@ public class ImageHelper
             System.out.println("Error: " + e);
         }
     }
-    
-    public static BufferedImage getImage(String path) throws IOException
+
+    public static BufferedImage getImage(String path, String missing) throws IOException
     {
-        return ImageIO.read(new File(path));
+        BufferedImage ret = null;
+        try
+        {
+            ret = ImageIO.read(new File(path));
+        }
+        catch (Exception e)
+        {
+            ret = ImageIO.read(new File(missing));
+        }
+        return ret;
     }
 
     public static BufferedImage ToGrayScale(BufferedImage img)

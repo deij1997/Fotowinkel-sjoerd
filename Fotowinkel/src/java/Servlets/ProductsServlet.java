@@ -79,7 +79,7 @@ public class ProductsServlet extends HttpServlet
                             + "                        <div class=\"thumbnail\">\n"
                             + "                            <div class='center'>"
                             + "                                  <img id=\"myImg\" src='" + imgurl + "' style=\"max-height: 100%;\" class=\"previewPhoto " + p.GetCode() + " \" alt='" + Encoder.HTMLEntityEncode(description) + "' "
-                            + "                                     onerror=\"this.onerror=null;this.src='Images/notfound.png'\n" + "\" > </img>"
+                            + "                                     onerror=\"removeButtons(event);\"\n" + "\" > </img>"
                             + "                                     <ol class=\"carousel-indicators custombutt\">\n"
                             + "                                         <li class=\"gree\"></li>\n"
                             + "                                         <li class=\"norml active\"></li>\n"

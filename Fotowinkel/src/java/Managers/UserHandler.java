@@ -19,9 +19,9 @@ public class UserHandler
 {
     private UserHandler()
     {
-        
+
     }
-    
+
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;
@@ -29,10 +29,13 @@ public class UserHandler
         {
             for (Cookie k : request.getCookies())
             {
-                if (k.getName().equals("user"))
+                if (k != null)
                 {
-                    user = k;
-                    break;
+                    if (k.getName().equals("user"))
+                    {
+                        user = k;
+                        break;
+                    }
                 }
             }
         }
@@ -77,8 +80,8 @@ public class UserHandler
 
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
     {
-        Cookie user;
-        if ((user = getUser(request)) == null)
+        Cookie user = getUser(request);
+        if (user == null)
         {
             return false;
         }

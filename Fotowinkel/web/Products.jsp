@@ -76,7 +76,7 @@
                                 xhttp.onreadystatechange = function () {
                                     if (this.readyState === 4 && this.status === 200) {
                                         document.getElementById("demo").innerHTML = this.responseText;
-                                        if (this.responseText !== "Er ging iets fout, probeer het (later) opnieuw.")
+                                        if (document.cookie.indexOf("user") != -1)
                                         {
                                             //Set header stuff 
                                             document.getElementById('userinfo').innerHTML = "<li>Welcome Klant</li> <li><a href=\"#\" id=\"logout\" onclick=\"deleteAllCookies()\">Uitloggen<img src=\"http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255\" alt=\"\" width=\"30\" height=\"30\"></a></li> <li><a href=\"Order.jsp\" >Winkelmandje<img src=\"http://www.vestsforservicedogs.com/product_images/cart.png\" alt=\"\" width=\"50\" height=\"50\"></a></li>";

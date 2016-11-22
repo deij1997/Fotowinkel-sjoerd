@@ -170,7 +170,7 @@ public class Database
             }
             else
             {
-                throw new Exception("Given ID does not exist!");
+                throw new Exception("Given email-ID " + Hash + " does not exist!");
             }
         }
         setUpConnection();
@@ -189,22 +189,22 @@ public class Database
 
         if (ret.equals(""))
         {
-            throw new Exception("Given ID does not exist!");
+            throw new Exception("Given email-ID " + Hash + " does not exist!");
         }
         return ret;
     }
-    
+
     private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
     {
         int ret = -1;
         setUpConnection();
         String query = "Select id from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where hash=?";
         ResultSet r = dab.getData(query, new String[]
-        {
-            hash
+                          {
+                              hash
         });
-        
-        while(r.next())
+
+        while (r.next())
         {
             ret = r.getInt("id");
             break;
@@ -332,7 +332,7 @@ public class Database
             dab.sendQuery(pquery, new String[]
                   {
                       //TODO Please note that price can differ in dots and commas, depending on OS language
-                      p.code, String.valueOf(GetIDFromHash((customer.contains("@") ? Encoder.GetHash(customer) : customer), false)), String.format(Locale.ENGLISH,"%.02f", p.price),
+                      p.code, String.valueOf(GetIDFromHash((customer.contains("@") ? Encoder.GetHash(customer) : customer), false)), String.format(Locale.ENGLISH, "%.02f", p.price),
                       String.valueOf(GetIDFromHash((photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), true)), p.GetTitle(), p.GetDescription()
             });
         }

@@ -41,6 +41,20 @@ public class ImageHelper
         }
     }
 
+    public static BufferedImage getImage(String path, String missing) throws IOException
+    {
+        BufferedImage ret = null;
+        try
+        {
+            ret = ImageIO.read(new File(path));
+        }
+        catch (Exception e)
+        {
+            ret = ImageIO.read(new File(missing));
+        }
+        return ret;
+    }
+
     public static BufferedImage ToGrayScale(BufferedImage img)
     {
         int width = img.getWidth();

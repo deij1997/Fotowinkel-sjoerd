@@ -46,6 +46,7 @@ public class Upload
 
     public Upload(String customer)
     {
+        
         this.customer = customer;
     }
 
@@ -71,13 +72,28 @@ public class Upload
      * @throws javax.mail.MessagingException
      * @throws java.io.UnsupportedEncodingException
      */
-    public void Push(HttpServletRequest request) throws UploadFailed, SQLException, MessagingException, UnsupportedEncodingException, Exception
+    public void Push(final HttpServletRequest request) throws UploadFailed, SQLException, MessagingException, UnsupportedEncodingException, Exception
     {
-        //Get uploaderemail
-        String uploaderEmail = new Database().GetEmailFromHash(UserHandler.getUserAsString(request));
-        String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
-        String id = ids[0].substring(0, ids[0].length() - 2);
-        EmailCustomer();
+        final String user = UserHandler.getUserAsString(request);
+        
+        new Thread() {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    //Get uploaderemail
+                    String uploaderEmail = new Database().GetEmailFromHash(user);
+                    String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
+                    String id = ids[0].substring(0, ids[0].length() - 2);
+                    EmailCustomer();
+                }
+                catch (Exception ex)
+                {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        }.start();
     }
     
     public void EmailCustomer() throws MessagingException, UnsupportedEncodingException, RandomiserFail

@@ -11,7 +11,8 @@
     <head>
         <%@include file="WEB-INF/head.jspf" %>
         <script src="JS/CartScript.js" type="text/javascript"></script>
-        <script src="JS/PopupImgCSS.js" type="text/javascript"></script>
+        <script src="JS/PopupImg.js" type="text/javascript"></script>
+        <script src="JS/ProductSwitcher.js" type="text/javascript"></script>
         <title>Fotowinkel Sjoerd</title>
     </head>
     <body>

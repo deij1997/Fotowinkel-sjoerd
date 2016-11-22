@@ -9,22 +9,16 @@ $(function () {
     $('#upload-form').ajaxForm({
         success: function (response)
         {
-            if (typeof response === 'Upload has been done successfully!')
-            {
-                // Success so call function to process the form
-                // submitForm(event, data);
-                console.log(response);
-
-            } else
-            {
-                // Handle errors here
-                console.log('ERRORS: ' + response);
-            }
+            console.log('RESULT: ' + response);
+            $('#sbmbtn').innerHTML = "Upload";
+            $('#sbmbtn').removeProp('disabled');
         },
         error: function (response)
         {
             // Handle errors here
             console.log('ERRORS: ' + response);
+            $('#sbmbtn').innerHTML = "Upload";
+            $('#sbmbtn').removeProp('disabled');
         }
     });
 });

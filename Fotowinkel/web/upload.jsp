@@ -19,7 +19,7 @@
         <%@include file="WEB-INF/register.jspf" %>
 
         <div class="container">
-            <form id="upload-form" data-toggle="validator" role="form" class="upload-box" action="UploadServlet" method="post" enctype="multipart/form-data">
+            <form id="upload-form" data-toggle="validator" onsubmit="sbmbtn.disabled = true; return true;" role="form" class="upload-box" action="UploadServlet" method="post" enctype="multipart/form-data">
 
                 <div id="atch">
                     <div id="UploadBox" class="UploadBox">
@@ -52,14 +52,14 @@
 
                     <br>
                     <hr><br>
-                    <div class="form-group has-feedback">
+                    <div id="maildiv" class="form-group has-feedback">
                         <label for="inputEmail" class="control-label">Klant mail</label>
                         <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Klant e-mail" data-error="Het e-mailadres van de klant is vereist." required>
                         <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                         <div class="help-block with-errors"></div>
                     </div><br>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button id="sbmbtn" name="sbmbtn" type="submit" class="btn btn-primary">Upload</button>
                     </div>
                 </div>
 

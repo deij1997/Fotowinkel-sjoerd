@@ -9,6 +9,7 @@ import Base.Database;
 import Base.Encoder;
 import Base.Photo;
 import Base.ShoppingCart;
+import Base.ShoppingCartItem;
 import Managers.ShoppingCartHolder;
 import Managers.UserHandler;
 import java.io.IOException;
@@ -68,7 +69,8 @@ public class OrderServlet extends HttpServlet
             while (it.hasNext())
             {
                 Map.Entry pair = (Map.Entry) it.next();
-                Photo p = db.GetPhoto(String.valueOf(pair.getKey()));
+                ShoppingCartItem sci = (ShoppingCartItem)pair.getKey();
+                Photo p = db.GetPhoto(String.valueOf(sci.getProduct().GetCode()));
             
                 String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();
@@ -102,6 +104,9 @@ public class OrderServlet extends HttpServlet
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
+                            + "                                \n"
+                            + "                                <div class=\"colorinfo\">\n"
+                            + "                                    <p class=\"pull-right\">Kleur:" + sci.getColourName() + "&nbsp&nbsp</p>\n"
                             + "                                </div>\n"
                             + "                                \n"
                             + "                            </div>\n"
@@ -126,7 +131,7 @@ public class OrderServlet extends HttpServlet
                     + "                                </div>\n"
                     + "                                \n"
                     + "                                <div class=\"ratings\">\n"
-                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Afrekenen</a></p>\n"
+                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_self\" href=\"Payment.jsp\">Afrekenen</a></p>\n"
                     + "                                    <!--<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>-->\n"
                     + "                                </div>\n"
                     + "                            \n"

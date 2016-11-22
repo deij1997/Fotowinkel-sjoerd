@@ -1,8 +1,10 @@
 package Servlets;
 
 import Base.Database;
+import Base.Enums.ColorType;
 import Base.Photo;
 import Base.ShoppingCart;
+import Base.ShoppingCartItem;
 import Managers.ShoppingCartHolder;
 import Managers.UserHandler;
 import java.io.IOException;
@@ -73,7 +75,8 @@ public class AddToCartServlet extends HttpServlet
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
-                                    cart.AddItemToBasket(product, amount);
+                                    ShoppingCartItem e = new ShoppingCartItem(product,"#000000",ColorType.NOCOLOUR);
+                                    cart.AddItemToBasket(e, amount);
                                     out.println("added " + amount + " items of '" + product.GetTitle() + "' successfully");
                                 }
                                 else

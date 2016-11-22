@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import Exceptions.NotAColorException;
+import Helpers.ColorUtils;
 import Helpers.ImageHelper;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class imgServlet extends HttpServlet
 {
 
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,12 +46,13 @@ public class imgServlet extends HttpServlet
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("image/png");
         OutputStream out = response.getOutputStream();
-        
+
         String type = request.getParameter("type");
         String id = request.getParameter("id");
-        
+        String strength = request.getParameter("light");
+
         BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
-        
+
         try
         {
             if (type.equals("norml"))
@@ -57,18 +60,68 @@ public class imgServlet extends HttpServlet
                 //Return normal image
                 ImageIO.write(img, "JPG", out);
             }
-            else if (type.equals("gree"))
+            else
             {
-                img = ImageHelper.ToGrayScale(img);
-                //Return greyscaled image
-                ImageIO.write(img, "JPG", out);
+                if (type.equals("gree"))
+                {
+                    img = ImageHelper.ToGrayScale(img);
+                    //Return greyscaled image
+                    ImageIO.write(img, "JPG", out);
+                }
+                else
+                {
+                    if (type.equals("sepia"))
+                    {
+                        img = ImageHelper.ToSepia(img);
+                        //Return sepia image
+                        ImageIO.write(img, "JPG", out);
+                    }
+                    else
+                    {
+                        int lightenwith = ImageHelper.CALCULATE_LIGHT_LEVEL;;
+                        if (strength != null && !strength.equals(""))
+                        {
+                            try
+                            {
+                                lightenwith = Integer.parseInt(strength);
+                            }
+                            catch (Exception e)
+                            {
+                                lightenwith = ImageHelper.CALCULATE_LIGHT_LEVEL;
+                            }
+                            finally
+                            {
+                                if (lightenwith != ImageHelper.CALCULATE_LIGHT_LEVEL)
+                                {
+                                    if (lightenwith < -255)
+                                    {
+                                        lightenwith = -255;
+                                    }
+                                    else
+                                    {
+                                        if (lightenwith > 255)
+                                        {
+                                            lightenwith = 255;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        try
+                        {
+                            img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), lightenwith);
+                            //Return coloured image
+                            ImageIO.write(img, "JPG", out);
+                        }
+                        catch (NotAColorException ex)
+                        {
+                            //Return nothing.
+                        }
+                    }
+                }
             }
-            else if (type.equals("sepia"))
-            {
-                img = ImageHelper.ToSepia(img);
-                //Return sepia image
-                ImageIO.write(img, "JPG", out);
-            }
+
         }
         finally
         {

@@ -39,4 +39,14 @@ public class ShoppingCartItem {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        ShoppingCartItem cs = (ShoppingCartItem)o;
+        Item p = cs.getProduct();
+        Item pp = this.Product;
+        return !p.code.equals(pp.code)&&!this.ColorType.equals(cs.ColorType);
+    }
+    
+    
+
 }

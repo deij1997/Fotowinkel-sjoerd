@@ -4,21 +4,21 @@ package Base.Enums;
  * Martijn
  */
 public enum ColorType {
-    NOCOLOUR {
-        public String ToString() {
-            return "No Colour";
-        }
-    }, HEX {
-        public String ToString() {
-            return "hex";
-        }
-    }, SEPIA {
-        public String ToString() {
-            return "Sepia";
-        }
-    }, BLACKWHITE {
-        public String ToString() {
-            return "Black & white";
-        }
-    };
+   // using the constructor defined below
+   NOCOLOR("Normale kleur"),
+   BLACKWHITE("Zwart-wit"),
+   SEPIA("Sepia"),
+   HEX("hex");
+
+   // Member to hold the name
+   private String string;
+
+   // constructor to set the string
+   ColorType(String name){string = name;}
+
+   // the toString just returns the given name
+   @Override
+   public String toString() {
+       return string;
+   }
 }

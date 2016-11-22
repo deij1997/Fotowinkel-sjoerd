@@ -131,7 +131,7 @@ public class OrderServlet extends HttpServlet
                     + "                                </div>\n"
                     + "                                \n"
                     + "                                <div class=\"ratings\">\n"
-                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_blank\" href=\"\">Afrekenen</a></p>\n"
+                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_self\" href=\"Payment.jsp\">Afrekenen</a></p>\n"
                     + "                                    <!--<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>-->\n"
                     + "                                </div>\n"
                     + "                            \n"

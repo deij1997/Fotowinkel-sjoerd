@@ -70,7 +70,7 @@ public class OrderServlet extends HttpServlet
             {
                 Map.Entry pair = (Map.Entry) it.next();
                 ShoppingCartItem sci = (ShoppingCartItem)pair.getKey();
-                Photo p = db.GetPhoto(String.valueOf(sci.getCode()));
+                Photo p = db.GetPhoto(String.valueOf(sci.getProduct().GetCode()));
             
                 String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();
@@ -104,6 +104,9 @@ public class OrderServlet extends HttpServlet
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
+                            + "                                \n"
+                            + "                                <div class=\"colorinfo\">\n"
+                            + "                                    <p class=\"pull-right\">Kleur:" + sci.getColourName() + "&nbsp&nbsp</p>\n"
                             + "                                </div>\n"
                             + "                                \n"
                             + "                            </div>\n"

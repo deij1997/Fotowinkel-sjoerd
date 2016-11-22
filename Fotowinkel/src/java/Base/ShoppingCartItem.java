@@ -8,12 +8,12 @@ import Base.Enums.ColorType;
  */
 public class ShoppingCartItem {
 
-    private final String Code;
+    private final Item Product;
     private final String ColorHex;
     private final ColorType ColorType;
 
-    public ShoppingCartItem(String Code, String ColorHex, ColorType ColorType) {
-        this.Code = Code;
+    public ShoppingCartItem(Item Product, String ColorHex, ColorType ColorType) {
+        this.Product = Product;
         this.ColorHex = ColorHex;
         this.ColorType = ColorType;
     }
@@ -22,8 +22,8 @@ public class ShoppingCartItem {
         return ColorType;
     }
 
-    public String getCode() {
-        return Code;
+    public Item getProduct() {
+        return Product;
     }
 
     public String getColorHex() {

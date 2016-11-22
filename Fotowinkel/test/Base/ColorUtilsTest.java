@@ -49,6 +49,22 @@ public class ColorUtilsTest
             assert false;
         }
     }
+    
+    @Test
+    public void TestNameColor()
+    {
+        Color sepia = new Color(70, 50, 5);
+        String in = "sepia";
+        
+        try
+        {
+            Assert.assertEquals(ColorUtils.getColor(in), sepia);
+        }
+        catch (NotAColorException ex)
+        {
+            assert false;
+        }
+    }
 
     @Test
     public void TestHexadecimal()

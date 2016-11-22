@@ -31,14 +31,26 @@ $(document).on("click", "#register", function loadDoc() {
             var message = document.getElementById("loginErrorMsgR");
             if (this.responseText == 0) {
                 message.classList.remove("hide");
-                message.innerHTML = "Username already exist. Try a diffrent username.";
+                message.innerHTML = "Email is al in gebruik";
             }
             if (this.responseText == 3) {
                 message.classList.remove("hide");
-                message.innerHTML = "Fill out all fields.";
+                message.innerHTML = "Niet alle velden zijn ingevuld";
             }
             if (this.responseText == 1) {
                 window.location.replace("index.jsp");
+            }
+            if (this.responseText == 2) {
+                message.classList.remove("hide");
+                message.innerHTML = "Email was niet correct";
+            }
+            if (this.responseText == 4) {
+                message.classList.remove("hide");
+                message.innerHTML = "Een fout was opgetreden";
+            }
+            if (this.responseText == 5) {
+                message.classList.remove("hide");
+                message.innerHTML = "Uw wachtwoord is niet sterk genoeg<br \>Deze moet minimaal 8 karakters bevatten, waarvan 1 hoofdletter en een getal";
             }
         }
 

@@ -75,7 +75,7 @@ public class AddToCartServlet extends HttpServlet
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
-                                    ShoppingCartItem e = new ShoppingCartItem(product,"#000000",ColorType.NOCOLOUR);
+                                    ShoppingCartItem e = new ShoppingCartItem(product,"#000000",ColorType.NOCOLOR);
                                     cart.AddItemToBasket(e, amount);
                                     out.println("added " + amount + " items of '" + product.GetTitle() + "' successfully");
                                 }

@@ -16,9 +16,9 @@ public class ShoppingCart {
         
     }
     
-    public void AddItemToBasket(Item product, int amount)
+    public void AddItemToBasket(ShoppingCartItem product, int amount)
     {
-        hm.put(product.code, amount);
+        hm.put(product, amount);
     }
     
     public Map getAllProducts()

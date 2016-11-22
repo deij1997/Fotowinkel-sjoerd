@@ -9,6 +9,7 @@ import Base.Database;
 import Base.Encoder;
 import Base.Photo;
 import Base.ShoppingCart;
+import Base.ShoppingCartItem;
 import Managers.ShoppingCartHolder;
 import Managers.UserHandler;
 import java.io.IOException;
@@ -68,7 +69,8 @@ public class OrderServlet extends HttpServlet
             while (it.hasNext())
             {
                 Map.Entry pair = (Map.Entry) it.next();
-                Photo p = db.GetPhoto(String.valueOf(pair.getKey()));
+                ShoppingCartItem sci = (ShoppingCartItem)pair.getKey();
+                Photo p = db.GetPhoto(String.valueOf(sci.getCode()));
             
                 String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();

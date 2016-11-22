@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Upload
 {
-    private Thread uploaderThread;
     private final List<Photo> photos = new ArrayList<Photo>();
     private final String customer;
 
@@ -75,26 +74,26 @@ public class Upload
      */
     public void Push(final HttpServletRequest request) throws UploadFailed, SQLException, MessagingException, UnsupportedEncodingException, Exception
     {
-        this.uploaderThread = new Thread("MailThread") {
+        final String user = UserHandler.getUserAsString(request);
+        
+        new Thread() {
             @Override
             public void run()
             {
                 try
                 {
                     //Get uploaderemail
-                    String uploaderEmail = new Database().GetEmailFromHash(UserHandler.getUserAsString(request));
+                    String uploaderEmail = new Database().GetEmailFromHash(user);
                     String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
                     String id = ids[0].substring(0, ids[0].length() - 2);
                     EmailCustomer();
                 }
                 catch (Exception ex)
                 {
-                    
+                    System.out.println(ex.getMessage());
                 }
             }
-        };
-        
-        this.uploaderThread.start();
+        }.start();
     }
     
     public void EmailCustomer() throws MessagingException, UnsupportedEncodingException, RandomiserFail

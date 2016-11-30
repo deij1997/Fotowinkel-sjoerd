@@ -7,6 +7,7 @@ package Base;
 
 import java.sql.SQLException;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -19,6 +20,12 @@ public class DatabaseTest
     
     public DatabaseTest()
     {
+    }
+    
+    static double random = 0;
+    @BeforeClass
+    public static void setUpBaseClass() {
+            random = Math.random();
     }
     
     
@@ -44,13 +51,24 @@ public class DatabaseTest
         Assert.assertTrue(dab.GetPhotosByKlantHashedId("1").isEmpty());
     }
     
-    
+        @Test
+    public void CheckregisterTest() throws SQLException
+    {
+        try{
+         dab.RegisterPhotographer("koekjes"+random+"@fotograaf.be", "wachtwoord");
+
+        }catch(Exception ex){
+            Assert.fail("Random error! Run opnieuw!");
+        }
+        CheckLoginTest();
+
+    }
     @Test
     public void CheckLoginTest() throws SQLException
     {
-        Assert.assertTrue(dab.ValidateCredentials("koekjes@fotograaf.be", "wachtwoord"));
-        Assert.assertFalse(dab.ValidateCredentials("koekjes@fotograaf.be", "wachtwoord1"));
-        Assert.assertFalse(dab.ValidateCredentials("koekjes@fotograaf.be1", "wachtwoord1"));
+        Assert.assertTrue(dab.ValidateCredentials("koekjes"+ random+"@fotograaf.be", "wachtwoord"));
+        Assert.assertFalse(dab.ValidateCredentials("koekjes"+ random+"@fotograaf.be", "wachtword1"));
+        Assert.assertFalse(dab.ValidateCredentials("koekjes"+ random+"@fotograaf.be1", "wachtwoord1"));
     }
     
     @Test

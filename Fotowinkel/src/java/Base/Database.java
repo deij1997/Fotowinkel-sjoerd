@@ -140,12 +140,23 @@ public class Database
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
         setUpConnection();
-        String query = "Select * From `fotograaf` where `email` =? and `wachtwoord` =?";
-        dab.sendQuery(query, new String[]
-              {
-                  email, password
+        String query = "Select * From `fotograaf` where `email` =?";
+
+        
+         ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                email
         });
-        boolean ret = dab.hasFoundData();
+         boolean ret = false;
+        while (rs2.next())
+        {
+            if(Helpers.BCrypt.checkpw(password, rs2.getString("wachtwoord"))){
+                ret = true;
+                break;
+
+            }
+        }
+        dab.close();
         dab.close();
         return ret;
     }
@@ -291,9 +302,11 @@ public class Database
     {
         setUpConnection();
         String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES(?,?,?)";
+        String salt = Helpers.BCrypt.gensalt();
         String[] parameters = new String[]
         {
-            password, email, Encoder.GetHash(email)
+            Helpers.BCrypt.hashpw(password, salt)
+            , email, Encoder.GetHash(email)
         };
         dab.sendQuery(query, parameters);
         dab.close();

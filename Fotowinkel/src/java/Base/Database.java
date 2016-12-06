@@ -395,4 +395,41 @@ public class Database
         dab.sendQuery(query, parameters);
         dab.close();
     }
+    
+        public List<PreviewItem> GetFotograafItems(String fotograafemail) throws SQLException
+    {
+        setUpConnection();
+        List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
+        String query = "Select code, prijs, title, date From `item` Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                fotograafemail
+        });
+        while (rs2.next())
+        {
+            Double prijs = rs2.getDouble("prijs");
+            String code = rs2.getString("code");
+            String title = rs2.getString("title");
+            Date date = rs2.getDate("date");
+            Item item = new Photo(prijs, code);
+            PreviewItem previewItem = new PreviewItem(title, item, date );
+            previewItems.add(previewItem);
+}
+        dab.close();
+        return previewItems;
+    }
+    
+    public List<String> getAllPhotographer() throws SQLException{
+        setUpConnection();
+        List<String> photographers = new ArrayList<String>();
+
+        String query = "Select * From `fotograaf`";
+        ResultSet rs2 = dab.getData(query, null);
+        while (rs2.next())
+        {
+            photographers.add(rs2.getString("email"));
+        }
+        dab.close();
+        return photographers;
+    }
 }

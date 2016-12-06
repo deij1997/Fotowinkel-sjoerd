@@ -19,9 +19,17 @@
             <a href="index.jsp" class="selected">Home</a>
             <a href="Products.jsp" >Winkel</a>
             <%
-                 if (UserHandler.userIsPhotographer(request))
-                 {%>
-            <a href="upload.jsp">Upload</a><%}%>
+                if (UserHandler.userIsPhotographer(request))
+                {
+            %><a href="upload.jsp">Upload</a><% }
+            %>
+
+            <%
+            if (UserHandler.userIsAdministrator(request))
+            {
+            %><a href="Overview.jsp">Beheer</a><%
+            }
+            %>
         </nav>
         <ul id="userinfo">
             <%

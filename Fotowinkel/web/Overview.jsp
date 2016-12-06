@@ -25,6 +25,10 @@
         <%@include file="WEB-INF/header.jsp" %>
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
+
+        <% if (UserHandler.userIsAdministrator(request))
+            {
+        %>
         <script type="text/javascript">
             function abc()
             {
@@ -40,20 +44,28 @@
             <div class="container">
                 <label>Fotograaf:</label>
                 <select class="form-control btn btn-primary btn-sm btn-block" id="selectedFotograaf" name="selectedFotograaf" onchange="abc()">
-                    <%if (request.getParameter("abc") != null) {
+                    <%if (request.getParameter("abc") != null)
+                        {
                             String result = request.getParameter("abc");
                     %>
-                    <%for (int i = 0; i < fotografen.size(); i++) {
-                            if (fotografen.get(i).equals(result)) {%>
+                    <%for (int i = 0; i < fotografen.size(); i++)
+                        {
+                            if (fotografen.get(i).equals(result))
+                            {%>
                     <option value= "<%=fotografen.get(i)%>" selected="selected"><%=fotografen.get(i)%></option>
-                    <%} else {%>
+                    <%}
+                    else
+                    {%>
 
                     <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
                     <%} %>
                     <%}%>
-                    <%} else { %>
+                    <%}
+                    else
+                    { %>
 
-                    <%for (int i = 0; i < fotografen.size(); i++) {
+                    <%for (int i = 0; i < fotografen.size(); i++)
+                        {
                     %>
                     <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
                     <%} %>
@@ -71,12 +83,16 @@
                         <td><b>Prijs</td>
                         <td><b>Datum</b></td>
                     </tr>
-                    <% if (session.getAttribute("items") != null) {
+                    <% if (session.getAttribute("items") != null)
+                        {
                             List<PreviewItem> items = (List) session.getAttribute("items");
 
-                            if (items != null ) {
-                                if (!items.isEmpty()) {
-                                    for (PreviewItem item : items) {
+                            if (items != null)
+                            {
+                                if (!items.isEmpty())
+                                {
+                                    for (PreviewItem item : items)
+                                    {
 
                     %>
                     <tr> 
@@ -84,20 +100,28 @@
                         <td><%= item.getItem().GetPrice()%></td>
                         <td><%= item.getDate()%></td>
                     </tr><%
-                             }
-                         }else {%> 
+                        }
+                    }
+                    else
+                    {%> 
                     <p>Er zijn geen items</p>
                     <% }
 
-                     }
-}
-                       
+                            }
+                        }
+
                     %>
                 </table>
             </div>
 
         </form>
-
+        <% }
+        else
+        {%> 
+        <% 
+        //Else...
+        %> 
+        <%}%> 
         <%@include file="WEB-INF/footer.jsp" %>
     </body>
 </html>

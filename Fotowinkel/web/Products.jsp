@@ -69,6 +69,7 @@
 
                         <script>
                             <%
+                                UserHandler.setLoginMethod(false);
                                 UserHandler.setUser(request.getParameter("id"), request, response);
                             %>
                             window.onload = function loadDoc() {

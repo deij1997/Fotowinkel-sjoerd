@@ -17,9 +17,22 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserHandler
 {
+    private static boolean loggedIn = false;
+
     private UserHandler()
     {
 
+    }
+
+    /**
+     * Sets how the user was logged in (through login form (true) or through the
+     * customer page (false))
+     *
+     * @param loginform
+     */
+    public static void setLoginMethod(boolean loginform)
+    {
+        loggedIn = loginform;
     }
 
     public static Cookie getUser(HttpServletRequest request)
@@ -78,8 +91,20 @@ public class UserHandler
         }
     }
 
+    public static boolean usedLoginForm()
+    {
+        return loggedIn;
+    }
+
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
     {
+        //If the user logged in through the login form, it will never be a photographer
+        if (!usedLoginForm())
+        {
+            return false;
+        }
+
+        //Else, get cookie, and verify if the logged in user is a photographer
         Cookie user = getUser(request);
         if (user == null)
         {

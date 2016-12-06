@@ -258,7 +258,7 @@ public class Database
     {
         setUpConnection();
 
-        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `klantid` from `item` where code = ?)";
+        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `"+ (isPhotographer ? "fotograafid" : "klantid")  +"` from `item` where code = ?)";
         ResultSet rs2 = dab.getData(query, new String[]
                             {
                                 photocode

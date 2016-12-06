@@ -22,6 +22,19 @@ public class UserHandler
 
     }
 
+    /**
+     * Sets how the user was logged in (through login form (true) or through the
+     * customer page (false))
+     *
+     * @param loginform
+     * @param request
+     * @param response
+     */
+    public static void setLoginMethod(boolean loginform, HttpServletRequest request, HttpServletResponse response)
+    {
+        response.addCookie(new Cookie("lim", loginform ? "t" : "f"));
+    }
+
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;
@@ -78,8 +91,30 @@ public class UserHandler
         }
     }
 
+    public static boolean usedLoginForm(HttpServletRequest request)
+    {
+        if (request != null && request.getCookies() != null)
+        {
+            for (Cookie k : request.getCookies())
+            {
+                if (k.getName().equals("lim"))
+                {
+                    return "t".equals(k.getValue());
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
     {
+        //If the user logged in through the login form, it will never be a photographer
+        if (!usedLoginForm(request))
+        {
+            return false;
+        }
+
+        //Else, get cookie, and verify if the logged in user is a photographer
         Cookie user = getUser(request);
         if (user == null)
         {

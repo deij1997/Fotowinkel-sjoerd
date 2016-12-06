@@ -6,8 +6,6 @@
 package Base;
 
 import Exceptions.RandomiserFail;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -74,4 +72,33 @@ public class Item {
     public String GetCode() {
         return this.code;
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 97 * hash + (this.code != null ? this.code.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final Item other = (Item) obj;
+        return !((this.code == null) ? (other.code != null) : !this.code.equals(other.code));
+    }
+    
+    
 }

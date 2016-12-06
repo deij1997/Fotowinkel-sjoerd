@@ -26,16 +26,17 @@ $(document).on("click", ".custombutt", function (event)
         if (doAdd)
         {
             var img = this.previousSibling.previousSibling;
-
+            
             var selection = this.querySelector('.active');
             var id = img.classList[1];
             var type = element.classList[0];
+            document.getElementById("color_"+id).value = type;
             selection.classList.remove("active");
             //Add "active" to clicked
             element.classList.add("active");
             if (!img.src.endsWith("Images/notfound.png"))
             {
-                img.src = "imgServlet?type=" + type + "&id=" + id;
+                img.src = "imgServlet?type=" + type + "&id=" + id +"&color=";
             }
         }
     }

@@ -15,8 +15,9 @@ $(document).on("click", ".addtocart", function loadDoc() {
     
     var amnt = document.getElementById(this.id + "_amnt").value;
     var item = this.id;
+    var color = document.getElementById("color_"+this.id).value;
     
-    xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + item, true);
+    xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + item + "&color=" + color, true);
     xhttp.send();
     return false;
 });

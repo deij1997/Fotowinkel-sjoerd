@@ -76,7 +76,7 @@ public class LowerDatabase
         this.sendQuery(query, parameters);
         return result;
     }
-    
+
     public ResultSet getMutatedData() throws SQLException
     {
         return getData();
@@ -127,7 +127,14 @@ public class LowerDatabase
         }
         if (statement != null || !statement.isClosed())
         {
-            statement.close();
+            try
+            {
+                statement.close();
+            }
+            catch (Exception e)
+            {
+                System.out.println("[ERROR] Could not close LowerDatabase statement. \r\n" + e.getMessage());
+            }
         }
         if (con != null || !con.isClosed())
         {

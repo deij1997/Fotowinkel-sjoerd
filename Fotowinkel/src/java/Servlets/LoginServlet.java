@@ -12,7 +12,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,6 +46,7 @@ public class LoginServlet extends HttpServlet {
         
         if(db.ValidateCredentials(name, pass))
         {
+            UserHandler.setLoginMethod(true, request, response);
             UserHandler.setUser(request.getParameter("username"), request, response);
             out.println("1");  
         }

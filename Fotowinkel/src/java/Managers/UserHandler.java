@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UserHandler
 {
-    private static boolean loggedIn = false;
-
     private UserHandler()
     {
 
@@ -29,10 +27,12 @@ public class UserHandler
      * customer page (false))
      *
      * @param loginform
+     * @param request
+     * @param response
      */
-    public static void setLoginMethod(boolean loginform)
+    public static void setLoginMethod(boolean loginform, HttpServletRequest request, HttpServletResponse response)
     {
-        loggedIn = loginform;
+        response.addCookie(new Cookie("lim", loginform ? "t" : "f"));
     }
 
     public static Cookie getUser(HttpServletRequest request)
@@ -91,15 +91,25 @@ public class UserHandler
         }
     }
 
-    public static boolean usedLoginForm()
+    public static boolean usedLoginForm(HttpServletRequest request)
     {
-        return loggedIn;
+        if (request != null && request.getCookies() != null)
+        {
+            for (Cookie k : request.getCookies())
+            {
+                if (k.getName().equals("lim"))
+                {
+                    return "t".equals(k.getValue());
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
     {
         //If the user logged in through the login form, it will never be a photographer
-        if (!usedLoginForm())
+        if (!usedLoginForm(request))
         {
             return false;
         }

@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
         
         if(db.ValidateCredentials(name, pass))
         {
-            UserHandler.setLoginMethod(true);
+            UserHandler.setLoginMethod(true, request, response);
             UserHandler.setUser(request.getParameter("username"), request, response);
             out.println("1");  
         }

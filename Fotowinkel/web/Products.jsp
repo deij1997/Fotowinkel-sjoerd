@@ -80,8 +80,6 @@
                                 xhttp.onreadystatechange = function () {
                                     if (this.readyState === 4 && this.status === 200) {
                                         document.getElementById("demo").innerHTML = this.responseText;
-                                        
-                                        console.log(document.cookie);
                                         if (document.cookie.indexOf("user") != -1 && document.cookie.indexOf("lim=t;") == -1)
                                         {
                                             //Set header stuff 

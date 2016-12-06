@@ -104,7 +104,7 @@ public class OrderServlet extends HttpServlet
                             + "                                \n"
                             + "                                <div class=\"ratings\">\n"
                             + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
-                            + "                                \n"
+                            + "                                </div>\n"
                             + "                                <div class=\"colorinfo\">\n"
                             + "                                    <p class=\"pull-right\">Kleur:" + sci.getColourName() + "&nbsp&nbsp</p>\n"
                             + "                                </div>\n"

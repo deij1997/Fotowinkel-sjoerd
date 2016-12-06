@@ -6,34 +6,43 @@ import Base.Enums.ColorType;
  *
  * @author Martijn
  */
-public class ShoppingCartItem {
+public class ShoppingCartItem
+{
 
     private final Item Product;
     private final String ColorHex;
     private final ColorType ColorType;
 
-    public ShoppingCartItem(Item Product, String ColorHex, ColorType ColorType) {
+    public ShoppingCartItem(Item Product, String ColorHex, ColorType ColorType)
+    {
         this.Product = Product;
         this.ColorHex = ColorHex;
         this.ColorType = ColorType;
     }
 
-    public ColorType getColorType() {
+    public ColorType getColorType()
+    {
         return ColorType;
     }
 
-    public Item getProduct() {
+    public Item getProduct()
+    {
         return Product;
     }
 
-    public String getColorHex() {
+    public String getColorHex()
+    {
         return ColorHex;
     }
 
-    public String getColourName() {
-        if (this.ColorType == ColorType.HEX) {
+    public String getColourName()
+    {
+        if (this.ColorType == ColorType.HEX)
+        {
             return ColorHex;
-        } else {
+        }
+        else
+        {
             return this.ColorType.toString();
         }
 
@@ -64,15 +73,18 @@ public class ShoppingCartItem {
             return false;
         }
         final ShoppingCartItem other = (ShoppingCartItem) obj;
-        if (this.Product != other.Product && (this.Product == null || !this.Product.equals(other.Product)))
+        //If products are the same
+        if ((this.Product == other.Product
+              || (this.Product == null || this.Product.equals(other.Product))))
         {
-            return false;
+            //And colortype as well
+            if (this.ColorType == other.ColorType)
+            {
+                //They are the same
+                return true;
+            }
         }
-        return this.ColorType == other.ColorType;
+        return false;
     }
-    
-    
-    
-    
 
 }

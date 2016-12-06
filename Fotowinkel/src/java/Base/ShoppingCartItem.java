@@ -40,12 +40,38 @@ public class ShoppingCartItem {
     }
 
     @Override
-    public boolean equals(Object o) {
-        ShoppingCartItem cs = (ShoppingCartItem)o;
-        Item p = cs.getProduct();
-        Item pp = this.Product;
-        return !p.code.equals(pp.code)&&!this.ColorType.equals(cs.ColorType);
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 89 * hash + (this.Product != null ? this.Product.hashCode() : 0);
+        hash = 89 * hash + (this.ColorType != null ? this.ColorType.hashCode() : 0);
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final ShoppingCartItem other = (ShoppingCartItem) obj;
+        if (this.Product != other.Product && (this.Product == null || !this.Product.equals(other.Product)))
+        {
+            return false;
+        }
+        return this.ColorType == other.ColorType;
+    }
+    
+    
     
     
 

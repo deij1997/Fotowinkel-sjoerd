@@ -4,6 +4,7 @@
     Author     : Tu
 --%>
 
+<%@page import="Base.Photo"%>
 <%@page import="Base.PreviewItem"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -97,7 +98,7 @@
                     %>
                     <tr> 
                         <td><%= item.getTitle()%></td>
-                        <td><%= item.getItem().GetPrice()%></td>
+                        <td><%= Photo.GetPriceAsString(item.getItem().GetPrice())%></td>
                         <td><%= item.getDate()%></td>
                     </tr><%
                         }
@@ -118,9 +119,13 @@
         <% }
         else
         {%> 
-        <% 
-        //Else...
-        %> 
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h1>Oh nee! :(</h1> Er ging iets fout, probeer het (later) opnieuw. <br /> 
+                </div>
+            </div>
+        </div>
         <%}%> 
         <%@include file="WEB-INF/footer.jsp" %>
     </body>

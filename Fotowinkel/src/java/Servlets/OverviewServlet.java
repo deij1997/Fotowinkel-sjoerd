@@ -9,6 +9,7 @@ import Base.Database;
 import Base.PreviewItem;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,8 +23,12 @@ import javax.servlet.http.HttpSession;
  *
  * @author Tu
  */
-@WebServlet(name = "OverzichtServlet", urlPatterns = {"/OverzichtServlet"})
-public class OverviewServlet extends HttpServlet {
+@WebServlet(name = "OverzichtServlet", urlPatterns =
+    {
+        "/OverzichtServlet"
+})
+public class OverviewServlet extends HttpServlet
+{
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,17 +40,22 @@ public class OverviewServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
+            throws ServletException, IOException
+    {
+        try
+        {
             String fotograaf = request.getParameter("selectedFotograaf");
             Database db = new Database();
             List<PreviewItem> items = db.GetFotograafItems(fotograaf);
-            
+            Collections.sort(items);
+
             HttpSession session = request.getSession();
             session.setAttribute("items", items);
-            RequestDispatcher rd = request.getRequestDispatcher("Overview.jsp?abc="+fotograaf);
+            RequestDispatcher rd = request.getRequestDispatcher("Overview.jsp?abc=" + fotograaf);
             rd.forward(request, response);
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex)
+        {
         }
 
     }
@@ -61,7 +71,8 @@ public class OverviewServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -75,7 +86,8 @@ public class OverviewServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -85,7 +97,8 @@ public class OverviewServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

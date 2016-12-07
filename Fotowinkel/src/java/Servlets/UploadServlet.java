@@ -74,7 +74,7 @@ public class UploadServlet extends HttpServlet
             }
 
             Database db = new Database();
-            if (!db.CheckIfPhotographerExists(user))
+            if (!db.CheckIfPhotographerExists(UserHandler.getUser(request).getValue()))
             {
                 throw new Exception("U hebt niet de juiste machtigingen voor deze handelingen");
             }

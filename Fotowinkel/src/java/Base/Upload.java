@@ -74,7 +74,7 @@ public class Upload
      */
     public void Push(final HttpServletRequest request) throws UploadFailed, SQLException, MessagingException, UnsupportedEncodingException, Exception
     {
-        final String user = UserHandler.getUserAsString(request);
+        final String user = UserHandler.getUser(request).getValue();
         
         new Thread() {
             @Override
@@ -83,8 +83,8 @@ public class Upload
                 try
                 {
                     //Get uploaderemail
-                    String uploaderEmail = new Database().GetEmailFromHash(user);
-                    String[] ids = UploadManager.UploadPhotos(photos, uploaderEmail, customer);
+                    String uploader = user;
+                    String[] ids = UploadManager.UploadPhotos(photos, uploader, customer);
                     String id = ids[0].substring(0, ids[0].length() - 2);
                     EmailCustomer();
                 }

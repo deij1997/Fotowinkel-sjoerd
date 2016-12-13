@@ -71,7 +71,7 @@ public class OverviewProductServlet extends HttpServlet
                     {
 
                         out.println("                                  <table class=\"panel panel-default freespace\">"
-                                    + "                                <table class=\"table table-striped freespace lightenup" + (iswhite ? " white" : "") + "\">"
+                                    + "                                <table class=\"table table-striped freespace lightenup tb" + (iswhite ? " white" : "") + "\">"
                                     + "                                <tr data-toggle=\"collapse\" data-target=\"#" + item.hashCode() + "\" class=\"clickable\"> \n"
                                     + "                                    <td><a>" + item.getTitle() + "</a></td>\n"
                                     + "                                    <td>" + Photo.GetPriceAsString(item.getItem().GetPrice()) + "</td>\n"

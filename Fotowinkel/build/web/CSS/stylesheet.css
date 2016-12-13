@@ -419,6 +419,10 @@ body {
     background-color: #eaf0f2;
 }
 
+.tb>tbody>tr>td{
+    width: 25%;
+}
+
 .white>tbody>tr:nth-of-type(odd){
     background-color: white;
 }

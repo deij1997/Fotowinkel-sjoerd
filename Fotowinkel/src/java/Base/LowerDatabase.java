@@ -119,7 +119,7 @@ public class LowerDatabase
      *
      * @throws SQLException
      */
-    protected void close() throws SQLException
+    public void close() throws SQLException
     {
         if (result != null || !result.isClosed())
         {

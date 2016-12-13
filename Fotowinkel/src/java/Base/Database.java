@@ -5,12 +5,14 @@
  */
 package Base;
 
+import Base.DatabaseBase.DBItemHandler;
+import Base.DatabaseBase.DBPhotoRetriever;
+import Base.DatabaseBase.DBUserHandler;
+import Base.DatabaseBase.DBVerify;
 import Exceptions.RandomiserFail;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *
@@ -18,312 +20,180 @@ import java.util.Locale;
  */
 public class Database
 {
-    final static String DRIVER = "com.mysql.jdbc.Driver";
-    LowerDatabase dab;
-    private static Object k = null;
 
     public Database()
     {
-        try
-        {
-            if (k == null)
-            {
-                k = Class.forName(DRIVER).newInstance();
-            }
-            setUpConnection();
-        }
-        catch (Exception e)
-        {
-        }
+        
     }
 
-    public void setUpConnection() throws SQLException
-    {
-        dab = new LowerDatabase();
-    }
-
+    /**
+     * Returns all photos belonging to a vaguer customer hash
+     * 
+     * @param code
+     * @return
+     * @throws SQLException
+     */
     public List<Photo> GetPhotos(String code) throws SQLException
     {
-        List<Photo> photos = new ArrayList<Photo>();
-        if (code == null || code.isEmpty())
-        {
-            return photos;
-        }
-
-        setUpConnection();
-        String query = "Select * From `item` Where klantid Like ?";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                code + "%"
-        });
-        while (rs2.next())
-        {
-            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-        }
-        dab.close();
-        return photos;
-
+        return new DBPhotoRetriever().GetPhotos(code);
     }
 
+    /**
+     * Returns all photos belonging to a customer hash
+     * 
+     * @param Klantid
+     * @return
+     * @throws SQLException
+     */
     public List<Photo> GetPhotosByKlantHashedId(String Klantid) throws SQLException
     {
-        setUpConnection();
-        List<Photo> photos = new ArrayList<Photo>();
-        String query = "Select * From `item` Where klantid = (Select `id` from `klant` where hash = ?)";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                Klantid
-        });
-        while (rs2.next())
-        {
-            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-        }
-        dab.close();
-        return photos;
-
+        return new DBPhotoRetriever().GetPhotosByKlantHashedId(Klantid);
     }
 
+    /**
+     * Returns all the photos
+     * @deprecated only for testing
+     * @return
+     * @throws SQLException
+     */
     public List<Photo> GetAllPhotos() throws SQLException
     {
-        setUpConnection();
-        List<Photo> photos = new ArrayList<Photo>();
-        String query = "Select * From `item`";
-        ResultSet rs2 = dab.getData(query, null);
-        while (rs2.next())
-        {
-            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
-        }
-        dab.close();
-
-        return photos;
+        return new DBPhotoRetriever().GetAllPhotos();
     }
 
+    /**
+     * Gets the photo with specific hash
+     * 
+     * @param hashId
+     * @return
+     * @throws SQLException
+     */
     public Photo GetPhoto(String hashId) throws SQLException
     {
-        setUpConnection();
-        Photo ret = null;
-        String query = "Select * From `item` where code = ?";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                hashId
-        });
-
-        while (rs2.next())
-        {
-            ret = new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description"));
-            break;
-        }
-        dab.close();
-
-        return ret;
+        return new DBPhotoRetriever().GetPhoto(hashId);
     }
 
+    /**
+     * Updates an array of photos in the database
+     * 
+     * @param photos
+     * @throws SQLException
+     */
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
-        setUpConnection();
-        for (Photo p : photos)
-        {
-            String pquery = "UPDATE `item` SET `prijs`=" + p.price + ", `title`=?,`description`=? WHERE `code`=?";
-            dab.sendQuery(pquery, new String[]
-                  {
-                      p.GetTitle(), p.GetDescription(), p.code
-            });
-        }
-        dab.close();
+        new DBItemHandler().UpdatePhotos(photos);
     }
 
+    /**
+     * Updates a photo with the new photo
+     * 
+     * @param photo
+     * @throws SQLException
+     */
     public void UpdatePhoto(Photo photo) throws SQLException
     {
         UpdatePhotos(Arrays.asList(photo));
     }
 
+    /**
+     * Validates the given email and password
+     * 
+     * @param email
+     * @param password
+     * @return
+     * @throws SQLException
+     */
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
-        setUpConnection();
-        String query = "Select * From `fotograaf` where `email` =?";
-        String query2 = "select * from `admin` where `email` =?";
-
-        boolean ret = false;
-        if (Validate(email, password, query))
-        {
-            ret = true;
-        }
-        else
-        {
-            if (Validate(email, password, query2))
-            {
-                ret = true;
-            }
-        }
-
-        dab.close();
-        return ret;
-    }
-
-    private boolean Validate(String email, String password, String query) throws SQLException
-    {
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                email
-        });
-        boolean ret = false;
-        while (rs2.next())
-        {
-            if (Helpers.BCrypt.checkpw(password, rs2.getString("wachtwoord")))
-            {
-                ret = true;
-                break;
-
-            }
-        }
-        return ret;
+        return new DBVerify().ValidateCredentials(email, password);
     }
     
+    /**
+     * Returns the name of an email
+     * 
+     * @param email
+     * @return
+     * @throws SQLException
+     */
     public String GetName(String email) throws SQLException
     {
-        setUpConnection();
-
-        String query = "Select `naam` from `admin` where email=?";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                email
-        });
-        String name = "";
-        while (rs2.next())
-        {
-            name = rs2.getString("naam");
-        }
-        dab.close();
-        return name;
+        return new DBVerify().GetName(email);
     }
 
+    /**
+     * Returns the email belonging to a user hash
+     * 
+     * @param Hash
+     * @return
+     * @throws SQLException
+     * @throws Exception
+     */
     public String GetEmailFromHash(String Hash) throws SQLException, Exception
     {
-        if (Hash.contains("@"))
-        {
-            return Hash;
-        }
-
-        String who = "", ret = "";
-        if (CheckIfCustomerExists(Hash))
-        {
-            who = "klant";
-        }
-        else
-        {
-            if (CheckIfPhotographerExists(Hash))
-            {
-                who = "fotograaf";
-            }
-            else
-            {
-                throw new Exception("Given email-ID " + Hash + " does not exist!");
-            }
-        }
-        setUpConnection();
-        String query = "Select email From `" + who + "` where hash=?";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                Hash
-        });
-        while (rs2.next())
-        {
-            ret = rs2.getString("email");
-            break;
-        }
-
-        dab.close();
-
-        if (ret.equals(""))
-        {
-            throw new Exception("Given email-ID " + Hash + " does not exist!");
-        }
-        return ret;
+        return new DBVerify().GetEmailFromHash(Hash);
     }
 
-    private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
-    {
-        int ret = -1;
-        setUpConnection();
-        String query = "Select id from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where hash=?";
-        ResultSet r = dab.getData(query, new String[]
-                          {
-                              hash
-        });
-
-        while (r.next())
-        {
-            ret = r.getInt("id");
-            break;
-        }
-        return ret;
-    }
-
+    /**
+     * Checks if the user is a photographer
+     * 
+     * @param emailorcode
+     * @return
+     * @throws SQLException
+     */
     public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
     {
-        setUpConnection();
-        String query = "Select id From `fotograaf` where " + (emailorcode.contains("@") ? "email=?" : "hash=?");
-        dab.sendQuery(query, new String[]
-              {
-                  emailorcode
-        });
-        boolean ret = dab.hasFoundData();
-        dab.close();
-        return ret;
+        return new DBVerify().CheckIfPhotographerExists(emailorcode);
     }
 
+    /**
+     * Checks if the user is an administrator
+     * 
+     * @param email
+     * @return
+     * @throws SQLException
+     */
     public boolean CheckIfAdministratorExists(String email) throws SQLException
     {
-        setUpConnection();
-        String query = "Select id From `admin` where email=?";
-        dab.sendQuery(query, new String[]
-              {
-                  email
-        });
-        boolean ret = dab.hasFoundData();
-        dab.close();
-        return ret;
+        return new DBVerify().CheckIfAdministratorExists(email);
     }
 
+    /**
+     * Checks if the user is a customer
+     * 
+     * @param emailorcode
+     * @return
+     * @throws SQLException
+     */
     public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
-        setUpConnection();
-        String query = "Select * From `klant` where " + (emailorcode.contains("@") ? "email=?" : "id=?");
-        dab.sendQuery(query, new String[]
-              {
-                  emailorcode
-        });
-        boolean ret = dab.hasFoundData();
-        dab.close();
-        return ret;
+        return new DBVerify().CheckIfCustomerExists(emailorcode);
     }
 
+    /**
+     * Checks if a photo belongs to specified user. Automatically checks if the user is a photographer or not
+     * 
+     * @param photocode
+     * @param user
+     * @return
+     * @throws SQLException
+     */
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user) throws SQLException
     {
         return CheckIfPhotoBelongsToUser(photocode, user, CheckIfPhotographerExists(user));
     }
 
+    /**
+     * Checks if a photo belongs to specified user
+     * 
+     * @param photocode
+     * @param user
+     * @param isPhotographer whether the user is a photographer or not
+     * @return
+     * @throws SQLException
+     */
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user, boolean isPhotographer) throws SQLException
     {
-        setUpConnection();
-
-        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `" + (isPhotographer ? "fotograafid" : "klantid") + "` from `item` where code = ?)";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                photocode
-        });
-        boolean belongsToAUser = false;
-        while (rs2.next())
-        {
-            if (String.valueOf(rs2.getInt("id")).equals(user) || rs2.getString("hash").equals(user) || rs2.getString("email").equals(user))
-            {
-                belongsToAUser = true;
-                break;
-            }
-        }
-        dab.close();
-
-        return belongsToAUser;
+        return new DBVerify().CheckIfPhotoBelongsToUser(photocode, user, isPhotographer);
     }
 
     /**
@@ -336,162 +206,79 @@ public class Database
      */
     public void RegisterPhotographer(String email, String password) throws SQLException, RandomiserFail
     {
-        InsertPhotographer(email, password);
+        new DBUserHandler().RegisterPhotographer(email, password);
     }
 
     /**
-     * Inserts a photographer into the database
-     *
-     * @param email the photographer email to add
-     * @param password
+     * Inserts an array of photos into the database
+     * 
+     * @param photos
+     * @param customer
+     * @param photograhper
      * @throws SQLException
-     * @throws Exceptions.RandomiserFail
+     * @throws RandomiserFail
      */
-    private void InsertPhotographer(String email, String password) throws SQLException, RandomiserFail
-    {
-        setUpConnection();
-        String query = "Insert into `fotograaf`(`wachtwoord`, `email`, `hash`) VALUES(?,?,?)";
-        String salt = Helpers.BCrypt.gensalt();
-        String[] parameters = new String[]
-        {
-            Helpers.BCrypt.hashpw(password, salt), email, Encoder.GetHash(email)
-        };
-        dab.sendQuery(query, parameters);
-        dab.close();
-    }
-
-    /**
-     * Inserts a customer into the database
-     *
-     * @param email the customer email to add
-     * @throws SQLException
-     * @throws Exceptions.RandomiserFail
-     */
-    private void InsertCustomer(String email) throws SQLException, RandomiserFail
-    {
-        setUpConnection();
-        String query = "Insert into `klant`(`hash`, `email`) VALUES (?,?)";
-        String[] parameters = new String[]
-        {
-            Encoder.GetHash(email), email
-        };
-        dab.sendQuery(query, parameters);
-    }
-
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
     {
-        setUpConnection();
-        if (!CheckIfCustomerExists(customer))
-        {
-            InsertCustomer(customer);
-        }
-        setUpConnection();
-
-        for (Photo p : photos)
-        {
-            String pquery = "Insert into `item`(`code`, `klantid`, `prijs`, `fotograafid`, `title`, `description`) VALUES(?,?,?,?,?,?)";
-            dab.sendQuery(pquery, new String[]
-                  {
-                      //TODO Please note that price can differ in dots and commas, depending on OS language
-                      p.code, String.valueOf(GetIDFromHash((customer.contains("@") ? Encoder.GetHash(customer) : customer), false)), String.format(Locale.ENGLISH, "%.02f", p.price),
-                      String.valueOf(GetIDFromHash((photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), true)), p.GetTitle(), p.GetDescription()
-            });
-        }
-        dab.close();
+        new DBItemHandler().InsertPhotos(photos, customer, photograhper);
     }
 
+    /**
+     * Inserts a photo into the database
+     * 
+     * @param photo
+     * @param customer
+     * @param photograhper
+     * @throws SQLException
+     * @throws RandomiserFail
+     */
     public void InsertPhoto(Photo photo, String customer, String photograhper) throws SQLException, RandomiserFail
     {
         InsertPhotos(Arrays.asList(photo), customer, photograhper);
     }
 
+    /**
+     * Inserts an order into the database
+     * 
+     * @param items
+     * @param customer
+     * @param name
+     * @param lastname
+     * @param country
+     * @param city
+     * @param street
+     * @param housenr
+     * @param postcode
+     * @param paymentmethod
+     * @throws SQLException
+     * @throws RandomiserFail
+     * @throws Exception
+     */
     public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
-        String query = "";
-        String[] parameters;
-
-        if (items.isEmpty())
-        {
-            return;
-        }
-
-        setUpConnection();
-        //Insert order
-        query = "Insert into `order` (`klantid`, `betaalmethode`) VALUES (?,?)";
-        parameters = new String[]
-        {
-            String.valueOf(GetIDFromHash(customer, false)), paymentmethod
-        };
-        dab.sendQuery(query, parameters);
-        ResultSet IDs = dab.getMutatedData();
-        int ID = 0;
-        if (IDs.next())
-        {
-            ID = IDs.getInt("id");
-        }
-        if (ID == 0)
-        {
-            throw new Exception("No order could be inserted");
-        }
-        setUpConnection();
-
-        //Insert bestelling
-        for (String i : items)
-        {
-            query = "Insert into `bestelling` (`itemid`, `orderid`) VALUES (?,?)";
-            parameters = new String[]
-            {
-                String.valueOf(i), String.valueOf(ID)
-            };
-            dab.sendQuery(query, parameters);
-        }
-        setUpConnection();
-
-        //Insert adress with order
-        query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";
-        parameters = new String[]
-        {
-            String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
-        };
-        dab.sendQuery(query, parameters);
-        dab.close();
+        new DBItemHandler().InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
     }
 
-    public List<PreviewItem> GetFotograafItems(String fotograafemail) throws SQLException
+     /**
+     * Returns all items from a photographer
+     * 
+     * @param email
+     * @return
+     * @throws SQLException
+     */
+    public List<PreviewItem> GetFotograafItems(String email) throws SQLException
     {
-        setUpConnection();
-        List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
-        String query = "Select code, prijs, title, date From `item` Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
-        ResultSet rs2 = dab.getData(query, new String[]
-                            {
-                                fotograafemail
-        });
-        while (rs2.next())
-        {
-            Double prijs = rs2.getDouble("prijs");
-            String code = rs2.getString("code");
-            String title = rs2.getString("title");
-            Date date = rs2.getDate("date");
-            Item item = new Photo(prijs, code);
-            PreviewItem previewItem = new PreviewItem(title, item, date);
-            previewItems.add(previewItem);
-        }
-        dab.close();
-        return previewItems;
+        return new DBItemHandler().GetPhotographerItems(email);
     }
 
+    /**
+     * Returns all registered photographers
+     * 
+     * @return
+     * @throws SQLException
+     */
     public List<String> getAllPhotographer() throws SQLException
     {
-        setUpConnection();
-        List<String> photographers = new ArrayList<String>();
-
-        String query = "Select * From `fotograaf`";
-        ResultSet rs2 = dab.getData(query, null);
-        while (rs2.next())
-        {
-            photographers.add(rs2.getString("email"));
-        }
-        dab.close();
-        return photographers;
+        return new DBUserHandler().getAllPhotographers();
     }
 }

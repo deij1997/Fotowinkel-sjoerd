@@ -47,7 +47,7 @@ public class OverviewServlet2 extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            out.println("\n"
+            out.println("                          <table class=\"table table-striped\"> \n"
                         + "                                <tr>\n"
                         + "                                    <td><b>Titel</b></td>\n"
                         + "                                    <td><b>Prijs</td>\n"
@@ -67,7 +67,7 @@ public class OverviewServlet2 extends HttpServlet
                     for (PreviewItem item : items)
                     {
 
-                        out.println("                                 <tr data-toggle=\"collapse\" data-target=\"#" + item.hashCode() + "\" class=\"panel clickable\"> \n"
+                        out.println("                                  <tr data-toggle=\"collapse\" data-target=\"#" + item.hashCode() + "\" class=\"panel clickable\"> \n"
                                     + "                                    <td><a>" + item.getTitle() + "</a></td>\n"
                                     + "                                    <td>" + Photo.GetPriceAsString(item.getItem().GetPrice()) + "</td>\n"
                                     + "                                    <td>" + item.getDate() + "</td>\n"
@@ -98,7 +98,8 @@ public class OverviewServlet2 extends HttpServlet
                         out.println("                                            </tbody>\n"
                                     + "                                        </table>  \n"
                                     + "                                    </div>\n"
-                                    + "                                </div>\n");
+                                    + "                                </div>\n"
+                                    + "                             </table>");
                     }
                 }
                 else

@@ -71,9 +71,9 @@
                                 <%  } %>
                             </select>
 
-                            <table id="fill" class="table table-striped">
+                            <div id="fill">
                                 <!--CONTENT HERE-->
-                            </table>
+                            </div>
                         </div>
                     </div>
                 </div>

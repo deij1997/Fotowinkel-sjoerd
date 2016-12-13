@@ -6,24 +6,29 @@
 package Servlets;
 
 import Base.Database;
-import Managers.UserHandler;
+import Base.PreviewItem;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Collections;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Tu
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "OverzichtServlet", urlPatterns =
+    {
+        "/OverzichtServlet"
+})
+public class OverviewServlet extends HttpServlet
+{
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,33 +40,24 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-        Database db = new Database();
-
-        String name=request.getParameter("username");
-        String pass=request.getParameter("password");
-        
-        if(db.ValidateCredentials(name, pass))
+            throws ServletException, IOException
+    {
+        try
         {
-            UserHandler.setLoginMethod(true, request, response);
-            UserHandler.setUser(request.getParameter("username"), request, response);
-            out.println("1");  
+            String fotograaf = request.getParameter("selectedFotograaf");
+            Database db = new Database();
+            List<PreviewItem> items = db.GetFotograafItems(fotograaf);
+            Collections.sort(items);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("items", items);
+            RequestDispatcher rd = request.getRequestDispatcher("Overview.jsp?abc=" + fotograaf);
+            rd.forward(request, response);
         }
-        else
+        catch (SQLException ex)
         {
-            out.println("0");  
-
         }
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-            out.println("0");  
 
-        } finally {
-            out.close();
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,7 +71,8 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -89,7 +86,8 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException
+    {
         processRequest(request, response);
     }
 
@@ -99,7 +97,8 @@ public class LoginServlet extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+    public String getServletInfo()
+    {
         return "Short description";
     }// </editor-fold>
 

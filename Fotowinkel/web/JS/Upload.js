@@ -12,6 +12,8 @@ $(function () {
             console.log('RESULT: ' + response);
             $('#sbmbtn').innerHTML = "Upload";
             $('#sbmbtn').removeProp('disabled');
+            // refresh page
+            location.reload();
         },
         error: function (response)
         {

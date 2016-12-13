@@ -141,24 +141,60 @@ public class Database
     {
         setUpConnection();
         String query = "Select * From `fotograaf` where `email` =?";
+        String query2 = "select * from `admin` where `email` =?";
 
-        
-         ResultSet rs2 = dab.getData(query, new String[]
+        boolean ret = false;
+        if (Validate(email, password, query))
+        {
+            ret = true;
+        }
+        else
+        {
+            if (Validate(email, password, query2))
+            {
+                ret = true;
+            }
+        }
+
+        dab.close();
+        return ret;
+    }
+
+    private boolean Validate(String email, String password, String query) throws SQLException
+    {
+        ResultSet rs2 = dab.getData(query, new String[]
                             {
                                 email
         });
-         boolean ret = false;
+        boolean ret = false;
         while (rs2.next())
         {
-            if(Helpers.BCrypt.checkpw(password, rs2.getString("wachtwoord"))){
+            if (Helpers.BCrypt.checkpw(password, rs2.getString("wachtwoord")))
+            {
                 ret = true;
                 break;
 
             }
         }
-        dab.close();
-        dab.close();
         return ret;
+    }
+    
+    public String GetName(String email) throws SQLException
+    {
+        setUpConnection();
+
+        String query = "Select `naam` from `admin` where email=?";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                email
+        });
+        String name = "";
+        while (rs2.next())
+        {
+            name = rs2.getString("naam");
+        }
+        dab.close();
+        return name;
     }
 
     public String GetEmailFromHash(String Hash) throws SQLException, Exception
@@ -236,6 +272,19 @@ public class Database
         return ret;
     }
 
+    public boolean CheckIfAdministratorExists(String email) throws SQLException
+    {
+        setUpConnection();
+        String query = "Select id From `admin` where email=?";
+        dab.sendQuery(query, new String[]
+              {
+                  email
+        });
+        boolean ret = dab.hasFoundData();
+        dab.close();
+        return ret;
+    }
+
     public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
         setUpConnection();
@@ -258,7 +307,7 @@ public class Database
     {
         setUpConnection();
 
-        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `klantid` from `item` where code = ?)";
+        String query = "Select id, hash, email from " + (isPhotographer ? "`fotograaf`" : "`klant`") + " where id = (select `" + (isPhotographer ? "fotograafid" : "klantid") + "` from `item` where code = ?)";
         ResultSet rs2 = dab.getData(query, new String[]
                             {
                                 photocode
@@ -305,8 +354,7 @@ public class Database
         String salt = Helpers.BCrypt.gensalt();
         String[] parameters = new String[]
         {
-            Helpers.BCrypt.hashpw(password, salt)
-            , email, Encoder.GetHash(email)
+            Helpers.BCrypt.hashpw(password, salt), email, Encoder.GetHash(email)
         };
         dab.sendQuery(query, parameters);
         dab.close();
@@ -407,5 +455,43 @@ public class Database
         };
         dab.sendQuery(query, parameters);
         dab.close();
+    }
+
+    public List<PreviewItem> GetFotograafItems(String fotograafemail) throws SQLException
+    {
+        setUpConnection();
+        List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
+        String query = "Select code, prijs, title, date From `item` Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                fotograafemail
+        });
+        while (rs2.next())
+        {
+            Double prijs = rs2.getDouble("prijs");
+            String code = rs2.getString("code");
+            String title = rs2.getString("title");
+            Date date = rs2.getDate("date");
+            Item item = new Photo(prijs, code);
+            PreviewItem previewItem = new PreviewItem(title, item, date);
+            previewItems.add(previewItem);
+        }
+        dab.close();
+        return previewItems;
+    }
+
+    public List<String> getAllPhotographer() throws SQLException
+    {
+        setUpConnection();
+        List<String> photographers = new ArrayList<String>();
+
+        String query = "Select * From `fotograaf`";
+        ResultSet rs2 = dab.getData(query, null);
+        while (rs2.next())
+        {
+            photographers.add(rs2.getString("email"));
+        }
+        dab.close();
+        return photographers;
     }
 }

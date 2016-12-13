@@ -22,6 +22,19 @@ public class UserHandler
 
     }
 
+    /**
+     * Sets how the user was logged in (through login form (true) or through the
+     * customer page (false))
+     *
+     * @param loginform
+     * @param request
+     * @param response
+     */
+    public static void setLoginMethod(boolean loginform, HttpServletRequest request, HttpServletResponse response)
+    {
+        response.addCookie(new Cookie("lim", loginform ? "t" : "f"));
+    }
+
     public static Cookie getUser(HttpServletRequest request)
     {
         Cookie user = null;
@@ -47,9 +60,22 @@ public class UserHandler
         return (getUser(request) != null);
     }
 
-    public static String getUserAsString(HttpServletRequest request)
+    public static String getUserAsString(HttpServletRequest request) throws SQLException
     {
-        return isUserLoggedIn(request) ? getUser(request).getValue() : "";
+        if (isUserLoggedIn(request))
+        {
+
+            if (userIsAdministrator(request))
+            {
+                return new Database().GetName(getUser(request).getValue());
+            }
+
+            return getUser(request).getValue();
+        }
+        else
+        {
+            return "";
+        }
     }
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
@@ -78,8 +104,30 @@ public class UserHandler
         }
     }
 
+    public static boolean usedLoginForm(HttpServletRequest request)
+    {
+        if (request != null && request.getCookies() != null)
+        {
+            for (Cookie k : request.getCookies())
+            {
+                if (k.getName().equals("lim"))
+                {
+                    return "t".equals(k.getValue());
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean userIsPhotographer(HttpServletRequest request) throws SQLException
     {
+        //If the user logged in through the login form, it will never be a photographer
+        if (!usedLoginForm(request))
+        {
+            return false;
+        }
+
+        //Else, get cookie, and verify if the logged in user is a photographer
         Cookie user = getUser(request);
         if (user == null)
         {
@@ -88,5 +136,29 @@ public class UserHandler
 
         //Check if this user is a photographer
         return new Database().CheckIfPhotographerExists(user.getValue());
+    }
+
+    public static boolean userIsAdministrator(HttpServletRequest request) throws SQLException
+    {
+        //If the user logged in through the login form, it will never be a photographer
+        if (!usedLoginForm(request))
+        {
+            return false;
+        }
+
+        //Else, get cookie, and verify if the logged in user is a photographer
+        Cookie user = getUser(request);
+        if (user == null)
+        {
+            return false;
+        }
+
+        if (!user.getValue().contains("@"))
+        {
+            return false;
+        }
+
+        //Check if this user is a photographer
+        return new Database().CheckIfAdministratorExists(user.getValue());
     }
 }

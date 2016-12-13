@@ -19,9 +19,17 @@
             <a href="index.jsp" class="selected">Home</a>
             <a href="Products.jsp" >Winkel</a>
             <%
-                 if (UserHandler.userIsPhotographer(request))
-                 {%>
-            <a href="upload.jsp">Upload</a><%}%>
+                if (UserHandler.userIsPhotographer(request))
+                {
+            %><a href="upload.jsp">Upload</a><% }
+            %>
+
+            <%
+            if (UserHandler.userIsAdministrator(request))
+            {
+            %><a href="Overview.jsp">Beheer</a><%
+            }
+            %>
         </nav>
         <ul id="userinfo">
             <%
@@ -33,7 +41,7 @@
 
             <%}
         else
-            if (UserHandler.userIsPhotographer(request))
+            if (UserHandler.userIsPhotographer(request) || UserHandler.userIsAdministrator(request))
             {%>
             <li>Welcome <% out.println(UserHandler.getUserAsString(request)); %></li>
             <li><a href="#" id="logout" onclick="deleteAllCookies()">Uitloggen<img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>

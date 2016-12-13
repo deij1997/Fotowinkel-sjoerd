@@ -5,7 +5,9 @@
  */
 package Base;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,7 @@ public class PreviewItem implements Comparable<PreviewItem>
     private String title;
     private Item item;
     private Date date;
+    private List<ItemSalesInfo> sales = new ArrayList<ItemSalesInfo>();
 
     public PreviewItem(String title, Item item, Date date)
     {
@@ -52,6 +55,21 @@ public class PreviewItem implements Comparable<PreviewItem>
     public void setDate(Date date)
     {
         this.date = date;
+    }
+    
+    public List<ItemSalesInfo> getSales()
+    {
+        return sales;
+    }
+
+    public void addSale(ItemSalesInfo sale)
+    {
+        this.sales.add(sale);
+    }
+    
+    public void setSales(List<ItemSalesInfo> sales)
+    {
+        this.sales = sales;
     }
 
     @Override

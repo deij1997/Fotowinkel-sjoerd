@@ -7,6 +7,7 @@ package Base.DatabaseBase;
 
 import Base.Encoder;
 import Base.Item;
+import Base.ItemSalesInfo;
 import Base.Photo;
 import Base.PreviewItem;
 import Exceptions.RandomiserFail;
@@ -19,7 +20,7 @@ import java.util.Locale;
 
 /**
  * Database class to handle photo and order insertions
- * 
+ *
  * @author Rowan
  */
 public class DBItemHandler extends DBBase
@@ -110,7 +111,7 @@ public class DBItemHandler extends DBBase
         dab.sendQuery(query, parameters);
         dab.close();
     }
-    
+
     private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
     {
         int ret = -1;
@@ -128,10 +129,10 @@ public class DBItemHandler extends DBBase
         }
         return ret;
     }
-    
+
     /**
      * Returns all items from a photographer
-     * 
+     *
      * @param email
      * @return
      * @throws SQLException
@@ -140,20 +141,62 @@ public class DBItemHandler extends DBBase
     {
         setUpConnection();
         List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
-        String query = "Select code, prijs, title, date From `item` Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
+        String query = "Select `code`, `prijs`, `title`, `date`, `naam`, `bedrukt`, `verzonden`, `totaal`, `totaalprijs` from `item` \n"
+                       + "INNER JOIN \n"
+                       + "(\n"
+                       + "	SELECT `itemid`, `naam`, COUNT(`naam`) as `totaal`,\n"
+                       + "		SUM(`bedrukt`) as `bedrukt`, \n"
+                       + "		SUM(`verzonden`) as `verzonden`,\n"
+                       + "		SUM(`prijs`) as `totaalprijs`\n"
+                       + "	FROM `bestelling` \n"
+                       + "	INNER JOIN `voorwerp`  \n"
+                       + "	ON bestelling.voorwerpid = voorwerp.id\n"
+                       + "	INNER JOIN `voorwerp_assortiment`\n"
+                       + "	ON voorwerp.naam = voorwerp_assortiment.voorwerpnaam\n"
+                       + "	GROUP BY `naam`\n"
+                       + ") as `QUICK`\n"
+                       + "ON QUICK.itemid = item.id\n"
+                       + "Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
         ResultSet rs2 = dab.getData(query, new String[]
                             {
                                 email
         });
+
+        String code = null;
+        PreviewItem last = null;
+
         while (rs2.next())
         {
+            String newcode = rs2.getString("code");
             Double prijs = rs2.getDouble("prijs");
-            String code = rs2.getString("code");
             String title = rs2.getString("title");
             Date date = rs2.getDate("date");
+            ItemSalesInfo i = new ItemSalesInfo(
+                    rs2.getString("naam"), rs2.getInt("bedrukt"), rs2.getInt("verzonden"), rs2.getInt("totaal"), rs2.getInt("totaalprijs")
+            );
             Item item = new Photo(prijs, code);
-            PreviewItem previewItem = new PreviewItem(title, item, date);
-            previewItems.add(previewItem);
+
+            if (last == null)
+            {
+                last = new PreviewItem(title, item, date);
+            }
+            last.addSale(i);
+
+            //If the codes do not match, do not add it as sale, 
+            // But save it to the list
+            // And continue with the new object
+            if (code != null && !code.equals(newcode))
+            {
+                //Else
+                //Add the last item to the list
+                previewItems.add(last);
+                //And create a new last object
+                last = new PreviewItem(title, item, date);
+            }
+        }
+        if (last != null)
+        {
+            previewItems.add(last);
         }
         dab.close();
         return previewItems;

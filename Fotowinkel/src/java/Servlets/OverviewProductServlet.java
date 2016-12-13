@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 })
 public class OverviewProductServlet extends HttpServlet
 {
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,7 +46,6 @@ public class OverviewProductServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-
             String fotograaf = request.getParameter("selection");
             Database db = new Database();
             List<PreviewItem> items = db.GetFotograafItems(fotograaf);

@@ -75,12 +75,17 @@ public class PreviewItem implements Comparable<PreviewItem>, Serializable
     
     public String getTotalAsString()
     {
+        return Photo.GetPriceAsString(getTotal());
+    }
+    
+    public double getTotal()
+    {
         double price = 0;
         for (ItemSalesInfo i : sales)
         {
             price += i.getTotalprice() + i.getTotal() * item.GetPrice();
         }
-        return Photo.GetPriceAsString(price);
+        return price;
     }
     
     public String getSaleAsString(ItemSalesInfo sale)

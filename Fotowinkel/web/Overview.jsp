@@ -32,6 +32,17 @@
             {
         %>
         <script type="text/javascript">
+            $(function() { 
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        document.getElementById("total").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("POST", "OverviewTotalGainServlet", true);
+                xhttp.send();
+            });
+            
             function getNew()
             {
                 var xhttp = new XMLHttpRequest();
@@ -45,6 +56,15 @@
 
                 xhttp.open("POST", "OverviewProductServlet?" + "selection=" + photograph, true);
                 xhttp.send();
+                
+                var xhttp2 = new XMLHttpRequest();
+                xhttp2.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        document.getElementById("totalcurrent").innerHTML = this.responseText;
+                    }
+                };
+                xhttp2.open("POST", "OverviewGainServlet?" + "selection=" + photograph, true);
+                xhttp2.send();
             }
         </script>
         <%
@@ -110,12 +130,12 @@
                     <h4><b>Verkoop</b></h4>
                     <table class = "table" >
                         <tr>
-                            <td> <b>Totaal fotograaf </b></td>
-                            <td> €999</td>
+                            <td> <b>Totale opbrengst van geselecteerde fotograaf </b></td>
+                            <td id="totalcurrent">N/A</td>
                         </tr>
                         <tr>
                             <td><b>Totaal</b></td>
-                            <td>€42142142 </td>
+                            <td id="total">N/A</td>
                         </tr>
                     </table>
                 </div>

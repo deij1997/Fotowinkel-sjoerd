@@ -5,29 +5,23 @@
  */
 package Servlets;
 
-import Base.Database;
-import Base.PreviewItem;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Tu
+ * @author Rowan
  */
-@WebServlet(name = "OverzichtServlet", urlPatterns =
+@WebServlet(name = "OverviewTotalGainServlet", urlPatterns =
     {
-        "/OverzichtServlet"
+        "/OverviewTotalGainServlet"
 })
-public class OverviewServlet extends HttpServlet
+public class OverviewTotalGainServlet extends HttpServlet
 {
 
     /**
@@ -42,22 +36,19 @@ public class OverviewServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
         try
         {
-            String fotograaf = request.getParameter("selectedFotograaf");
-            Database db = new Database();
-            List<PreviewItem> items = db.GetFotograafItems(fotograaf);
-            Collections.sort(items);
+            //Database db = new Database();
+            //Get all 'bestellingen'
 
-            HttpSession session = request.getSession();
-            session.setAttribute("items", items);
-            RequestDispatcher rd = request.getRequestDispatcher("Overview.jsp?abc=" + fotograaf);
-            rd.forward(request, response);
+            out.println("NOT YET IMPLEMENTED");
         }
-        catch (SQLException ex)
+        finally
         {
+            out.close();
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

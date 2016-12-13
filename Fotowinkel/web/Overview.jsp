@@ -27,8 +27,7 @@
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
 
-        <% if (UserHandler.userIsAdministrator(request))
-            {
+        <% if (UserHandler.userIsAdministrator(request)) {
         %>
         <script type="text/javascript">
             function abc()
@@ -41,84 +40,122 @@
             List<String> fotografen = new ArrayList<String>();
             fotografen = db.getAllPhotographer();
         %>
-        <form action="OverzichtServlet" method="post" name="form" id="form">
-            <div class="container">
-                <label>Fotograaf:</label>
-                <select class="form-control btn btn-primary btn-sm btn-block" id="selectedFotograaf" name="selectedFotograaf" onchange="abc()">
-                    <%if (request.getParameter("abc") != null)
-                        {
-                            String result = request.getParameter("abc");
-                    %>
-                    <%for (int i = 0; i < fotografen.size(); i++)
-                        {
-                            if (fotografen.get(i).equals(result))
-                            {%>
-                    <option value= "<%=fotografen.get(i)%>" selected="selected"><%=fotografen.get(i)%></option>
-                    <%}
-                    else
-                    {%>
+        <form action="OverzichtServlet" method="post" name="form" id="form">     
+        <div class="container"> 
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Fotograaf</a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                    <div class="panel-body">
 
-                    <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
-                    <%} %>
-                    <%}%>
-                    <%}
-                    else
-                    { %>
+                            <label>Fotograaf:</label>
+                            <select class="form-control btn btn-primary btn-sm btn-block" id="selectedFotograaf" name="selectedFotograaf" onchange="abc()">
+                                <%if (request.getParameter("abc") != null) {
+                                        String result = request.getParameter("abc");
+                                %>
+                                <%for (int i = 0; i < fotografen.size(); i++) {
+                            if (fotografen.get(i).equals(result)) {%>
+                                <option value= "<%=fotografen.get(i)%>" selected="selected"><%=fotografen.get(i)%></option>
+                                <%} else {%>
 
-                    <%for (int i = 0; i < fotografen.size(); i++)
-                        {
-                    %>
-                    <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
-                    <%} %>
+                                <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
+                                <%} %>
+                                <%}%>
+                                <%} else { %>
 
-                    <%} %>
+                                <%for (int i = 0; i < fotografen.size(); i++) {
+                                %>
+                                <option value= "<%=fotografen.get(i)%>"><%=fotografen.get(i)%></option>
+                                <%} %>
 
-                </select>
+                                <%} %>
 
+                            </select>
+
+
+                            <table class="table table-striped">
+                                <tr>
+                                    <td><b>Titel</b></td>
+                                    <td><b>Prijs</td>
+                                    <td><b>Datum</b></td>
+                                </tr>
+                                <% if (session.getAttribute("items") != null) {
+                                        List<PreviewItem> items = (List) session.getAttribute("items");
+
+                                        if (items != null) {
+                                            if (!items.isEmpty()) {
+                                                for (PreviewItem item : items) {
+
+                                %>
+                                <tr> 
+                                    <td><%= item.getTitle()%></td>
+                                    <td><%= Photo.GetPriceAsString(item.getItem().GetPrice())%></td>
+                                    <td><%= item.getDate()%></td>
+                                </tr><%
+                                    }
+                                } else {%> 
+                                <p>Er zijn geen items</p>
+                                <% }
+
+                                        }
+                                    }
+
+                                %>
+                            </table>
+                        
+                    </div>
+                </div>
             </div>
 
-            <div class="container"> 
-                <table class="table table-striped">
-                    <tr>
-                        <td><b>Titel</b></td>
-                        <td><b>Prijs</td>
-                        <td><b>Datum</b></td>
-                    </tr>
-                    <% if (session.getAttribute("items") != null)
-                        {
-                            List<PreviewItem> items = (List) session.getAttribute("items");
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Artikelen</a>
+        </h4>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse">
+          <div class="panel-body">
+                                          <table class="table table-striped">
+                                <tr>
+                                    <td><b>Artikel</b></td>
+                                    <td><b>Prijs</td>
+                                    <td><b>Verzonden</b></td>
+                                    <td><b>Geprind</b></td>
+                                    <td><b>Totaal prijs</b></td>
+                                </tr>
 
-                            if (items != null)
-                            {
-                                if (!items.isEmpty())
-                                {
-                                    for (PreviewItem item : items)
-                                    {
-
-                    %>
-                    <tr> 
-                        <td><%= item.getTitle()%></td>
-                        <td><%= Photo.GetPriceAsString(item.getItem().GetPrice())%></td>
-                        <td><%= item.getDate()%></td>
-                    </tr><%
-                        }
-                    }
-                    else
-                    {%> 
-                    <p>Er zijn geen items</p>
-                    <% }
-
-                            }
-                        }
-
-                    %>
-                </table>
-            </div>
-
+                                <tr> 
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+          </div>
+      </div>
+    </div>
+                            
+         <div class = "container" >
+           
+             <h4><b>Verkoop</b></h4>
+            <table class = "table" >
+                <tr>
+                    <td> <b>Totaal fotograaf </b></td>
+                    <td> €999</td>
+                </tr>
+                <tr>
+                    <td><b>Totaal</b></td>
+                    <td>€42142142 </td>
+                </tr>
+            </table>
+        </div>
+        </div>
         </form>
-        <% }
-        else
-        {%> 
+        <% } else {%> 
         <div class="container">
             <div class="row">
                 <div class="col-md-9">

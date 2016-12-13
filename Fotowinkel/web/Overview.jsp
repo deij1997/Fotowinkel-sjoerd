@@ -43,7 +43,7 @@
 
                 var photograph = document.getElementById("selectedFotograaf").value;
 
-                xhttp.open("POST", "OverzichtServlet2?" + "selection=" + photograph, true);
+                xhttp.open("POST", "OverviewProductServlet?" + "selection=" + photograph, true);
                 xhttp.send();
             }
         </script>

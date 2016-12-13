@@ -23,11 +23,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Tu
  */
-@WebServlet(name = "OverzichtServlet2", urlPatterns =
+@WebServlet(name = "OverviewProductServlet", urlPatterns =
     {
-        "/OverzichtServlet2"
+        "/OverviewProductServlet"
 })
-public class OverviewServlet2 extends HttpServlet
+public class OverviewProductServlet extends HttpServlet
 {
 
     /**

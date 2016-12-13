@@ -5,6 +5,7 @@
  */
 package Base;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author Tu
  */
-public class PreviewItem implements Comparable<PreviewItem>
+public class PreviewItem implements Comparable<PreviewItem>, Serializable
 {
     private String title;
     private Item item;
@@ -70,6 +71,26 @@ public class PreviewItem implements Comparable<PreviewItem>
     public void setSales(List<ItemSalesInfo> sales)
     {
         this.sales = sales;
+    }
+    
+    public String getTotalAsString()
+    {
+        double price = 0;
+        for (ItemSalesInfo i : sales)
+        {
+            price += i.getTotalprice() + i.getTotal() * item.GetPrice();
+        }
+        return Photo.GetPriceAsString(price);
+    }
+    
+    public String getSaleAsString(ItemSalesInfo sale)
+    {
+        return Photo.GetPriceAsString(sale.getTotalprice() + sale.getTotal() * item.GetPrice());
+    }
+    
+    public String getMarkupTitleIfNeeded()
+    {
+        return sales.size() > 0 ? "<a>" + getTitle() + "</a>" : getTitle();
     }
 
     @Override

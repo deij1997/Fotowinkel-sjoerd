@@ -419,8 +419,8 @@ body {
     background-color: #eaf0f2;
 }
 
-.tablestress>tbody>tr:nth-of-type(odd){
-    background-color: whitesmoke;
+.white>tbody>tr:nth-of-type(odd){
+    background-color: white;
 }
 
 .lightenup>tbody>tr:nth-of-type(odd):hover{

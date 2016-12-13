@@ -153,7 +153,8 @@ public class DBItemHandler extends DBBase
                        + "	ON bestelling.voorwerpid = voorwerp.id\n"
                        + "	INNER JOIN `voorwerp_assortiment`\n"
                        + "	ON voorwerp.naam = voorwerp_assortiment.voorwerpnaam\n"
-                       + "	GROUP BY `naam`\n"
+                       + "	GROUP BY `naam`, `itemid`\n"
+                       + "	ORDER BY `itemid`\n"
                        + ") as `QUICK`\n"
                        + "ON QUICK.itemid = item.id\n"
                        + "Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
@@ -179,8 +180,8 @@ public class DBItemHandler extends DBBase
             if (last == null)
             {
                 last = new PreviewItem(title, item, date);
+                code = newcode;
             }
-            last.addSale(i);
 
             //If the codes do not match, do not add it as sale, 
             // But save it to the list
@@ -193,6 +194,8 @@ public class DBItemHandler extends DBBase
                 //And create a new last object
                 last = new PreviewItem(title, item, date);
             }
+            last.addSale(i);
+            code = newcode;
         }
         if (last != null)
         {

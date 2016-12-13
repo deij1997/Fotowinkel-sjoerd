@@ -47,13 +47,6 @@ public class OverviewServlet2 extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            out.println("                          <table class=\"table table-striped\"> \n"
-                        + "                                <tr>\n"
-                        + "                                    <td><b>Titel</b></td>\n"
-                        + "                                    <td><b>Prijs</td>\n"
-                        + "                                    <td><b>Datum</b></td>\n"
-                        + "                                    <td><b>Totaal</td>\n"
-                        + "                                </tr>");
 
             String fotograaf = request.getParameter("selection");
             Database db = new Database();
@@ -64,17 +57,30 @@ public class OverviewServlet2 extends HttpServlet
             {
                 if (!items.isEmpty())
                 {
+                    out.println("                          <table class=\"table table-striped freespace tablestress\"> \n"
+                                + "                                <tr>\n"
+                                + "                                    <td><b>Titel</b></td>\n"
+                                + "                                    <td><b>Prijs</td>\n"
+                                + "                                    <td><b>Datum</b></td>\n"
+                                + "                                    <td><b>Totaal</td>\n"
+                                + "                                </tr>");
+
+                    boolean iswhite = true;
+
                     for (PreviewItem item : items)
                     {
 
-                        out.println("                                  <tr data-toggle=\"collapse\" data-target=\"#" + item.hashCode() + "\" class=\"panel clickable\"> \n"
+                        out.println("                                  <table class=\"panel panel-default freespace\">"
+                                    + "                                <table class=\"table table-striped freespace lightenup" + (iswhite ? " white" : "") + "\">"
+                                    + "                                <tr data-toggle=\"collapse\" data-target=\"#" + item.hashCode() + "\" class=\"clickable\"> \n"
                                     + "                                    <td><a>" + item.getTitle() + "</a></td>\n"
                                     + "                                    <td>" + Photo.GetPriceAsString(item.getItem().GetPrice()) + "</td>\n"
                                     + "                                    <td>" + item.getDate() + "</td>\n"
                                     + "                                    <td>" + item.getTotalAsString() + "</td>\n"
                                     + "                                </tr>     \n"
-                                    + "                                <div id=\"" + item.hashCode() + "\" class=\"panel-collapse collapse\">\n"
-                                    + "                                    <div class=\"panel-body\">\n"
+                                    + "                                </table>"
+                                    + "                                <div id=\"" + item.hashCode() + "\" class=\"panel-body smallfreespace collapse\">\n"
+                                    + "                                    <div class=\"\">\n"
                                     + "                                        <table class=\"table table-striped\"> \n"
                                     + "                                            <tbody>\n"
                                     + "                                                <tr>\n"
@@ -85,6 +91,7 @@ public class OverviewServlet2 extends HttpServlet
                                     + "                                                    <td><b>Opbrengsten</b></td>\n"
                                     + "                                                </tr>\n"
                                     + "                                                \n");
+                        iswhite = !iswhite;
                         for (ItemSalesInfo i : item.getSales())
                         {
                             out.println("                                                <tr> \n"
@@ -99,12 +106,14 @@ public class OverviewServlet2 extends HttpServlet
                                     + "                                        </table>  \n"
                                     + "                                    </div>\n"
                                     + "                                </div>\n"
+                                    + "                             </table>"
                                     + "                             </table>");
                     }
                 }
                 else
                 {
-                    out.println("<p>Er zijn nog geen fotos verkocht door deze fotograaf</p>");
+                    out.println("<h2>Oh nee! :(</h2>"
+                                + "<p>Er zijn nog geen fotos verkocht door deze fotograaf</p>");
                 }
             }
         }

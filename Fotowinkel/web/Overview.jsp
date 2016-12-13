@@ -62,8 +62,6 @@
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
                         <div class="panel-body">
-
-                            <label>Fotograaf:</label>
                             <select class="form-control btn btn-primary btn-sm btn-block" id="selectedFotograaf" name="selectedFotograaf" onchange="getNew()">
                                 <%for (int i = 0; i < fotografen.size(); i++)
                                     { %>

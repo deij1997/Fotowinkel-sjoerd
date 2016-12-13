@@ -403,3 +403,26 @@ body {
 .custombutt .norml.active{
     background-color: grey;
 }
+
+.freespace{
+    padding: 0px;
+    margin: 0px;
+}
+
+.smallfreespace{
+    padding: 0px 25px;
+    
+    margin: 0px;
+}
+
+.tablestress>tbody>tr:nth-of-type(odd){
+    background-color: #eaf0f2;
+}
+
+.tablestress>tbody>tr:nth-of-type(odd){
+    background-color: whitesmoke;
+}
+
+.lightenup>tbody>tr:nth-of-type(odd):hover{
+    background-color: #eaf0f2;
+}

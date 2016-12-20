@@ -278,8 +278,24 @@ public class Database
         return DBGlobals.D_BUSER_HANDLER.getAllPhotographers();
     }
     
+    /**
+     * Returns the total profit made from all products
+     * 
+     * @return
+     * @throws SQLException
+     */
     public String getTotalProfit() throws SQLException
     {
         return Photo.GetPriceAsString(DBGlobals.D_B_ITEM_HANDLER.GetTotalSale());
+    }
+    
+    /**
+     * Returns the list of articles
+     * 
+     * @return
+     */
+    public List<PreviewArticle> GetArticles()
+    {
+        return null;
     }
 }

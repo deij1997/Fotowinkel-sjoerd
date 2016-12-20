@@ -21,6 +21,7 @@
     <head>
         <%@include file="WEB-INF/head.jspf" %>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="JS/Overview.js"></script>
         <title>Finance Overview</title>
     </head>
     <body>
@@ -30,44 +31,6 @@
 
         <% if (UserHandler.userIsAdministrator(request))
             {
-        %>
-        <script type="text/javascript">
-            $(function() { 
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        document.getElementById("total").innerHTML = this.responseText;
-                    }
-                };
-                xhttp.open("POST", "OverviewTotalGainServlet", true);
-                xhttp.send();
-            });
-            
-            function getNew()
-            {
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        document.getElementById("fill").innerHTML = this.responseText;
-                    }
-                };
-
-                var photograph = document.getElementById("selectedFotograaf").value;
-
-                xhttp.open("POST", "OverviewProductServlet?" + "selection=" + photograph, true);
-                xhttp.send();
-                
-                var xhttp2 = new XMLHttpRequest();
-                xhttp2.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        document.getElementById("totalcurrent").innerHTML = this.responseText;
-                    }
-                };
-                xhttp2.open("POST", "OverviewGainServlet?" + "selection=" + photograph, true);
-                xhttp2.send();
-            }
-        </script>
-        <%
             Database db = new Database();
             List<String> fotografen = new ArrayList<String>();
             fotografen = db.getAllPhotographer();
@@ -104,7 +67,7 @@
                     </div>
                     <div id="collapse3" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <table class="table table-striped">
+                            <table id="articles" class="table table-striped">
                                 <tr>
                                     <td><b>Artikel</b></td>
                                     <td><b>Prijs</td>

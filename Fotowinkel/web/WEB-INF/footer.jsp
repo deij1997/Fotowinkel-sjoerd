@@ -12,7 +12,7 @@
         <p class="footer-links">
             <a href="#">Home</a>
             -
-            <a href="#">About</a>
+            <a href="#"><fmt:message key="Over" /></a>
             -
             <a href="#">Contact</a>
 
@@ -41,11 +41,11 @@
     </div>
 
     <div class="footer-right">
-        <h3><span>About</span></h3>
+        <h3><span><fmt:message key="Over" /></span></h3>
 
         <p class="footer-company-about">
-            <span>About the company</span>
-            Fotowinkel Sjoerd is build by 5 developers of Fontys. This is a project for PTS4.
+            <span><fmt:message key="Aboutcompany" /></span>
+            <fmt:message key="Aboutdescription" />
         </p>
 
         <div class="footer-icons">

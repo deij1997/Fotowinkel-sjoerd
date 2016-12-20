@@ -71,13 +71,22 @@ public class AddToCartServlet extends HttpServlet
                         if (product != null)
                         {
                             int amount = Integer.valueOf(request.getParameter("amnt"));
-                            if (amount > 0)
+                            if (amount >= 0)
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
-                                    ShoppingCartItem e = new ShoppingCartItem(product,"#000000",ColorType.getTypeFromString(request.getParameter("color")));
-                                    cart.AddItemToBasket(e, amount);
-                                    out.println("added " + amount + " items of '" + product.GetTitle() + "' successfully");
+                                    ShoppingCartItem e = new ShoppingCartItem(product, "#000000", ColorType.getTypeFromString(request.getParameter("color")));
+
+                                    if (amount == 0)
+                                    {
+                                        String success = cart.RemoveItemFromBasket(e) ? "successfully" : "unsuccessfully";
+                                        out.println("removed " + product.GetTitle() + " " + success);
+                                    }
+                                    else
+                                    {
+                                        cart.AddItemToBasket(e, amount);
+                                        out.println("added " + amount + " items of '" + product.GetTitle() + "' successfully");
+                                    }
                                 }
                                 else
                                 {

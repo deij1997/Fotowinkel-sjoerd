@@ -173,7 +173,7 @@ public class DBItemHandler extends DBBase
             String title = rs2.getString("title");
             Date date = rs2.getDate("date");
             ItemSalesInfo i = new ItemSalesInfo(
-                    rs2.getString("naam"), rs2.getInt("bedrukt"), rs2.getInt("verzonden"), rs2.getInt("totaal"), rs2.getInt("totaalprijs")
+                    rs2.getString("naam"), rs2.getInt("bedrukt"), rs2.getInt("verzonden"), rs2.getInt("totaal"), rs2.getDouble("totaalprijs")
             );
             Item item = new Photo(prijs, code);
 
@@ -203,5 +203,34 @@ public class DBItemHandler extends DBBase
         }
         dab.close();
         return previewItems;
+    }
+
+    /**
+     * Gets the total sales profit
+     * @return
+     * @throws SQLException
+     */
+    public double GetTotalSale() throws SQLException
+    {
+        setUpConnection();
+        String query = "SELECT SUM(`iprijs`) + SUM(`prijs`) as `total` FROM `bestelling` \n"
+                       + "INNER JOIN \n"
+                       + "(\n"
+                       + "    SELECT `prijs` as `iprijs`, `id` FROM `item`\n"
+                       + ") as `item2`\n"
+                       + "ON item2.id = bestelling.itemid\n"
+                       + "INNER JOIN `voorwerp`\n"
+                       + "ON voorwerpid = voorwerp.id\n"
+                       + "INNER JOIN `voorwerp_assortiment`\n"
+                       + "ON naam = voorwerp_assortiment.voorwerpnaam";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+        });
+        double ret = 0.0;
+        while (rs2.next())
+        {
+            ret = rs2.getDouble("total");
+        }
+        return ret;
     }
 }

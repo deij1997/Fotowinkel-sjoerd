@@ -5,8 +5,10 @@
  */
 package Servlets;
 
+import Base.Database;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,10 +42,15 @@ public class OverviewTotalGainServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
-            //Database db = new Database();
-            //Get all 'bestellingen'
-
-            out.println("NOT YET IMPLEMENTED");
+            Database db = new Database();
+            try
+            {
+                out.println(db.getTotalProfit());
+            }
+            catch (SQLException ex)
+            {
+                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
+            }
         }
         finally
         {

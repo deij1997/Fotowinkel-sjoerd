@@ -277,4 +277,9 @@ public class Database
     {
         return DBGlobals.D_BUSER_HANDLER.getAllPhotographers();
     }
+    
+    public String getTotalProfit() throws SQLException
+    {
+        return Photo.GetPriceAsString(DBGlobals.D_B_ITEM_HANDLER.GetTotalSale());
+    }
 }

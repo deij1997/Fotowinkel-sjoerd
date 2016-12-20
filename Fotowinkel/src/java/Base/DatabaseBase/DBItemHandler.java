@@ -5,6 +5,7 @@
  */
 package Base.DatabaseBase;
 
+import Base.Article;
 import Base.Encoder;
 import Base.Item;
 import Base.ItemSalesInfo;
@@ -241,7 +242,7 @@ public class DBItemHandler extends DBBase
         return ret;
     }
 
-    public List<PreviewArticle> GetArticles() throws SQLException
+    public List<PreviewArticle> GetArticleSales() throws SQLException
     {
         setUpConnection();
         List<PreviewArticle> previewItems = new ArrayList<PreviewArticle>();
@@ -274,5 +275,22 @@ public class DBItemHandler extends DBBase
         }
         endConnection();
         return previewItems;
+    }
+    
+    public List<Article> GetArticles() throws SQLException
+    {
+        setUpConnection();
+        List<Article> articles = new ArrayList<Article>();
+        String query = "SELECT * FROM `voorwerp_assortiment`";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+        });
+
+        while (rs2.next())
+        {
+            articles.add(new Article(rs2.getString("voorwerpnaam"), rs2.getDouble("prijs")));
+        }
+        endConnection();
+        return articles;
     }
 }

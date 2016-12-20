@@ -5,8 +5,9 @@
  */
 package Servlets;
 
+import Base.Article;
 import Base.Database;
-import Base.PreviewArticle;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -20,11 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Rowan
  */
-@WebServlet(name = "OverviewArticleServlet", urlPatterns =
+@WebServlet(name = "ProductArticlesServlet", urlPatterns =
     {
-        "/OverviewArticleServlet"
+        "/ProductArticlesServlet"
 })
-public class OverviewArticleServlet extends HttpServlet
+public class ProductArticlesServlet extends HttpServlet
 {
 
     /**
@@ -44,41 +45,24 @@ public class OverviewArticleServlet extends HttpServlet
         try
         {
             Database db = new Database();
-            List<PreviewArticle> articles;
-            try
-            {
-                articles = db.GetArticleSales();
+            List<Article> articles = db.GetArticles();
 
-                out.println("<tr>\n"
-                            + "                                    <td><b>Artikel</b></td>\n"
-                            + "                                    <td><b>Prijs</td>\n"
-                            + "                                    <td><b>Verzonden</b></td>\n"
-                            + "                                    <td><b>Geprint</b></td>\n"
-                            + "                                    <td><b>Verkocht</b></td>\n"
-                            + "                                    <td><b>In voorraad</b></td>\n"
-                            + "                                    <td><b>Totaal winst</b></td>\n"
-                            + "                                </tr>\n");
-
-                for (PreviewArticle a : articles)
-                {
-                    if (!a.getName().equals("Standaard"))
-                    {
-                        out.println("<tr> \n"
-                                    + "                                    <td>" + a.getName() + "</td>\n"
-                                    + "                                    <td>" + a.getPriceAsString() + "</td>\n"
-                                    + "                                    <td>" + a.getSent() + "</td>\n"
-                                    + "                                    <td>" + a.getPrinted() + "</td>\n"
-                                    + "                                    <td>" + a.getSold() + "</td>\n"
-                                    + "                                    <td>" + a.getStock()+ "</td>\n"
-                                    + "                                    <td>" + a.getTotalPriceAsString() + "</td>\n"
-                                    + "                                </tr>");
-                    }
-                }
-            }
-            catch (Exception ex)
+            for (Article a : articles)
             {
-                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
+                //TODO
+                //Add default image for specific content (edit database?)
+                //Add price tag over div
+                out.println("<div class=\"article\">\n"
+                            + "                                        <div class=\"center-article\">\n"
+                            + "                                            <img src=\"fullimages/1.png\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                            + "                                        </div>\n"
+                            + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                            + "                                    </div>");
             }
+        }
+        catch (Exception e)
+        {
+            printStackTrace();
         }
         finally
         {

@@ -6,7 +6,7 @@
                 <div class="modal-content" style="max-width: 400px">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                        <h2 class="modal-title">Login</h2>
+                        <h2 class="modal-title"><fmt:message key="Login" /></h2>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -14,12 +14,12 @@
                                 <div class="well">
                                     <form>
                                         <div class="form-group">
-                                            <label for="username" class="control-label">Emailadres</label>
+                                            <label for="username" class="control-label">Email</label>
                                             <input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com">
                                             <span class="help-block"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label for="password" class="control-label">Wachtwoord</label>
+                                            <label for="password" class="control-label"><fmt:message key="Password" /></label>
                                             <input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
                                             <span class="help-block"></span>
                                         </div>
@@ -27,12 +27,11 @@
                                         <div id="loginErrorMsg" class="alert alert-error hide" style="color:#E0492F">Verkeerde gebruiker combinatie</div>
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="remember" id="remember"> Onthoud
+                                                <input type="checkbox" name="remember" id="remember"> <fmt:message key="Remember" />
                                             </label>
-                                            <p class="help-block">(indien dit een prive-computer is)</p>
                                         </div>
-                                        <button  id="login" class="btn btn-success btn-block" style="margin:3px">Log in</button>
-                                        <p><a href="#"  data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" data-dismiss="modal" data-target="#login-modal" style="margin:3px">Nieuwe fotograaf?</a></p>
+                                        <button  id="login" class="btn btn-success btn-block" style="margin:3px"><fmt:message key="Login" /></button>
+                                        <p><a href="#"  data-toggle="modal" data-target="#register-modal" class="btn btn-info btn-block" data-dismiss="modal" data-target="#login-modal" style="margin:3px"><fmt:message key="Login_register" /></a></p>
                                     </form>
                                 </div>
                             </div>

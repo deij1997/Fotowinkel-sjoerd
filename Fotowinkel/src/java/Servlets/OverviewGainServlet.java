@@ -46,20 +46,23 @@ public class OverviewGainServlet extends HttpServlet
         try
         {
             String fotograaf = request.getParameter("selection");
-            Database db = new Database();
-            List<PreviewItem> items = db.GetFotograafItems(fotograaf);
-            double lastPhotographerEarnings = 0;
-            if (items != null)
+            if (!(fotograaf == null || fotograaf.isEmpty()))
             {
-                if (!items.isEmpty())
+                Database db = new Database();
+                List<PreviewItem> items = db.GetFotograafItems(fotograaf);
+                double lastPhotographerEarnings = 0;
+                if (items != null)
                 {
-                    for (PreviewItem item : items)
+                    if (!items.isEmpty())
                     {
-                        lastPhotographerEarnings += item.getTotal();
+                        for (PreviewItem item : items)
+                        {
+                            lastPhotographerEarnings += item.getTotal();
+                        }
                     }
                 }
+                out.println(Photo.GetPriceAsString(lastPhotographerEarnings));
             }
-            out.println(Photo.GetPriceAsString(lastPhotographerEarnings));
         }
         catch (Exception ehroar)
         {

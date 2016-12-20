@@ -5,10 +5,7 @@
  */
 package Base;
 
-import Base.DatabaseBase.DBItemHandler;
-import Base.DatabaseBase.DBPhotoRetriever;
-import Base.DatabaseBase.DBUserHandler;
-import Base.DatabaseBase.DBVerify;
+import Base.DatabaseBase.DBGlobals;
 import Exceptions.RandomiserFail;
 import java.sql.*;
 import java.util.Arrays;
@@ -20,7 +17,6 @@ import java.util.List;
  */
 public class Database
 {
-
     public Database()
     {
         
@@ -35,7 +31,7 @@ public class Database
      */
     public List<Photo> GetPhotos(String code) throws SQLException
     {
-        return new DBPhotoRetriever().GetPhotos(code);
+        return DBGlobals.D_BPHOTO_RETRIEVER.GetPhotos(code);
     }
 
     /**
@@ -47,7 +43,7 @@ public class Database
      */
     public List<Photo> GetPhotosByKlantHashedId(String Klantid) throws SQLException
     {
-        return new DBPhotoRetriever().GetPhotosByKlantHashedId(Klantid);
+        return DBGlobals.D_BPHOTO_RETRIEVER.GetPhotosByKlantHashedId(Klantid);
     }
 
     /**
@@ -58,7 +54,7 @@ public class Database
      */
     public List<Photo> GetAllPhotos() throws SQLException
     {
-        return new DBPhotoRetriever().GetAllPhotos();
+        return DBGlobals.D_BPHOTO_RETRIEVER.GetAllPhotos();
     }
 
     /**
@@ -70,7 +66,7 @@ public class Database
      */
     public Photo GetPhoto(String hashId) throws SQLException
     {
-        return new DBPhotoRetriever().GetPhoto(hashId);
+        return DBGlobals.D_BPHOTO_RETRIEVER.GetPhoto(hashId);
     }
 
     /**
@@ -81,7 +77,7 @@ public class Database
      */
     public void UpdatePhotos(List<Photo> photos) throws SQLException
     {
-        new DBItemHandler().UpdatePhotos(photos);
+        DBGlobals.D_B_ITEM_HANDLER.UpdatePhotos(photos);
     }
 
     /**
@@ -105,7 +101,7 @@ public class Database
      */
     public boolean ValidateCredentials(String email, String password) throws SQLException
     {
-        return new DBVerify().ValidateCredentials(email, password);
+        return DBGlobals.D_BVERIFY.ValidateCredentials(email, password);
     }
     
     /**
@@ -117,7 +113,7 @@ public class Database
      */
     public String GetName(String email) throws SQLException
     {
-        return new DBVerify().GetName(email);
+        return DBGlobals.D_BVERIFY.GetName(email);
     }
 
     /**
@@ -130,7 +126,7 @@ public class Database
      */
     public String GetEmailFromHash(String Hash) throws SQLException, Exception
     {
-        return new DBVerify().GetEmailFromHash(Hash);
+        return DBGlobals.D_BVERIFY.GetEmailFromHash(Hash);
     }
 
     /**
@@ -142,7 +138,7 @@ public class Database
      */
     public boolean CheckIfPhotographerExists(String emailorcode) throws SQLException
     {
-        return new DBVerify().CheckIfPhotographerExists(emailorcode);
+        return DBGlobals.D_BVERIFY.CheckIfPhotographerExists(emailorcode);
     }
 
     /**
@@ -154,7 +150,7 @@ public class Database
      */
     public boolean CheckIfAdministratorExists(String email) throws SQLException
     {
-        return new DBVerify().CheckIfAdministratorExists(email);
+        return DBGlobals.D_BVERIFY.CheckIfAdministratorExists(email);
     }
 
     /**
@@ -166,7 +162,7 @@ public class Database
      */
     public boolean CheckIfCustomerExists(String emailorcode) throws SQLException
     {
-        return new DBVerify().CheckIfCustomerExists(emailorcode);
+        return DBGlobals.D_BVERIFY.CheckIfCustomerExists(emailorcode);
     }
 
     /**
@@ -193,7 +189,7 @@ public class Database
      */
     public boolean CheckIfPhotoBelongsToUser(String photocode, String user, boolean isPhotographer) throws SQLException
     {
-        return new DBVerify().CheckIfPhotoBelongsToUser(photocode, user, isPhotographer);
+        return DBGlobals.D_BVERIFY.CheckIfPhotoBelongsToUser(photocode, user, isPhotographer);
     }
 
     /**
@@ -206,7 +202,7 @@ public class Database
      */
     public void RegisterPhotographer(String email, String password) throws SQLException, RandomiserFail
     {
-        new DBUserHandler().RegisterPhotographer(email, password);
+        DBGlobals.D_BUSER_HANDLER.RegisterPhotographer(email, password);
     }
 
     /**
@@ -220,7 +216,7 @@ public class Database
      */
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
     {
-        new DBItemHandler().InsertPhotos(photos, customer, photograhper);
+        DBGlobals.D_B_ITEM_HANDLER.InsertPhotos(photos, customer, photograhper);
     }
 
     /**
@@ -256,7 +252,7 @@ public class Database
      */
     public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
-        new DBItemHandler().InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
+        DBGlobals.D_B_ITEM_HANDLER.InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
     }
 
      /**
@@ -268,7 +264,7 @@ public class Database
      */
     public List<PreviewItem> GetFotograafItems(String email) throws SQLException
     {
-        return new DBItemHandler().GetPhotographerItems(email);
+        return DBGlobals.D_B_ITEM_HANDLER.GetPhotographerItems(email);
     }
 
     /**
@@ -279,6 +275,6 @@ public class Database
      */
     public List<String> getAllPhotographer() throws SQLException
     {
-        return new DBUserHandler().getAllPhotographers();
+        return DBGlobals.D_BUSER_HANDLER.getAllPhotographers();
     }
 }

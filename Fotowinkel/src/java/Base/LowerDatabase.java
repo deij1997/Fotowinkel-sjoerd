@@ -22,6 +22,7 @@ public class LowerDatabase
     final static String ACCOUNT_NAME = "u4951p4091_prof";
     final static String PASSWORD = "fotos";
     static Connection con;
+    static Integer connections = 0;
     private PreparedStatement statement = null;
     private ResultSet result = null;
 
@@ -31,6 +32,7 @@ public class LowerDatabase
         {
             con = DriverManager.getConnection(CONNECTION_URL, ACCOUNT_NAME, PASSWORD);
         }
+        addConnections(1);
     }
 
     /**
@@ -121,31 +123,39 @@ public class LowerDatabase
      */
     public void close() throws SQLException
     {
-        if (result != null || !result.isClosed())
+        if (result != null)
         {
-            result.close();
-        }
-        if (statement != null || !statement.isClosed())
-        {
-            try
+            if (!result.isClosed())
             {
-                statement.close();
-            }
-            catch (Exception e)
-            {
-                System.out.println("[ERROR] Could not close LowerDatabase statement. \r\n" + e.getMessage());
+                result.close();
             }
         }
+        if (statement != null)
+        {
+            if (!statement.isClosed())
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    System.out.println("[ERROR] Could not close LowerDatabase statement. \r\n" + e.getMessage());
+                }
+            }
+        }
+        addConnections(-1);
         if (con != null || !con.isClosed())
         {
-            con.close();
+            if (connections == 0)
+            {
+                con.close();
+            }
         }
     }
-
-    @Override
-    protected void finalize() throws Throwable
+    
+    private synchronized void addConnections(int i)
     {
-        this.close();
-        super.finalize();
+        connections += i;
     }
 }

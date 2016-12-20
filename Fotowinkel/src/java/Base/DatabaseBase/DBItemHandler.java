@@ -8,6 +8,7 @@ package Base.DatabaseBase;
 import Base.Encoder;
 import Base.Item;
 import Base.ItemSalesInfo;
+import Base.LowerDatabase;
 import Base.Photo;
 import Base.PreviewArticle;
 import Base.PreviewItem;
@@ -140,7 +141,7 @@ public class DBItemHandler extends DBBase
      */
     public List<PreviewItem> GetPhotographerItems(String email) throws SQLException
     {
-        setUpConnection();
+        LowerDatabase dab = new LowerDatabase();
         List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
         String query = "Select `code`, `prijs`, `title`, `date`, `naam`, `bedrukt`, `verzonden`, `totaal`, `totaalprijs` from `item` \n"
                        + "INNER JOIN \n"
@@ -206,7 +207,7 @@ public class DBItemHandler extends DBBase
         {
             previewItems.add(last);
         }
-        endConnection();
+        dab.close();
         return previewItems;
     }
 

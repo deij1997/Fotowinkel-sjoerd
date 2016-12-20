@@ -7,18 +7,20 @@ package Base.DatabaseBase;
 
 import Base.LowerDatabase;
 import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Base database class
- * 
+ *
  * @author Rowan
  */
 public class DBBase
 {
     final static String DRIVER = "com.mysql.jdbc.Driver";
+    private ReentrantLock lock = new ReentrantLock();
     protected LowerDatabase dab;
     private static Object k = null;
-    
+
     public DBBase()
     {
         try
@@ -32,10 +34,43 @@ public class DBBase
         catch (Exception e)
         {
         }
-    }    
-    
+    }
+
     public final void setUpConnection() throws SQLException
     {
-        dab = new LowerDatabase();
+        lock.lock();
+        try
+        {
+            dab = new LowerDatabase();
+        }
+        finally
+        {
+            lock.unlock();
+        }
     }
+
+    public final void endConnection() throws SQLException
+    {
+        lock.lock();
+        try
+        {
+            dab.close();
+        }
+        finally
+        {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable
+    {
+        if (lock.isHeldByCurrentThread() && lock.isLocked())
+        {
+            lock.unlock();
+        }
+
+        super.finalize(); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -23,7 +23,6 @@ public class LowerDatabase
     final static String PASSWORD = "fotos";
     static Connection con;
     static Integer connections = 0;
-    private PreparedStatement statement = null;
     private ResultSet result = null;
 
     public LowerDatabase() throws SQLException
@@ -44,7 +43,7 @@ public class LowerDatabase
      */
     public void sendQuery(String query, String[] parameters) throws SQLException
     {
-        statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         int i = 0;
         if (parameters != null)
         {
@@ -128,20 +127,6 @@ public class LowerDatabase
             if (!result.isClosed())
             {
                 result.close();
-            }
-        }
-        if (statement != null)
-        {
-            if (!statement.isClosed())
-            {
-                try
-                {
-                    statement.close();
-                }
-                catch (Exception e)
-                {
-                    System.out.println("[ERROR] Could not close LowerDatabase statement. \r\n" + e.getMessage());
-                }
             }
         }
         addConnections(-1);

@@ -34,7 +34,7 @@ public class DBVerify extends DBBase
             }
         }
 
-        dab.close();
+        endConnection();
         return ret;
     }
 
@@ -71,7 +71,7 @@ public class DBVerify extends DBBase
         {
             name = rs2.getString("naam");
         }
-        dab.close();
+        endConnection();
         return name;
     }
 
@@ -110,7 +110,7 @@ public class DBVerify extends DBBase
             break;
         }
 
-        dab.close();
+        endConnection();
 
         if (ret.equals(""))
         {
@@ -128,7 +128,7 @@ public class DBVerify extends DBBase
                   emailorcode
         });
         boolean ret = dab.hasFoundData();
-        dab.close();
+        endConnection();
         return ret;
     }
 
@@ -141,7 +141,7 @@ public class DBVerify extends DBBase
                   email
         });
         boolean ret = dab.hasFoundData();
-        dab.close();
+        endConnection();
         return ret;
     }
 
@@ -154,7 +154,7 @@ public class DBVerify extends DBBase
                   emailorcode
         });
         boolean ret = dab.hasFoundData();
-        dab.close();
+        endConnection();
         return ret;
     }
 
@@ -176,7 +176,7 @@ public class DBVerify extends DBBase
                 break;
             }
         }
-        dab.close();
+        endConnection();
 
         return belongsToAUser;
     }

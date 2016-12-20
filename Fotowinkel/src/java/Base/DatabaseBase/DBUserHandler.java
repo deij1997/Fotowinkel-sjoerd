@@ -51,7 +51,7 @@ public class DBUserHandler extends DBBase
             Helpers.BCrypt.hashpw(password, salt), email, Encoder.GetHash(email)
         };
         dab.sendQuery(query, parameters);
-        dab.close();
+        endConnection();
     }
 
     /**
@@ -83,7 +83,7 @@ public class DBUserHandler extends DBBase
         {
             photographers.add(rs2.getString("email"));
         }
-        dab.close();
+        endConnection();
         return photographers;
     }
 }

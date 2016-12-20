@@ -37,7 +37,7 @@ public class DBItemHandler extends DBBase
                       p.GetTitle(), p.GetDescription(), p.GetCode()
             });
         }
-        dab.close();
+        endConnection();
     }
 
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
@@ -58,12 +58,12 @@ public class DBItemHandler extends DBBase
                       String.valueOf(GetIDFromHash((photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), true)), p.GetTitle(), p.GetDescription()
             });
         }
-        dab.close();
+        endConnection();
     }
 
     public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
-        String query = "";
+        String query = null;
         String[] parameters;
 
         if (items.isEmpty())
@@ -110,7 +110,7 @@ public class DBItemHandler extends DBBase
             String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
         };
         dab.sendQuery(query, parameters);
-        dab.close();
+        endConnection();
     }
 
     private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
@@ -174,7 +174,11 @@ public class DBItemHandler extends DBBase
             String title = rs2.getString("title");
             Date date = rs2.getDate("date");
             ItemSalesInfo i = new ItemSalesInfo(
-                    rs2.getString("naam"), rs2.getInt("bedrukt"), rs2.getInt("verzonden"), rs2.getInt("totaal"), rs2.getDouble("totaalprijs")
+                    rs2.getString("naam"), 
+                    rs2.getInt("bedrukt"), 
+                    rs2.getInt("verzonden"), 
+                    rs2.getInt("totaal"), 
+                    rs2.getDouble("totaalprijs")
             );
             Item item = new Photo(prijs, code);
 
@@ -202,7 +206,7 @@ public class DBItemHandler extends DBBase
         {
             previewItems.add(last);
         }
-        dab.close();
+        endConnection();
         return previewItems;
     }
 
@@ -267,7 +271,7 @@ public class DBItemHandler extends DBBase
         {
             previewItems.add(new PreviewArticle(rs2.getString("naam"), rs2.getDouble("prijs"), rs2.getInt("verkocht"), rs2.getInt("voorraad"), rs2.getInt("verzonden"), rs2.getInt("bedrukt")));
         }
-        dab.close();
+        endConnection();
         return previewItems;
     }
 }

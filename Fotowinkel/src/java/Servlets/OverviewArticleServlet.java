@@ -44,30 +44,40 @@ public class OverviewArticleServlet extends HttpServlet
         try
         {
             Database db = new Database();
-            List<PreviewArticle> articles = db.GetArticles();
-
-            out.println("<tr>\n"
-                        + "                                    <td><b>Artikel</b></td>\n"
-                        + "                                    <td><b>Prijs</td>\n"
-                        + "                                    <td><b>Verzonden</b></td>\n"
-                        + "                                    <td><b>Geprint</b></td>\n"
-                        + "                                    <td><b>Verkocht</b></td>\n"
-                        + "                                    <td><b>In voorraad</b></td>\n"
-                        + "                                    <td><b>Totaal winst</b></td>\n"
-                        + "                                </tr>\n");
-
-            for (PreviewArticle a : articles)
+            List<PreviewArticle> articles;
+            try
             {
+                articles = db.GetArticles();
 
-                out.println("<tr> \n"
-                            + "                                    <td>" + a.getName() + "</td>\n"
-                            + "                                    <td>" + a.getPriceAsString()+ "</td>\n"
-                            + "                                    <td>" + a.getSent()+ "</td>\n"
-                            + "                                    <td>" + a.getPrinted()+ "</td>\n"
-                            + "                                    <td>" + a.getSold()+ "</td>\n"
-                            + "                                    <td>" + a.getTotal()+ "</td>\n"
-                            + "                                    <td>" + a.getTotalPriceAsString()+ "</td>\n"
-                            + "                                </tr>");
+                out.println("<tr>\n"
+                            + "                                    <td><b>Artikel</b></td>\n"
+                            + "                                    <td><b>Prijs</td>\n"
+                            + "                                    <td><b>Verzonden</b></td>\n"
+                            + "                                    <td><b>Geprint</b></td>\n"
+                            + "                                    <td><b>Verkocht</b></td>\n"
+                            + "                                    <td><b>In voorraad</b></td>\n"
+                            + "                                    <td><b>Totaal winst</b></td>\n"
+                            + "                                </tr>\n");
+
+                for (PreviewArticle a : articles)
+                {
+                    if (!a.getName().equals("Standaard"))
+                    {
+                        out.println("<tr> \n"
+                                    + "                                    <td>" + a.getName() + "</td>\n"
+                                    + "                                    <td>" + a.getPriceAsString() + "</td>\n"
+                                    + "                                    <td>" + a.getSent() + "</td>\n"
+                                    + "                                    <td>" + a.getPrinted() + "</td>\n"
+                                    + "                                    <td>" + a.getSold() + "</td>\n"
+                                    + "                                    <td>" + a.getStock()+ "</td>\n"
+                                    + "                                    <td>" + a.getTotalPriceAsString() + "</td>\n"
+                                    + "                                </tr>");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
             }
         }
         finally

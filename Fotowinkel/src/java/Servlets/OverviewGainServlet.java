@@ -67,6 +67,7 @@ public class OverviewGainServlet extends HttpServlet
         catch (Exception ehroar)
         {
             out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+            ehroar.printStackTrace(out);
         }
         finally
         {

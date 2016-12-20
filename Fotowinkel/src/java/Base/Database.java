@@ -294,8 +294,8 @@ public class Database
      * 
      * @return
      */
-    public List<PreviewArticle> GetArticles()
+    public List<PreviewArticle> GetArticles() throws SQLException
     {
-        return null;
+        return DBGlobals.D_B_ITEM_HANDLER.GetArticles();
     }
 }

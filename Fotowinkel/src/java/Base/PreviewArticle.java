@@ -14,12 +14,14 @@ public class PreviewArticle
     private String name;
     private double price;
     private int sold;
-    private int total;
     private int sent;
     private int printed;
+    
+    //Total being the amount of items, including sold
+    private int total;
     private double totalprice;
 
-    public PreviewArticle(String name, double price, int sold, int total, int sent, int printed, double totalprice)
+    public PreviewArticle(String name, double price, int sold, int total, int sent, int printed)
     {
         this.name = name;
         this.price = price;
@@ -27,7 +29,7 @@ public class PreviewArticle
         this.total = total;
         this.sent = sent;
         this.printed = printed;
-        this.totalprice = totalprice;
+        this.totalprice = price * sold;
     }
 
     public int getSold()
@@ -48,6 +50,11 @@ public class PreviewArticle
     public void setTotal(int total)
     {
         this.total = total;
+    }
+    
+    public int getStock()
+    {
+        return getTotal() - getSold();
     }
 
     public String getName()

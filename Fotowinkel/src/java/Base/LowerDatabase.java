@@ -39,9 +39,10 @@ public class LowerDatabase
      *
      * @param query The query to send
      * @param parameters The query string parameters
+     * @return 
      * @throws SQLException
      */
-    public void sendQuery(String query, String[] parameters) throws SQLException
+    public ResultSet sendQuery(String query, String[] parameters) throws SQLException
     {
         PreparedStatement statement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         int i = 0;
@@ -57,10 +58,12 @@ public class LowerDatabase
         {
             statement.executeUpdate();
             result = statement.getGeneratedKeys();
+            return result;
         }
         else
         {
-            result = statement.executeQuery();
+            result = statement.executeQuery();       
+            return result;
         }
     }
 
@@ -74,8 +77,7 @@ public class LowerDatabase
      */
     public ResultSet getData(String query, String[] parameters) throws SQLException
     {
-        this.sendQuery(query, parameters);
-        return result;
+        return this.sendQuery(query, parameters);
     }
 
     public ResultSet getMutatedData() throws SQLException

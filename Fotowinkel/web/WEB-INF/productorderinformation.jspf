@@ -1,0 +1,38 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h2 class="modal-title">Product details</h2>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form>
+                        <div class="col-md-12">
+                            <div >
+                                <!-- Image. Top left, id=modalimage -->
+                                <img id="modalimage" class="col-md-8" style="padding: 15px" src="fullimages/1.png" alt=""/>
+                            </div>
+                            <div class="col-md-4">
+                                <!-- Title. image right, id=modaltitle -->
+                                <h2 id="modaltitle">TEST TITEL</h2>
+                                <!-- Description. image mid, id=modaldescription -->
+                                <p id="modaldescription">Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum</p>
+                                <!-- Colour. image bottom, id=modalcolour -->
+                                <input type="color" class="form-control" id="modalcolour">
+                            </div>
+                        </div>
+                        <div id="modalcontent" class="col-md-12">
+                            <!-- Scrollable box with options. Fill with JSP if possible-->
+                        </div>
+                        <div class="col-md-12">
+                            <p class="btn btn-primary" style="display: inherit" href="" id="modalpreview">Bestel</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

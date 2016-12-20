@@ -19,6 +19,7 @@
         <%@include file="WEB-INF/header.jsp" %>
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
+        <%@include file="WEB-INF/productorderinformation.jspf" %>
         <div class="container">
 
             <div class="row">

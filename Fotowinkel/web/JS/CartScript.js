@@ -13,6 +13,8 @@ $(document).on("click", ".addtocart", function loadDoc() {
         }
     };
     
+    //TODO
+    //Edit later on with modal input.
     var amnt = document.getElementById(this.id + "_amnt").value;
     if (amnt != 0)
     {
@@ -24,4 +26,17 @@ $(document).on("click", ".addtocart", function loadDoc() {
     xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + item + "&color=" + color, true);
     xhttp.send();
     return false;
+});
+
+$(document).on("click", ".showdetails", function loadDoc() {
+    //Stuff....
+    var item = this.id;
+    
+    var image = document.getElementsByClassName(item)[0];
+    var text = image.alt;
+    //innerText for IE. Fuck IE.
+    var title = document.getElementsByClassName(item)[0].parentElement.nextSibling.nextSibling.getElementsByTagName("h4")[1].textContent;
+    document.getElementById("modalimage").src = image.src;
+    document.getElementById("modaldescription").textContent = text;
+    document.getElementById("modaltitle").textContent = title;
 });

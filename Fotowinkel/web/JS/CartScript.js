@@ -14,6 +14,10 @@ $(document).on("click", ".addtocart", function loadDoc() {
     };
     
     var amnt = document.getElementById(this.id + "_amnt").value;
+    if (amnt != 0)
+    {
+        document.getElementById("cart").src = "Images/cartwi.png";
+    }
     var item = this.id;
     var color = document.getElementById("color_"+this.id).value;
     

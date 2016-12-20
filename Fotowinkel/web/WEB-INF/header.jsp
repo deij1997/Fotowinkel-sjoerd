@@ -45,17 +45,13 @@
             {%>
             <li>Welcome <% out.println(UserHandler.getUserAsString(request)); %></li>
             <li><a href="#" id="logout" onclick="deleteAllCookies()">Uitloggen<img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
-            <li><a href="Order.jsp" >Winkelmandje<img src="http://www.vestsforservicedogs.com/product_images/cart.png" alt="" width="50" height="50"></a></li>
-
-
             <%}
         else
         {%>
             <li>Welcome Klant</li>
             <li><a href="#" id="logout" onclick="deleteAllCookies()">Uitloggen<img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
-            <li><a href="Order.jsp" >Winkelmandje<img src="http://www.vestsforservicedogs.com/product_images/cart.png" alt="" width="50" height="50"></a></li>
-
             <%}%>
+            <li><a href="Order.jsp" >Winkelmandje<img id="cart" src="Images/cart.png" alt="" width="50" height="50"></a></li>
         </ul>
         <script>
             function deleteAllCookies() {

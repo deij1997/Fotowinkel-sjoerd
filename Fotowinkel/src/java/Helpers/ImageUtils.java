@@ -52,12 +52,12 @@ public class ImageUtils
     public static BufferedImage wrapImage(BufferedImage image, double strength, boolean inWidth, int lossamount)
     {
         int w = image.getWidth(), h = image.getHeight();
-        double bulgeStrength = strength / Math.PI;
+        double bulgeStrength = strength / Math.PI + 0.1 * strength;
         BufferedImage ret = new BufferedImage(w, h, image.getType());
 
         int cx = w / 2;
         int cy = h / 2;
-        int bulgeRadius = inWidth ? cy *2 : cx *2;
+        int bulgeRadius = (int) (inWidth ? cy * 1.75 : cx * 1.75);
 
         for (int x = 0; x < w; x++)
         {
@@ -88,15 +88,9 @@ public class ImageUtils
                 }
                 if (sx >= 0 && sx < w && sy >= 0 && sy < h)
                 {
-                    int rgb;
-                    if (inWidth)
-                    {
-                        rgb = image.getRGB(sx, y);
-                    }
-                    else
-                    {
-                        rgb = image.getRGB(x, sy);
-                    }
+                    int rgb = inWidth
+                              ? image.getRGB(sx, y)
+                              : image.getRGB(x, sy);
                     ret.setRGB(x, y, rgb);
                 }
             }

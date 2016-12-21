@@ -5,8 +5,8 @@
  */
 package Servlets;
 
-import Base.Article;
 import Base.Database;
+import Base.ListedArticle;
 import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,23 +41,41 @@ public class ProductArticlesServlet extends HttpServlet
             throws ServletException, IOException
     {
         response.setContentType("text/html;charset=UTF-8");
+
         PrintWriter out = response.getWriter();
         try
         {
-            Database db = new Database();
-            List<Article> articles = db.GetArticles();
+            //Get photo code
+            String id = request.getParameter("id");
+            //Get color code
+            String color = request.getParameter("color");
 
-            for (Article a : articles)
+            if (id != null && !id.isEmpty())
             {
-                //TODO
-                //Add default image for specific content (edit database?)
-                //Add price tag over div
-                out.println("<div class=\"article\">\n"
-                            + "                                        <div class=\"center-article\">\n"
-                            + "                                            <img src=\"fullimages/1.png\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                            + "                                        </div>\n"
-                            + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
-                            + "                                    </div>");
+                if (color == null || color.isEmpty())
+                {
+                    color = "000000";
+                }
+                Database db = new Database();
+                List<ListedArticle> articles = db.GetArticles();
+
+                for (ListedArticle a : articles)
+                {
+                    //TODO
+                    //Translate it to new image
+                    //Put new image over other image
+
+                    //TODO
+                    //Add price tag over div
+                    out.println("<div class=\"article\">\n"
+                                + "                                        <div class=\"center-article\">\n"
+                                + "                                            <img src=\"" + a.getPath() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                + "                                        </div>\n"
+                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                                + "                                    </div>");
+                }
+
+                //Show other items of photo code in those divs
             }
         }
         catch (Exception e)

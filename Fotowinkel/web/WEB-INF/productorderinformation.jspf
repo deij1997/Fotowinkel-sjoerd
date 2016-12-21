@@ -1,5 +1,6 @@
 <%-- any content can be specified here e.g.: --%>
 <%@ page pageEncoding="UTF-8" %>
+<script src="JS/ProductArticleLoader.js"></script>
 <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -28,19 +29,10 @@
                             <!-- Scrollable box with options. Fill with JSP if possible-->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4>Artiekelen</h4>
+                                    <h4 style="display: inline-block; left">Artikelen</h4>
+                                    <div id="modalbutton" class="btn btn-primary" style="display: inline-block; float:right">+</div>
                                 </div>
                                 <div id="modalcontent" class="panel-body articleholder">
-                                    <script>
-                                        var xhttp = new XMLHttpRequest();
-                                        xhttp.onreadystatechange = function () {
-                                            if (this.readyState === 4 && this.status === 200) {
-                                                document.getElementById("modalcontent").innerHTML = this.responseText;
-                                            }
-                                        };
-                                        xhttp.open("POST", "ProductArticlesServlet", true);
-                                        xhttp.send();
-                                    </script>
                                     <!-- Scrollable box -->
                                     <!--<div class="article">
                                         <div class="center-article">

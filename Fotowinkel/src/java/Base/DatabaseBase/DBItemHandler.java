@@ -5,10 +5,10 @@
  */
 package Base.DatabaseBase;
 
-import Base.Article;
 import Base.Encoder;
 import Base.Item;
 import Base.ItemSalesInfo;
+import Base.ListedArticle;
 import Base.LowerDatabase;
 import Base.Photo;
 import Base.PreviewArticle;
@@ -176,10 +176,10 @@ public class DBItemHandler extends DBBase
             String title = rs2.getString("title");
             Date date = rs2.getDate("date");
             ItemSalesInfo i = new ItemSalesInfo(
-                    rs2.getString("naam"), 
-                    rs2.getInt("bedrukt"), 
-                    rs2.getInt("verzonden"), 
-                    rs2.getInt("totaal"), 
+                    rs2.getString("naam"),
+                    rs2.getInt("bedrukt"),
+                    rs2.getInt("verzonden"),
+                    rs2.getInt("totaal"),
                     rs2.getDouble("totaalprijs")
             );
             Item item = new Photo(prijs, code);
@@ -276,11 +276,11 @@ public class DBItemHandler extends DBBase
         endConnection();
         return previewItems;
     }
-    
-    public List<Article> GetArticles() throws SQLException
+
+    public List<ListedArticle> GetArticles() throws SQLException
     {
         setUpConnection();
-        List<Article> articles = new ArrayList<Article>();
+        List<ListedArticle> articles = new ArrayList<ListedArticle>();
         String query = "SELECT * FROM `voorwerp_assortiment`";
         ResultSet rs2 = dab.getData(query, new String[]
                             {
@@ -288,7 +288,12 @@ public class DBItemHandler extends DBBase
 
         while (rs2.next())
         {
-            articles.add(new Article(rs2.getString("voorwerpnaam"), rs2.getDouble("prijs")));
+            articles.add(new ListedArticle(rs2.getInt("minx"),
+                                           rs2.getInt("miny"),
+                                           rs2.getInt("maxx"),
+                                           rs2.getInt("maxy"),
+                                           rs2.getDouble("strength"),
+                                           rs2.getString("voorwerpnaam"), rs2.getDouble("prijs")));
         }
         endConnection();
         return articles;

@@ -306,7 +306,7 @@ public class Database
      * @return
      * @throws SQLException
      */
-    public List<Article> GetArticles() throws SQLException
+    public List<ListedArticle> GetArticles() throws SQLException
     {
         return DBGlobals.D_B_ITEM_HANDLER.GetArticles();
     }

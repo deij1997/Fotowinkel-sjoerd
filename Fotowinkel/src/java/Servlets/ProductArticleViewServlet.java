@@ -5,12 +5,13 @@
  */
 package Servlets;
 
-import Base.Database;
-import Base.ListedArticle;
-import static com.sun.corba.se.impl.util.Utility.printStackTrace;
+import Helpers.ColorUtils;
+import Helpers.ImageHelper;
+import Helpers.ImageUtils;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +22,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Rowan
  */
-@WebServlet(name = "ProductArticlesServlet", urlPatterns =
+@WebServlet(name = "ProductArticleViewServlet", urlPatterns =
     {
-        "/ProductArticlesServlet"
+        "/ProductArticleViewServlet"
 })
-public class ProductArticlesServlet extends HttpServlet
+public class ProductArticleViewServlet extends HttpServlet
 {
+    public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,43 +42,30 @@ public class ProductArticlesServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        response.setContentType("text/html;charset=UTF-8");
-
-        PrintWriter out = response.getWriter();
+        PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
+        response.setContentType("image/png");
+        OutputStream out = response.getOutputStream();
         try
         {
-            //Get photo code
+            String type = request.getParameter("color");
             String id = request.getParameter("id");
-            //Get color code
-            String color = request.getParameter("color");
+            int minx = Integer.valueOf(request.getParameter("x1"));
+            int miny = Integer.valueOf(request.getParameter("y1"));
+            int maxx = Integer.valueOf(request.getParameter("x2"));
+            int maxy = Integer.valueOf(request.getParameter("y2"));
+            double str = Double.valueOf(request.getParameter("str"));
+            
+            BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
 
-            if (id != null && !id.isEmpty())
-            {
-                if (color == null || color.isEmpty())
-                {
-                    color = "000000";
-                }
-                Database db = new Database();
-                List<ListedArticle> articles = db.GetArticles();
-
-                for (ListedArticle a : articles)
-                {
-                    //TODO
-                    //Add price tag over div
-                    out.println("<div class=\"article\">\n"
-                                + "                                        <div class=\"center-article\">\n"
-                                + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                + "                                        </div>\n"
-                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
-                                + "                                    </div>");
-                }
-
-                //Show other items of photo code in those divs
-            }
+            img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
+            //TODO
+            //Paste onto actual object
+            img = ImageUtils.wrapImage(img, str, true, 0);
+            ImageIO.write(img, "PNG", out);
         }
         catch (Exception e)
         {
-            printStackTrace();
+            
         }
         finally
         {

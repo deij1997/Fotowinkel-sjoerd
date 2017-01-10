@@ -52,7 +52,7 @@ public class ProductArticlesServlet extends HttpServlet
 
             if (id != null && !id.isEmpty())
             {
-                if (color == null || color.isEmpty())
+                if (color == null || color.isEmpty() || color.equals("undefined"))
                 {
                     color = "000000";
                 }

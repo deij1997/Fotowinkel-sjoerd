@@ -456,14 +456,10 @@ body {
     height: 380px;
     overflow: scroll;
 }
- /*inputs*/
 
- input{
-     margin-left: 50px;
- }
- 
  /*table*/
 
- td{
+ #appelsap{
      max-width: 100px;
+     margin-left: 50px;
  }

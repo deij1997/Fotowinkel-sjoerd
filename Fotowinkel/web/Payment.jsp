@@ -23,15 +23,15 @@
         <div>
             <form style="padding-left: 50px">
                 <table>
-                    <tr><td><p>Name: </p></td><td><input type="text" name="name" id="name"></td></tr>
-                    <tr><td><p>Last name: </p></td><td><input type="text" name="lastname" id="lastname"></td></tr>
-                    <tr><td><p>Country: </p></td><td><input type="text" name="country" id="country"></td></tr>
-                    <tr><td><p>City: </p></td><td><input type="text" name="city" id="city"></td></tr>
-                    <tr><td><p>Street: </p></td><td><input type="text" name="street" id="street"></td></tr>
-                    <tr><td><p>House Nr: </p></td><td><input type="text" name="housenr" id="housenr"></td></tr>
-                    <tr><td><p>Postcode: </p></td><td><input type="text" name="postcode" id="postcode"></td></tr>
-                    <tr><td><p>Payment method: </p></td><td><input type="text" name="paymentmethod" id="paymentmethod"></td></tr>
-                    <tr><td><button  id="login" class="btn btn-success btn-block" style="margin:3px">Pay</button></td></tr>
+                    <tr><td id="appelsap"><p>Name: </p></td><td id="appelsap"><input type="text" name="name" id="name"></td></tr>
+                    <tr><td id="appelsap"><p>Last name: </p></td><td id="appelsap"><input type="text" name="lastname" id="lastname"></td></tr>
+                    <tr><td id="appelsap"><p>Country: </p></td><td id="appelsap"><input type="text" name="country" id="country"></td></tr>
+                    <tr><td id="appelsap"><p>City: </p></td><td id="appelsap"><input type="text" name="city" id="city"></td></tr>
+                    <tr><td id="appelsap"><p>Street: </p></td><td id="appelsap"><input type="text" name="street" id="street"></td></tr>
+                    <tr><td id="appelsap"><p>House Nr: </p></td><td id="appelsap"><input type="text" name="housenr" id="housenr"></td></tr>
+                    <tr><td id="appelsap"><p>Postcode: </p></td><td id="appelsap"><input type="text" name="postcode" id="postcode"></td></tr>
+                    <tr><td id="appelsap"><p>Payment method: </p></td><td id="appelsap"><input type="text" name="paymentmethod" id="paymentmethod"></td></tr>
+                    <tr><td id="appelsap"><button  id="login" class="btn btn-success btn-block" style="margin:3px">Pay</button></td></tr>
                 </table> 
             </form>
         </div>

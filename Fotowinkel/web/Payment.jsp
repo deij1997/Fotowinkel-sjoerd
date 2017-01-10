@@ -12,7 +12,26 @@
         <title>Fotowinkel Sjoerd</title>
         <script src="JS/Order.js"></script>
         <script src="JS/PopupImg.js"></script>
-        
+        <script>
+            $(document).ready(function () {
+                $("login").click(function () {
+                    $.post("Payment.jsp",
+                            {
+                                Name = $("name").val(),
+                                Last name = $("lastname").val(),
+                                Country = $("country").val(),
+                                City = $("city").val(),
+                                Street = $("street").val(),
+                                House Nr = $("housenr").val(),
+                                Postcode = $("postcode").val(),
+                                Payment method = $("paymentmethod").val()
+                            },
+                            function (data, status) {
+                                alert("Data: " + data + "\nStatus: " + status);
+                            });
+                });
+            });
+        </script>
     </head>
     <body>
         <%@include file="WEB-INF/header.jsp" %>

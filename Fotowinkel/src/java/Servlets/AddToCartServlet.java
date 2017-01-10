@@ -91,13 +91,17 @@ public class AddToCartServlet extends HttpServlet
 
                                     if (amount == 0)
                                     {
-                                        String success = cart.RemoveItemFromBasket(e) ? "successfully" : "unsuccessfully";
-                                        out.println("removed " + product.GetTitle() + " (" + e.getArticle() + ") " + success);
+                                        boolean succ = cart.RemoveItemFromBasket(e);
+                                        String success = succ ? "successfully" : "unsuccessfully";
+                                        if (succ)
+                                        {
+                                            out.println("removed " + product.GetTitle() + " (" + e.getArticle() + ") " + success);
+                                        }
                                     }
                                     else
                                     {
                                         cart.AddItemToBasket(e, amount);
-                                        out.println("added " + amount + " " + e.getArticle() +  " of '" + product.GetTitle() + "' successfully");
+                                        out.println("added " + amount + " " + e.getArticle() + " of '" + product.GetTitle() + "' successfully");
                                     }
                                 }
                                 else

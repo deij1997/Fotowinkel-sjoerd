@@ -85,11 +85,11 @@ public class ProductArticlesServlet extends HttpServlet
                 }
                 else
                 {
+                    //Get all the added products
                     Map ps = cart.getAllProducts();
                     Object[] products = ps.keySet().toArray();
                     Object[] amounts = ps.values().toArray();
 
-                    //Get all items
                     for (int i = 0; i < ps.size(); i++)
                     {
                         //Make sure the shopping cart item supports the articles as well
@@ -97,20 +97,29 @@ public class ProductArticlesServlet extends HttpServlet
 
                         if (product.getProduct().GetCode().equals(id))
                         {
+                            String article = product.getArticle().toLowerCase();
+                            ListedArticle a = null;
+                            for (ListedArticle art : articles)
+                            {
+                                if (art.getName().toLowerCase().equals(article))
+                                {
+                                    a = art;
+                                    break;
+                                }
+                            }
+                            if (a != null)
+                            {
+                                String color = product.getColorHex();
+                                color = color.replace("#", "");
+                                Integer orderamount = (Integer) amounts[i];
 
-                            Integer orderamount = (Integer) amounts[i];
-                            String color = product.getColorHex();
-                            color = color.replace("#", "");
-
-                            //Article type. Standard for now
-                            ListedArticle a = articles.get(7);
-
-                            out.println("<div class=\"article\">\n"
-                                        + "                                        <div class=\"center-article\">\n"
-                                        + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                        + "                                        </div>\n"
-                                        + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
-                                        + "                                    </div>");
+                                out.println("<div class=\"article\">\n"
+                                            + "                                        <div class=\"center-article\">\n"
+                                            + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                            + "                                        </div>\n"
+                                            + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
+                                            + "                                    </div>");
+                            }
                         }
                     }
                 }

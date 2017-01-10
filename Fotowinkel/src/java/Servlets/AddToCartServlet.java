@@ -40,7 +40,7 @@ public class AddToCartServlet extends HttpServlet
      * @throws IOException if an I/O error occurs
      * @throws java.sql.SQLException
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected synchronized void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException
     {
         response.setContentType("text/html;charset=UTF-8");
@@ -65,6 +65,18 @@ public class AddToCartServlet extends HttpServlet
                     else
                     {
                         String hash = request.getParameter("it");
+                        String color = request.getParameter("color");
+                        if (color == null)
+                        {
+                            color = "000000";
+                        }
+                        color = "#" + color;
+                        String articletype = request.getParameter("type");
+                        if (articletype == null)
+                        {
+                            articletype = "standaard";
+                        }
+
                         //Create a product from the given Hash
                         Photo product = new Database().GetPhoto(hash);
                         //If it's an existing product
@@ -75,17 +87,17 @@ public class AddToCartServlet extends HttpServlet
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
-                                    ShoppingCartItem e = new ShoppingCartItem(product, "#000000", ColorType.getTypeFromString(request.getParameter("color")));
+                                    ShoppingCartItem e = new ShoppingCartItem(product, color, articletype, ColorType.getTypeFromString(request.getParameter("color")));
 
                                     if (amount == 0)
                                     {
                                         String success = cart.RemoveItemFromBasket(e) ? "successfully" : "unsuccessfully";
-                                        out.println("removed " + product.GetTitle() + " " + success);
+                                        out.println("removed " + product.GetTitle() + " (" + e.getArticle() + ") " + success);
                                     }
                                     else
                                     {
                                         cart.AddItemToBasket(e, amount);
-                                        out.println("added " + amount + " items of '" + product.GetTitle() + "' successfully");
+                                        out.println("added " + amount + " " + e.getArticle() +  " of '" + product.GetTitle() + "' successfully");
                                     }
                                 }
                                 else

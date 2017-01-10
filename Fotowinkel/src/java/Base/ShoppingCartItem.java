@@ -11,15 +11,27 @@ public class ShoppingCartItem
 
     private final Item Product;
     private final String ColorHex;
+    private final String article;
     private final ColorType ColorType;
 
-    public ShoppingCartItem(Item Product, String ColorHex, ColorType ColorType)
+    public ShoppingCartItem(Item Product, String ColorHex, String article, ColorType ColorType)
     {
         this.Product = Product;
         this.ColorHex = ColorHex;
         this.ColorType = ColorType;
+        
+        if (article == null || article.isEmpty() || article.equals("null"))
+        {
+            article = "standaard";
+        }
+        this.article = article;
     }
 
+    public String getArticle()
+    {
+        return article;
+    }
+    
     public ColorType getColorType()
     {
         return ColorType;
@@ -52,8 +64,9 @@ public class ShoppingCartItem
     public int hashCode()
     {
         int hash = 7;
-        hash = 89 * hash + (this.Product != null ? this.Product.hashCode() : 0);
-        hash = 89 * hash + (this.ColorType != null ? this.ColorType.hashCode() : 0);
+        hash = 29 * hash + (this.Product != null ? this.Product.hashCode() : 0);
+        hash = 29 * hash + (this.article != null ? this.article.hashCode() : 0);
+        hash = 29 * hash + (this.ColorType != null ? this.ColorType.hashCode() : 0);
         return hash;
     }
 
@@ -73,18 +86,20 @@ public class ShoppingCartItem
             return false;
         }
         final ShoppingCartItem other = (ShoppingCartItem) obj;
-        //If products are the same
-        if ((this.Product == other.Product
-              || (this.Product == null || this.Product.equals(other.Product))))
+        if ((this.article == null) ? (other.article != null) : !this.article.equals(other.article))
         {
-            //And colortype as well
-            if (this.ColorType == other.ColorType)
-            {
-                //They are the same
-                return true;
-            }
+            return false;
         }
-        return false;
+        if (this.Product != other.Product && (this.Product == null || !this.Product.equals(other.Product)))
+        {
+            return false;
+        }
+        return this.ColorType == other.ColorType;
     }
 
+    @Override
+    public String toString()
+    {
+        return "Item{" + "ColorHex=" + ColorHex + ", article=" + article + '}';
+    }
 }

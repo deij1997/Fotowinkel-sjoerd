@@ -102,23 +102,19 @@ $(document).on("click", "#modalpreview", function (event) {
         var type = img.alt;
 
         //Get the colour from the url
-        var color = "#" + getColor(img.src);
+        var color = getColor(img.src);
 
-        //If there's at least one item to add
-        if (amnt != 0)
-        {
-            //Send a request to the server to add it
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    console.log(this.responseText);
-                }
-            };
+        //Send a request to the server to add it
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.responseText);
+            }
+        };
 
-            xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + tid + "&color=" + color + "&type=" + type, true);
-            xhttp.send();
-            totalamnt += amnt;
-        }
+        xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + tid + "&color=" + color + "&type=" + type, true);
+        xhttp.send();
+        totalamnt += amnt;
     }
     if (totalamnt != 0)
     {
@@ -148,7 +144,7 @@ function filterAndAddModalContent(toAdd) {
 
 function getColor(item)
 {
-    var color = item.match(/color=(.{6})/);
+    var color = item.match(/color=(.{6})/)[1];
     if (color == null)
     {
         color = "000000";

@@ -13,7 +13,7 @@
                         <div class="col-md-12">
                             <div >
                                 <!-- Image. Top left, id=modalimage -->
-                                <img id="modalimage" class="col-md-8" style="padding: 15px" src="fullimages/1.png" alt=""/>
+                                <img id="modalimage" class="col-md-8" style="padding: 15px; max-width: 100%;" src="fullimages/1.png" alt=""/>
                             </div>
                             <div class="col-md-4">
                                 <!-- Title. image right, id=modaltitle -->

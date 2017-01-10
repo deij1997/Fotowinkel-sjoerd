@@ -88,26 +88,30 @@ public class ProductArticlesServlet extends HttpServlet
                     Map ps = cart.getAllProducts();
                     Object[] products = ps.keySet().toArray();
                     Object[] amounts = ps.values().toArray();
-                    
-                    
+
                     //Get all items
                     for (int i = 0; i < ps.size(); i++)
                     {
                         //Make sure the shopping cart item supports the articles as well
-                        ShoppingCartItem product = (ShoppingCartItem)products[i];
-                        Integer orderamount = (Integer)amounts[i];
-                        String color = product.getColorHex();
-                        color = color.replace("#", "");
-                        
-                        //Article type. Standard for now
-                        ListedArticle a = articles.get(7);
+                        ShoppingCartItem product = (ShoppingCartItem) products[i];
 
-                        out.println("<div class=\"article\">\n"
-                                    + "                                        <div class=\"center-article\">\n"
-                                    + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                    + "                                        </div>\n"
-                                    + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
-                                    + "                                    </div>");
+                        if (product.getProduct().GetCode().equals(id))
+                        {
+
+                            Integer orderamount = (Integer) amounts[i];
+                            String color = product.getColorHex();
+                            color = color.replace("#", "");
+
+                            //Article type. Standard for now
+                            ListedArticle a = articles.get(7);
+
+                            out.println("<div class=\"article\">\n"
+                                        + "                                        <div class=\"center-article\">\n"
+                                        + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                        + "                                        </div>\n"
+                                        + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
+                                        + "                                    </div>");
+                        }
                     }
                 }
             }

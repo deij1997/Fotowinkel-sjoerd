@@ -19,17 +19,6 @@
         <%@include file="WEB-INF/register.jspf" %>
         <div class="container">
             <div class="row">
-                <div class="col-md-3" id="detailbox">
-                    <p class="lead">Details</p>
-                    <p class="pull-right">test</p><p>Name: </p>
-                    <p class="pull-right">test</p><p>Last name: </p>
-                    <p class="pull-right">test</p><p>Country: </p>
-                    <p class="pull-right">test</p><p>City: </p>
-                    <p class="pull-right">test</p><p>Street: </p>
-                    <p class="pull-right">test</p><p>House Nr: </p>
-                    <p class="pull-right">test</p><p>Postcode: </p>
-                    <p class="pull-right">test</p><p>Payment method: </p>
-                </div>
                 <div class="col-md-9">
                     <div class="row" id="demo">
                     </div>

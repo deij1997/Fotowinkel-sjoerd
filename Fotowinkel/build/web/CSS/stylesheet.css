@@ -430,3 +430,15 @@ body {
 .lightenup>tbody>tr:nth-of-type(odd):hover{
     background-color: #eaf0f2;
 }
+
+ /*inputs*/
+
+ input{
+     margin-left: 50px;
+ }
+ 
+ /*table*/
+
+ td{
+     max-width: 100px;
+ }

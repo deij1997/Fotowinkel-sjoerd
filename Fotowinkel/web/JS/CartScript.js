@@ -5,6 +5,7 @@
  */
 var tid;
 var tcolor;
+var ft;
 
 //For quick add
 $(document).on("click", ".addtocart", function loadDoc() {
@@ -41,7 +42,16 @@ $(document).on("click", ".showdetails", function loadDoc() {
     document.getElementById("modalimage").src = "imgServlet?type=000000&id=" + tid;
     document.getElementById("modaldescription").textContent = text;
     document.getElementById("modaltitle").textContent = title;
-    document.getElementById("modalcontent").innerHTML = "";
+
+    //Fill the content with the shopping cart where the ids match
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            document.getElementById("modalcontent").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("POST", "ProductArticlesServlet?id=" + tid + "&ft=true", true);
+    xhttp.send();
 });
 
 //To show direct feedback to the user regarding colour
@@ -65,7 +75,7 @@ $(document).on("click", "#modalbutton", function (event) {
     xhttp.send();
 });
 
-//Get the new articles to order
+//Order the new items from the modal window
 $(document).on("click", "#modalpreview", function (event) {
 
     //Add all things to the shopping cart
@@ -87,7 +97,7 @@ $(document).on("click", "#modalpreview", function (event) {
         var amnt = Child.getElementsByTagName("input")[0].value;
 
         var img = Child.children[0].getElementsByTagName("img")[0];
-        
+
         //Get the product name
         var type = img.alt;
 

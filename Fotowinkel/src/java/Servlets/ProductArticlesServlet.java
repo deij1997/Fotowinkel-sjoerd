@@ -7,12 +7,17 @@ package Servlets;
 
 import Base.Database;
 import Base.ListedArticle;
+import Base.ShoppingCart;
+import Base.ShoppingCartItem;
+import Managers.ShoppingCartHolder;
 import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 })
 public class ProductArticlesServlet extends HttpServlet
 {
+    private static List<ListedArticle> articles = null;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,37 +51,95 @@ public class ProductArticlesServlet extends HttpServlet
         PrintWriter out = response.getWriter();
         try
         {
+            if (articles == null)
+            {
+                Database db = new Database();
+                articles = db.GetArticles();
+            }
+
             //Get photo code
             String id = request.getParameter("id");
-            //Get color code
-            String color = request.getParameter("color");
+            //Get if first load
+            String ft = request.getParameter("ft");
+            boolean firsttime = ft == null ? false : ft.equals("true");
 
-            if (id != null && !id.isEmpty())
+            //Load in the shopping cart if it's the first time
+            if (firsttime)
             {
-                if (color == null || color.isEmpty() || color.equals("undefined"))
+                Cookie[] cookies = request.getCookies();
+                ShoppingCart cart = null;
+                if (cookies != null)
                 {
-                    color = "000000";
+                    for (Cookie c : cookies)
+                    {
+                        if (c.getName().equals("cartID"))// cartID found, now we send the value
+                        {
+                            cart = ShoppingCartHolder.getInstance().getCartByID(c.getValue());
+                            break;
+                        }
+                    }
                 }
-                Database db = new Database();
-                List<ListedArticle> articles = db.GetArticles();
-
-                for (ListedArticle a : articles)
+                if (cart == null)
                 {
-                    //TODO
-                    //Add price tag over div
-                    out.println("<div class=\"article\">\n"
-                                + "                                        <div class=\"center-article\">\n"
-                                + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                + "                                        </div>\n"
-                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
-                                + "                                    </div>");
+                    response.addCookie(new Cookie("cartID", ShoppingCartHolder.getRandomID()));
                 }
+                else
+                {
+                    Map ps = cart.getAllProducts();
+                    Object[] products = ps.keySet().toArray();
+                    Object[] amounts = ps.values().toArray();
+                    
+                    
+                    //Get all items
+                    for (int i = 0; i < ps.size(); i++)
+                    {
+                        //Make sure the shopping cart item supports the articles as well
+                        ShoppingCartItem product = (ShoppingCartItem)products[i];
+                        Integer orderamount = (Integer)amounts[i];
+                        String color = product.getColorHex();
+                        color = color.replace("#", "");
+                        
+                        //Article type. Standard for now
+                        ListedArticle a = articles.get(7);
 
-                //Show other items of photo code in those divs
+                        out.println("<div class=\"article\">\n"
+                                    + "                                        <div class=\"center-article\">\n"
+                                    + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                    + "                                        </div>\n"
+                                    + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
+                                    + "                                    </div>");
+                    }
+                }
+            }
+            else
+            {
+                //Get color code
+                String color = request.getParameter("color");
+                if (id != null && !id.isEmpty())
+                {
+                    if (color == null || color.isEmpty() || color.equals("undefined"))
+                    {
+                        color = "000000";
+                    }
+
+                    for (ListedArticle a : articles)
+                    {
+                        //TODO
+                        //Add price tag over div
+                        out.println("<div class=\"article\">\n"
+                                    + "                                        <div class=\"center-article\">\n"
+                                    + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                    + "                                        </div>\n"
+                                    + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                                    + "                                    </div>");
+                    }
+                    //Show other items of photo code in those divs
+                }
             }
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
             printStackTrace();
         }
         finally

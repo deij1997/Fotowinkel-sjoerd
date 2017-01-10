@@ -12,13 +12,13 @@ public class ShoppingCartItem
     private final Item Product;
     private final String ColorHex;
     private final String article;
-    private final ColorType ColorType;
+    private final ColorType colorType;
 
-    public ShoppingCartItem(Item Product, String ColorHex, String article, ColorType ColorType)
+    public ShoppingCartItem(Item Product, String ColorHex, String article)
     {
         this.Product = Product;
         this.ColorHex = ColorHex;
-        this.ColorType = ColorType;
+        this.colorType = ColorType.getTypeFromString(ColorHex);
         
         if (article == null || article.isEmpty() || article.equals("null"))
         {
@@ -34,7 +34,7 @@ public class ShoppingCartItem
     
     public ColorType getColorType()
     {
-        return ColorType;
+        return colorType;
     }
 
     public Item getProduct()
@@ -49,13 +49,13 @@ public class ShoppingCartItem
 
     public String getColourName()
     {
-        if (this.ColorType == ColorType.HEX)
+        if (this.colorType == colorType.HEX)
         {
             return ColorHex;
         }
         else
         {
-            return this.ColorType.toString();
+            return this.colorType.toString();
         }
 
     }
@@ -66,7 +66,7 @@ public class ShoppingCartItem
         int hash = 7;
         hash = 29 * hash + (this.Product != null ? this.Product.hashCode() : 0);
         hash = 29 * hash + (this.article != null ? this.article.hashCode() : 0);
-        hash = 29 * hash + (this.ColorType != null ? this.ColorType.hashCode() : 0);
+        hash = 29 * hash + (this.colorType != null ? this.colorType.hashCode() : 0);
         return hash;
     }
 
@@ -94,7 +94,11 @@ public class ShoppingCartItem
         {
             return false;
         }
-        return this.ColorType == other.ColorType;
+        if (this.ColorHex != other.ColorHex && (this.ColorHex == null || !this.ColorHex.equals(other.ColorHex)))
+        {
+            return false;
+        }
+        return this.colorType == other.colorType;
     }
 
     @Override

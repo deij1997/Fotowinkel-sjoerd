@@ -29,13 +29,13 @@ public enum ColorType
 
     public static ColorType getTypeFromString(String string)
     {
+        if (string == null)
+        {
+            return NOCOLOR;
+        }
         if (string.contains("#"))
         {
             return ColorType.HEX;
-        }
-        if (string.equals(null))
-        {
-            return ColorType.NOCOLOR;
         }
         //voordat je gaat huilen over if-statements, denk er dan aan dat 
         //je met JavaEE niet hoger dan Source level 6 kan 

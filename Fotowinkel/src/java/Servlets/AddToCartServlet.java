@@ -68,9 +68,16 @@ public class AddToCartServlet extends HttpServlet
                         String color = request.getParameter("color");
                         if (color == null)
                         {
-                            color = "000000";
+                            color = "#000000";
                         }
-                        color = "#" + color;
+                        //If it is norml, empty or null (hex is not possible due to the lack of # in post methods)
+                        if (ColorType.getTypeFromString(color) == ColorType.NOCOLOR)
+                        {
+                            if (!color.equals("norml"))
+                            {
+                                color = "#" + color;
+                            }
+                        }
                         String articletype = request.getParameter("type");
                         if (articletype == null)
                         {
@@ -87,7 +94,7 @@ public class AddToCartServlet extends HttpServlet
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
-                                    ShoppingCartItem e = new ShoppingCartItem(product, color, articletype, ColorType.getTypeFromString(request.getParameter("color")));
+                                    ShoppingCartItem e = new ShoppingCartItem(product, color, articletype);
 
                                     if (amount == 0)
                                     {

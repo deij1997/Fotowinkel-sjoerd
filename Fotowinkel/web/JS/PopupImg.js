@@ -6,7 +6,7 @@
 $(document).on("click", "#myImg", function () {
     $('#myModal')[0].style.display = "block";
     $('#img01')[0].src = this.src;
-    $('#caption')[0].innerHTML = this.alt;
+    $('#caption')[0].textContent = this.alt;
 });
 
 $(document).on("click", ".close", function () {

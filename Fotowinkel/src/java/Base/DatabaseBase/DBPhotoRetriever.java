@@ -27,7 +27,7 @@ public class DBPhotoRetriever extends DBBase
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
         }
-        dab.close();
+        endConnection();
 
         return photos;
     }
@@ -50,7 +50,7 @@ public class DBPhotoRetriever extends DBBase
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
         }
-        dab.close();
+        endConnection();
         return photos;
     }
     
@@ -67,7 +67,7 @@ public class DBPhotoRetriever extends DBBase
         {
             photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
         }
-        dab.close();
+        endConnection();
         return photos;
 
     }
@@ -87,7 +87,7 @@ public class DBPhotoRetriever extends DBBase
             ret = new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description"));
             break;
         }
-        dab.close();
+        endConnection();
 
         return ret;
     }

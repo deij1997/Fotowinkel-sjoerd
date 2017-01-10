@@ -5,12 +5,13 @@
  */
 package Servlets;
 
-import Base.Database;
-import Base.Photo;
-import Base.PreviewItem;
+import Helpers.ColorUtils;
+import Helpers.ImageHelper;
+import Helpers.ImageUtils;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import java.io.OutputStream;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +22,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Rowan
  */
-@WebServlet(name = "OverviewGainServlet", urlPatterns =
+@WebServlet(name = "ProductArticleViewServlet", urlPatterns =
     {
-        "/OverviewGainServlet"
+        "/ProductArticleViewServlet"
 })
-public class OverviewGainServlet extends HttpServlet
+public class ProductArticleViewServlet extends HttpServlet
 {
+    public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,34 +42,30 @@ public class OverviewGainServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
+        response.setContentType("image/png");
+        OutputStream out = response.getOutputStream();
         try
         {
-            String fotograaf = request.getParameter("selection");
-            if (!(fotograaf == null || fotograaf.isEmpty()))
-            {
-                Database db = new Database();
-                List<PreviewItem> items = db.GetFotograafItems(fotograaf);
-                double lastPhotographerEarnings = 0;
-                if (items != null)
-                {
-                    if (!items.isEmpty())
-                    {
-                        for (PreviewItem item : items)
-                        {
-                            lastPhotographerEarnings += item.getTotal();
-                        }
-                    }
-                }
-                out.println(Photo.GetPriceAsString(lastPhotographerEarnings));
-            }
+            String type = request.getParameter("color");
+            String id = request.getParameter("id");
+            int minx = Integer.valueOf(request.getParameter("x1"));
+            int miny = Integer.valueOf(request.getParameter("y1"));
+            int maxx = Integer.valueOf(request.getParameter("x2"));
+            int maxy = Integer.valueOf(request.getParameter("y2"));
+            double str = Double.valueOf(request.getParameter("str"));
+            
+            BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
+
+            img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
+            //TODO
+            //Paste onto actual object
+            img = ImageUtils.wrapImage(img, str, true, 0);
+            ImageIO.write(img, "PNG", out);
         }
-        catch (Exception ehroar)
+        catch (Exception e)
         {
-            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
-            ehroar.printStackTrace(out);
+            
         }
         finally
         {

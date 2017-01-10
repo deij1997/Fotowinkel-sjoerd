@@ -8,7 +8,10 @@ package Base.DatabaseBase;
 import Base.Encoder;
 import Base.Item;
 import Base.ItemSalesInfo;
+import Base.ListedArticle;
+import Base.LowerDatabase;
 import Base.Photo;
+import Base.PreviewArticle;
 import Base.PreviewItem;
 import Exceptions.RandomiserFail;
 import java.sql.Date;
@@ -36,7 +39,7 @@ public class DBItemHandler extends DBBase
                       p.GetTitle(), p.GetDescription(), p.GetCode()
             });
         }
-        dab.close();
+        endConnection();
     }
 
     public void InsertPhotos(List<Photo> photos, String customer, String photograhper) throws SQLException, RandomiserFail
@@ -57,12 +60,12 @@ public class DBItemHandler extends DBBase
                       String.valueOf(GetIDFromHash((photograhper.contains("@") ? Encoder.GetHash(photograhper) : photograhper), true)), p.GetTitle(), p.GetDescription()
             });
         }
-        dab.close();
+        endConnection();
     }
 
     public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
-        String query = "";
+        String query = null;
         String[] parameters;
 
         if (items.isEmpty())
@@ -109,7 +112,7 @@ public class DBItemHandler extends DBBase
             String.valueOf(ID), name, lastname, housenr, street, city, country, postcode
         };
         dab.sendQuery(query, parameters);
-        dab.close();
+        endConnection();
     }
 
     private int GetIDFromHash(String hash, boolean isPhotographer) throws SQLException
@@ -139,7 +142,7 @@ public class DBItemHandler extends DBBase
      */
     public List<PreviewItem> GetPhotographerItems(String email) throws SQLException
     {
-        setUpConnection();
+        LowerDatabase dab = new LowerDatabase();
         List<PreviewItem> previewItems = new ArrayList<PreviewItem>();
         String query = "Select `code`, `prijs`, `title`, `date`, `naam`, `bedrukt`, `verzonden`, `totaal`, `totaalprijs` from `item` \n"
                        + "INNER JOIN \n"
@@ -173,7 +176,11 @@ public class DBItemHandler extends DBBase
             String title = rs2.getString("title");
             Date date = rs2.getDate("date");
             ItemSalesInfo i = new ItemSalesInfo(
-                    rs2.getString("naam"), rs2.getInt("bedrukt"), rs2.getInt("verzonden"), rs2.getInt("totaal"), rs2.getDouble("totaalprijs")
+                    rs2.getString("naam"),
+                    rs2.getInt("bedrukt"),
+                    rs2.getInt("verzonden"),
+                    rs2.getInt("totaal"),
+                    rs2.getDouble("totaalprijs")
             );
             Item item = new Photo(prijs, code);
 
@@ -207,6 +214,7 @@ public class DBItemHandler extends DBBase
 
     /**
      * Gets the total sales profit
+     *
      * @return
      * @throws SQLException
      */
@@ -233,6 +241,61 @@ public class DBItemHandler extends DBBase
         }
         return ret;
     }
-    
-    
+
+    public List<PreviewArticle> GetArticleSales() throws SQLException
+    {
+        setUpConnection();
+        List<PreviewArticle> previewItems = new ArrayList<PreviewArticle>();
+        String query = "SELECT *\n"
+                       + "	FROM `voorwerp_assortiment`\n"
+                       + "INNER JOIN\n"
+                       + "(\n"
+                       + "    SELECT SUM(`verzonden`) as `verzonden`,\n"
+                       + "    SUM(`bedrukt`) as `bedrukt`, \n"
+                       + "    COUNT(`id`) as `voorraad`,\n"
+                       + "    COUNT(`orderid`) as `verkocht`,\n"
+                       + "    `naam`\n"
+                       + "    FROM\n"
+                       + "    (\n"
+                       + "    	SELECT voorwerp.id as `id`, `orderid`, `verzonden`, `bedrukt`, `naam` FROM `voorwerp`\n"
+                       + "        LEFT JOIN `bestelling`\n"
+                       + "        ON bestelling.voorwerpid = voorwerp.id\n"
+                       + "    ) as `bestelling2`\n"
+                       + "    GROUP BY `naam`\n"
+                       + ") as `voorwerp2`\n"
+                       + "ON voorwerp_assortiment.voorwerpnaam = voorwerp2.naam\n"
+                       + "GROUP BY voorwerpnaam";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+        });
+
+        while (rs2.next())
+        {
+            previewItems.add(new PreviewArticle(rs2.getString("naam"), rs2.getDouble("prijs"), rs2.getInt("verkocht"), rs2.getInt("voorraad"), rs2.getInt("verzonden"), rs2.getInt("bedrukt")));
+        }
+        endConnection();
+        return previewItems;
+    }
+
+    public List<ListedArticle> GetArticles() throws SQLException
+    {
+        setUpConnection();
+        List<ListedArticle> articles = new ArrayList<ListedArticle>();
+        String query = "SELECT * FROM `voorwerp_assortiment`";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+        });
+
+        while (rs2.next())
+        {
+            articles.add(new ListedArticle(rs2.getInt("minx"),
+                                           rs2.getInt("miny"),
+                                           rs2.getInt("maxx"),
+                                           rs2.getInt("maxy"),
+                                           rs2.getDouble("strength"),
+                                           rs2.getString("voorwerpnaam"), rs2.getDouble("prijs")));
+        }
+        endConnection();
+        return articles;
+    }
 }

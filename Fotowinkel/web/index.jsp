@@ -52,7 +52,7 @@
                     <h1><a href="">Home</a></h1>
                 </div>
                 <div class="col-sm-4">
-                    <h1><a href="">About</a></h1>
+                    <h1><a href=""><fmt:message key="Over" /></a></h1>
                 </div>
                 <div class="col-sm-4">
                     <h1><a href="">Contact</a></h1>

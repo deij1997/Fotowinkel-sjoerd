@@ -1,1 +1,0 @@
-because Git does not allow you to store empty directories, this file is in here. It serves no purpose other than to make sure that the WEB-INF directory exists, which is needed for building

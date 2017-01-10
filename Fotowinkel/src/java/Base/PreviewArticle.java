@@ -9,25 +9,24 @@ package Base;
  *
  * @author Rowan
  */
-public class PreviewArticle
+public class PreviewArticle extends Article
 {
-    private String name;
-    private double price;
     private int sold;
-    private int total;
     private int sent;
     private int printed;
+    
+    //Total being the amount of items, including sold
+    private int total;
     private double totalprice;
 
-    public PreviewArticle(String name, double price, int sold, int total, int sent, int printed, double totalprice)
+    public PreviewArticle(String name, double price, int sold, int total, int sent, int printed)
     {
-        this.name = name;
-        this.price = price;
+        super(name, price);
         this.sold = sold;
         this.total = total;
         this.sent = sent;
         this.printed = printed;
-        this.totalprice = totalprice;
+        this.totalprice = price * sold;
     }
 
     public int getSold()
@@ -49,25 +48,10 @@ public class PreviewArticle
     {
         this.total = total;
     }
-
-    public String getName()
+    
+    public int getStock()
     {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public double getPrice()
-    {
-        return price;
-    }
-
-    public void setPrice(double price)
-    {
-        this.price = price;
+        return getTotal() - getSold();
     }
 
     public int getSent()

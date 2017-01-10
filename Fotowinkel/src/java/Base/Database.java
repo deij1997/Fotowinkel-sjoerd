@@ -290,12 +290,24 @@ public class Database
     }
     
     /**
+     * Returns the list of article sales
+     * 
+     * @return
+     * @throws java.sql.SQLException
+     */
+    public List<PreviewArticle> GetArticleSales() throws SQLException
+    {
+        return DBGlobals.D_B_ITEM_HANDLER.GetArticleSales();
+    }
+    
+    /**
      * Returns the list of articles
      * 
      * @return
+     * @throws SQLException
      */
-    public List<PreviewArticle> GetArticles()
+    public List<ListedArticle> GetArticles() throws SQLException
     {
-        return null;
+        return DBGlobals.D_B_ITEM_HANDLER.GetArticles();
     }
 }

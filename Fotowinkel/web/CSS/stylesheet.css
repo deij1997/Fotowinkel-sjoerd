@@ -34,7 +34,7 @@ html{
 }
 
 .thumbnail img {
-    width: 100%;
+    max-width: 100%;
 }
 
 
@@ -361,7 +361,6 @@ body {
     background-size:  contain;
     background-repeat: no-repeat;
     background-position: center;
-    width:100%;
     margin: auto;
 }
 .center{
@@ -431,6 +430,32 @@ body {
     background-color: #eaf0f2;
 }
 
+.article{
+    float: left; 
+    margin: 14px;
+    height: 150px;
+    width: 125px;
+}
+
+.center-article{
+    margin: auto;
+    height: 125px;
+}
+
+.article-preview{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.article > input{
+    width: 100%;
+    max-height: 25px;
+}
+
+.articleholder{
+    height: 380px;
+    overflow: scroll;
+}
  /*inputs*/
 
  input{

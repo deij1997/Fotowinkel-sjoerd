@@ -6,7 +6,8 @@
 package Servlets;
 
 import Base.Database;
-import Base.PreviewArticle;
+import Base.ListedArticle;
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -20,11 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Rowan
  */
-@WebServlet(name = "OverviewArticleServlet", urlPatterns =
+@WebServlet(name = "ProductArticlesServlet", urlPatterns =
     {
-        "/OverviewArticleServlet"
+        "/ProductArticlesServlet"
 })
-public class OverviewArticleServlet extends HttpServlet
+public class ProductArticlesServlet extends HttpServlet
 {
 
     /**
@@ -40,45 +41,42 @@ public class OverviewArticleServlet extends HttpServlet
             throws ServletException, IOException
     {
         response.setContentType("text/html;charset=UTF-8");
+
         PrintWriter out = response.getWriter();
         try
         {
-            Database db = new Database();
-            List<PreviewArticle> articles;
-            try
+            //Get photo code
+            String id = request.getParameter("id");
+            //Get color code
+            String color = request.getParameter("color");
+
+            if (id != null && !id.isEmpty())
             {
-                articles = db.GetArticleSales();
-
-                out.println("<tr>\n"
-                            + "                                    <td><b>Artikel</b></td>\n"
-                            + "                                    <td><b>Prijs</td>\n"
-                            + "                                    <td><b>Verzonden</b></td>\n"
-                            + "                                    <td><b>Geprint</b></td>\n"
-                            + "                                    <td><b>Verkocht</b></td>\n"
-                            + "                                    <td><b>In voorraad</b></td>\n"
-                            + "                                    <td><b>Totaal winst</b></td>\n"
-                            + "                                </tr>\n");
-
-                for (PreviewArticle a : articles)
+                if (color == null || color.isEmpty())
                 {
-                    if (!a.getName().equals("Standaard"))
-                    {
-                        out.println("<tr> \n"
-                                    + "                                    <td>" + a.getName() + "</td>\n"
-                                    + "                                    <td>" + a.getPriceAsString() + "</td>\n"
-                                    + "                                    <td>" + a.getSent() + "</td>\n"
-                                    + "                                    <td>" + a.getPrinted() + "</td>\n"
-                                    + "                                    <td>" + a.getSold() + "</td>\n"
-                                    + "                                    <td>" + a.getStock()+ "</td>\n"
-                                    + "                                    <td>" + a.getTotalPriceAsString() + "</td>\n"
-                                    + "                                </tr>");
-                    }
+                    color = "000000";
                 }
+                Database db = new Database();
+                List<ListedArticle> articles = db.GetArticles();
+
+                for (ListedArticle a : articles)
+                {
+                    //TODO
+                    //Add price tag over div
+                    out.println("<div class=\"article\">\n"
+                                + "                                        <div class=\"center-article\">\n"
+                                + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                + "                                        </div>\n"
+                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                                + "                                    </div>");
+                }
+
+                //Show other items of photo code in those divs
             }
-            catch (Exception ex)
-            {
-                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ex.getMessage());
-            }
+        }
+        catch (Exception e)
+        {
+            printStackTrace();
         }
         finally
         {

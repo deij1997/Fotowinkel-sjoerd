@@ -7,6 +7,7 @@ package Servlets;
 
 import Base.Database;
 import Base.Encoder;
+import Base.ListedArticle;
 import Base.Photo;
 import Base.ShoppingCart;
 import Base.ShoppingCartItem;
@@ -15,6 +16,7 @@ import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 })
 public class OrderServlet extends HttpServlet
 {
+    private static List<ListedArticle> articles = null;
+
     public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
 
@@ -57,6 +61,11 @@ public class OrderServlet extends HttpServlet
             String klantcode = UserHandler.getUserAsString(request);
             Database db = new Database();
 
+            if (articles == null)
+            {
+                articles = db.GetArticles();
+            }
+
             ShoppingCart cart = ShoppingCartHolder.getInstance().getCurrentCart(request, response);
 
             //List<Photo> photos = db.GetPhotos(klantcode);
@@ -64,15 +73,14 @@ public class OrderServlet extends HttpServlet
 
             Map cc = cart.getAllProducts();
             Iterator it = cc.entrySet().iterator();
-            
-            
+
             while (it.hasNext())
             {
                 Map.Entry pair = (Map.Entry) it.next();
-                ShoppingCartItem sci = (ShoppingCartItem)pair.getKey();
-                Photo p = db.GetPhoto(String.valueOf(sci.getProduct().GetCode()));
-            
-                String imgurl = p.getPreviewLocation();
+                ShoppingCartItem product = (ShoppingCartItem) pair.getKey();
+                Photo p = db.GetPhoto(String.valueOf(product.getProduct().GetCode()));
+
+                //String imgurl = p.getPreviewLocation();
                 String price = p.GetPriceAsString();
                 String title = p.GetTitle();
                 String description = p.GetDescription();
@@ -84,36 +92,55 @@ public class OrderServlet extends HttpServlet
                 {
                     description = "Zonder beschrijving";
                 }
-                int amnt = (Integer)pair.getValue();
+                int amnt = (Integer) pair.getValue();
                 String amount = String.valueOf(amnt);
-                
+
                 String pricedetails = Photo.GetPriceAsString(p.GetPrice() * amnt);
 
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<div class=\"col-md-12\">\n"
-                            + "                        \n"
-                            + "                        <div class=\"thumbnail\">\n"
-                            + "                            <img id=\"myImg\" src='" + imgurl + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
-                            + "                            \n"
-                            + "                            <div class=\"caption\">\n"
-                            + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
-                            + "                                <h4>\n"
-                            + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
-                            + "                                </h4>\n"
-                            + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
-                            + "                                \n"
-                            + "                                <div class=\"ratings\">\n"
-                            + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
-                            + "                                </div>\n"
-                            + "                                <div class=\"colorinfo\">\n"
-                            + "                                    <p class=\"pull-right\">Kleur:" + sci.getColourName() + "&nbsp&nbsp</p>\n"
-                            + "                                </div>\n"
-                            + "                                \n"
-                            + "                            </div>\n"
-                            + "                            \n"
-                            + "                        </div>\n"
-                            + "                        \n"
-                            + "                    </div>");
+                String article = product.getArticle().toLowerCase();
+                ListedArticle a = null;
+                for (ListedArticle art : articles)
+                {
+                    if (art.getName().toLowerCase().equals(article))
+                    {
+                        a = art;
+                        break;
+                    }
+                }
+                String id = p.GetCode();
+                String color = product.getColorHex();
+                color = color.replace("#", "");
+
+                if (a != null)
+                {
+                    out.println("<div class=\"col-md-12\">\n"
+                                + "                        \n"
+                                + "                        <div class=\"thumbnail\">\n"
+                                + "                            <img id=\"myImg\" src='ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                                + "                            \n"
+                                + "                            <div class=\"caption\">\n"
+                                + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
+                                + "                                <h4>\n"
+                                + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                                + "                                </h4>\n"
+                                + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
+                                + "                                \n"
+                                + "                                <div class=\"ratings\">\n"
+                                + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
+                                + "                                </div>\n"
+                                + "                                <div class=\"colorinfo\">\n"
+                                + "                                    <p class=\"pull-right\">Kleur:" + product.getColourName() + "&nbsp&nbsp</p>\n"
+                                + "                                </div>\n <br />"
+                                + "                                <div class=\"articleinfo\">\n"
+                                + "                                    <p class=\"pull-right\">Artikel:" + product.getArticle() + "&nbsp&nbsp</p>\n"
+                                + "                                </div>\n"
+                                + "                                \n"
+                                + "                            </div>\n"
+                                + "                            \n"
+                                + "                        </div>\n"
+                                + "                        \n"
+                                + "                    </div>");
+                }
                 dtprice += (p.GetPrice() * amnt);
             }
             String tprice = "€ " + String.format("%.2f", dtprice);

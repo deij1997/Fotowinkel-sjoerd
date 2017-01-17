@@ -46,9 +46,10 @@
         <%
             if ("POST".equalsIgnoreCase(request.getMethod())) {
                 Database db = new Database();
-                ShoppingCartHolder sh = ShoppingCartHolder.getInstance();
+                ShoppingCartHolder sh;
                 String customer = UserHandler.getUser(request).getValue();
-                ShoppingCart itemsincart = sh.getCartByID(customer);
+                
+                ShoppingCart itemsincart = ShoppingCartHolder.getInstance().getCurrentCart(request, response);
 
                 List<String> items = new ArrayList<String>();
                 HashMap h = (HashMap)itemsincart.getAllProducts();
@@ -68,9 +69,9 @@
                 String paymentmethod = request.getParameter("paymentmethod");
 
                 //out.println(name + lastname + country + city + street + housenr + postcode + paymentmethod);
-                out.println(customer);
-                out.println(items);
-                //db.InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
+                //out.println(customer);
+                //out.println(items);
+                db.InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
             }
         %>
     </head>

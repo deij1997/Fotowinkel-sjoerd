@@ -21,7 +21,9 @@ $(function () {
             document.getElementById("articles").innerHTML = this.responseText;
         }
     };
-    xhttp2.open("POST", "OverviewArticleServlet", true);
+        var language = document.getElementById("language").value;
+
+    xhttp2.open("POST", "OverviewArticleServlet?"+ "language=" + language, true);
     xhttp2.send();
 });
 
@@ -35,8 +37,9 @@ function getNew()
     };
 
     var photograph = document.getElementById("selectedFotograaf").value;
+    var language = document.getElementById("language").value;
 
-    xhttp.open("POST", "OverviewProductServlet?" + "selection=" + photograph, true);
+    xhttp.open("POST", "OverviewProductServlet?" + "selection=" + photograph+ "&language=" + language, true);
     xhttp.send();
 
     var xhttp2 = new XMLHttpRequest();

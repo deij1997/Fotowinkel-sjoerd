@@ -4,6 +4,7 @@
     Author     : Jesse
 --%>
 
+<%@page import="Base.ShoppingCartItem"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="java.util.Iterator"%>
@@ -44,19 +45,27 @@
              */
         </script>
         <%
-            if ("POST".equalsIgnoreCase(request.getMethod())) {
+            if ("POST".equalsIgnoreCase(request.getMethod()))
+            {
                 Database db = new Database();
                 ShoppingCartHolder sh;
                 String customer = UserHandler.getUser(request).getValue();
-                
+
                 ShoppingCart itemsincart = ShoppingCartHolder.getInstance().getCurrentCart(request, response);
 
-                List<String> items = new ArrayList<String>();
-                HashMap h = (HashMap)itemsincart.getAllProducts();
+                List<ShoppingCartItem> items = new ArrayList<ShoppingCartItem>();
+                HashMap h = (HashMap) itemsincart.getAllProducts();
                 Iterator it = h.entrySet().iterator();
-                while (it.hasNext()) {
+                while (it.hasNext())
+                {
                     Map.Entry pair = (Map.Entry) it.next();
-                    items.add(pair.getKey() + " = " + pair.getValue());
+
+                    for(int i = 0; i < (Integer)pair.getValue(); i++)
+                    {
+                        items.add((ShoppingCartItem)pair.getKey());
+                    }
+                    
+                    //items.add(pair.getKey() + " = " + pair.getValue());
                     it.remove(); // avoids a ConcurrentModificationException
                 }
                 String name = request.getParameter("name");

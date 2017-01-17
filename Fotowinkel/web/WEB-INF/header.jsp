@@ -12,13 +12,7 @@
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="Language.language" />
-        <form>
-            <label><fmt:message key="Language" />:</label>
-            <select class="form-control" id="language" name="language" onchange="submit()">
-                <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-                <option value="nl" ${language == 'nl' ? 'selected' : ''}>Nederlands</option>
-            </select>
-        </form>
+
 
 
 <header class="header-login-signup">
@@ -45,6 +39,15 @@
             }
             %>
         </nav>
+        <ul>
+        <form>
+            <label><fmt:message key="Language" />:</label>
+            <select class="form-control" id="language" name="language" onchange="submit()">
+                <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
+                <option value="nl" ${language == 'nl' ? 'selected' : ''}>Nederlands</option>
+            </select>
+        </form>
+        </ul>
         <ul id="userinfo">
             <%
             if (!UserHandler.isUserLoggedIn(request))

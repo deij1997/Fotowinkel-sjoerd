@@ -40,7 +40,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Fotograaf</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><fmt:message key="Photograpgher" /></a>
                         </h4>
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
@@ -62,27 +62,13 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Artikelen</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"><fmt:message key="Administration_articles" /></a>
                         </h4>
                     </div>
                     <div id="collapse3" class="panel-collapse collapse">
                         <div class="panel-body">
                             <table id="articles" class="table table-striped">
-                                <tr>
-                                    <td><b>Artikel</b></td>
-                                    <td><b>Prijs</td>
-                                    <td><b>Verzonden</b></td>
-                                    <td><b>Geprint</b></td>
-                                    <td><b>Totaal prijs</b></td>
-                                </tr>
-
-                                <tr> 
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                     <!--CONTENT HERE-->   
                             </table>
                         </div>
                     </div>
@@ -90,14 +76,14 @@
 
                 <div class = "container" >
 
-                    <h4><b>Verkoop</b></h4>
+                    <h4><b><fmt:message key="Administration_sale" /></b></h4>
                     <table class = "table" >
                         <tr>
-                            <td> <b>Totale opbrengst van geselecteerde fotograaf </b></td>
+                            <td> <b><fmt:message key="Administration_totalphotographer" /></b></td>
                             <td id="totalcurrent">N/A</td>
                         </tr>
                         <tr>
-                            <td><b>Totaal</b></td>
+                            <td><b><fmt:message key="Administration_total" /></b></td>
                             <td id="total">N/A</td>
                         </tr>
                     </table>

@@ -45,18 +45,47 @@ public class OverviewArticleServlet extends HttpServlet
         {
             Database db = new Database();
             List<PreviewArticle> articles;
+            
+            String language = request.getParameter("language");
+            String article = null;
+            String price = null;
+            String send= null;
+            String print= null;
+            String sold= null;
+            String stock = null;
+            String total = null;
+            if(language.equals("en") ){
+                article = "Article";
+                price = "Price";
+                send = "Send";
+                print = "Printed";
+                sold = "Sold";
+                stock = "In stock";
+                total = "Total gain";              
+            }else if (language.equals("nl")){
+                article = "Artikel";
+                price = "Prijs";
+                send = "Verzonden";
+                print = "Geprint";
+                sold = "Verkocht";
+                stock = "In voorraad";
+                total = "Totaal winst";     
+            }
+
+            
+            
             try
             {
                 articles = db.GetArticleSales();
 
                 out.println("<tr>\n"
-                            + "                                    <td><b>Artikel</b></td>\n"
-                            + "                                    <td><b>Prijs</td>\n"
-                            + "                                    <td><b>Verzonden</b></td>\n"
-                            + "                                    <td><b>Geprint</b></td>\n"
-                            + "                                    <td><b>Verkocht</b></td>\n"
-                            + "                                    <td><b>In voorraad</b></td>\n"
-                            + "                                    <td><b>Totaal winst</b></td>\n"
+                            + "                                    <td><b>"+article+"</b></td>\n"
+                            + "                                    <td><b>"+price+"</td>\n"
+                            + "                                    <td><b>"+send+"</b></td>\n"
+                            + "                                    <td><b>"+print+"</b></td>\n"
+                            + "                                    <td><b>"+sold+"</b></td>\n"
+                            + "                                    <td><b>"+stock+"</b></td>\n"
+                            + "                                    <td><b>"+total+"</b></td>\n"
                             + "                                </tr>\n");
 
                 for (PreviewArticle a : articles)

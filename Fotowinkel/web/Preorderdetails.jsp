@@ -17,6 +17,9 @@
         <%@include file="WEB-INF/header.jsp" %>
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
+        
+        <h1>Je hebt betaald</h1>
+        <%--
         <div class="container">
             <div class="row">
                 <div class="col-md-3" id="detailbox">
@@ -34,7 +37,7 @@
                     </form>
                 </div>
             </div>
-
+        --%>
         </div>
         <%@include file="WEB-INF/footer.jsp" %>
     </body>

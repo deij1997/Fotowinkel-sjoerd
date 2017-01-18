@@ -21,7 +21,7 @@
         <title>Fotowinkel Sjoerd</title>
         <script src="JS/Order.js"></script>
         <script src="JS/PopupImg.js"></script>
-        <script>
+        <script lang="JavaScript">
             /*
              $(document).ready(function () {
              $("pay").click(function () {
@@ -43,6 +43,10 @@
              });
              });
              */
+            function showInput()
+            {
+                
+            }
         </script>
         <%
             if ("POST".equalsIgnoreCase(request.getMethod()))
@@ -60,11 +64,11 @@
                 {
                     Map.Entry pair = (Map.Entry) it.next();
 
-                    for(int i = 0; i < (Integer)pair.getValue(); i++)
+                    for (int i = 0; i < (Integer) pair.getValue(); i++)
                     {
-                        items.add((ShoppingCartItem)pair.getKey());
+                        items.add((ShoppingCartItem) pair.getKey());
                     }
-                    
+
                     //items.add(pair.getKey() + " = " + pair.getValue());
                     it.remove(); // avoids a ConcurrentModificationException
                 }
@@ -89,9 +93,8 @@
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
         <h1>Je gaat betalen</h1>
-
         <div>
-            <form style="padding-left: 50px" action="Payment.jsp" method="post">
+            <form style="padding-left: 50px" action="Preorderdetails.jsp" method="post">
                 <table>
                     <tr><td id="appelsap"><p>Name: </p></td><td id="appelsap"><input type="text" name="name" id="name" value="ayy"></td></tr>
                     <tr><td id="appelsap"><p>Last name: </p></td><td id="appelsap"><input type="text" name="lastname" id="lastname" value="lmao"></td></tr>
@@ -101,7 +104,7 @@
                     <tr><td id="appelsap"><p>House Nr: </p></td><td id="appelsap"><input type="text" name="housenr" id="housenr"></td></tr>
                     <tr><td id="appelsap"><p>Postcode: </p></td><td id="appelsap"><input type="text" name="postcode" id="postcode"></td></tr>
                     <tr><td id="appelsap"><p>Payment method: </p></td><td id="appelsap"><input type="text" name="paymentmethod" id="paymentmethod"></td></tr>
-                    <tr><td id="appelsap"><input type="submit"  id="pay" class="btn btn-success btn-block" style="margin:3px" value="Pay"></td></tr>
+                    <tr><td id="appelsap"><input type="submit" onclick="showinput();" id="pay" class="btn btn-success btn-block" style="margin:3px" value="Pay"></td></tr>
                 </table> 
             </form>
         </div>

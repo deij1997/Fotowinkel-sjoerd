@@ -465,6 +465,12 @@ body {
     background-color: rgba(255,234,171,0.8);
 }
 
+.persistent-top-bar{
+    position:fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 500000;
+}
 /*table*/
 
 #appelsap{

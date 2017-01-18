@@ -21,7 +21,10 @@
         <%@include file="WEB-INF/register.jspf" %>
         <%@include file="WEB-INF/productorderinformation.jspf" %>
         <div class="container">
-
+            <div id="cart-popup" class="alert alert-success alert-dismissable persistent-top-bar hide">
+                <a href="#">&times;</a>
+                Your shopping cart has been <strong>updated</strong>!
+            </div>
             <div class="row">
 
                 <div class="col-md-3">

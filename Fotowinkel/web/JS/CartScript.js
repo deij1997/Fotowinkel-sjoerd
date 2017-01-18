@@ -25,6 +25,8 @@ $(document).on("click", ".addtocart", function loadDoc() {
 
     xhttp.open("POST", "AddToCartServlet?" + "amnt=" + amnt + "&it=" + item + "&color=" + tcolor, true);
     xhttp.send();
+
+    showShoppingCartUpdate();
     return false;
 });
 
@@ -119,9 +121,32 @@ $(document).on("click", "#modalpreview", function (event) {
     if (totalamnt != 0)
     {
         document.getElementById("cart").src = "Images/cartwi.png";
+        //Alert
+        showShoppingCartUpdate();
+        //Hide the modal
+        $('.modal').modal('hide');
     }
-
     return false;
+});
+
+function showShoppingCartUpdate()
+{
+    var pop = document.getElementById("cart-popup")
+    if (pop.classList.length > 0)
+    {
+        $("#cart-popup").stop();
+        pop.style.opacity = "1";
+        pop.style.display = "block";
+        pop.classList.remove("hide");
+        $("#cart-popup").fadeOut(5000, "swing", function () {
+            document.getElementById("cart-popup").classList.add("hide");
+        });
+    }
+}
+
+//For the shopping cart popup
+$(document).on("click", "#cart-popup", function (event) {
+    document.getElementById("cart-popup").classList.add("hide");
 });
 
 function filterAndAddModalContent(toAdd) {

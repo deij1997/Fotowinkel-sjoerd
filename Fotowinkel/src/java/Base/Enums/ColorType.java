@@ -60,7 +60,7 @@ public enum ColorType
         {
             return ColorType.HEX;
         }
-        return ColorType.NOCOLOR;
+        return ColorType.HEX;
 
     }
 }

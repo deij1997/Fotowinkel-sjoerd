@@ -212,7 +212,6 @@ public class ImageUtils
         Graphics2D g2d = bufferedImage.createGraphics();
         g2d.drawImage(bottom, 0, 0, null);
         g2d.drawImage(top, minx, miny, null);
-        //g2d.drawImage(top, maxy, maxy, newH, newH, null);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         return bufferedImage;

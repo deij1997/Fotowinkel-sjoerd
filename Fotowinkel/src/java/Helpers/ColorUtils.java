@@ -208,7 +208,8 @@ public class ColorUtils
      * @throws Exceptions.NotAColorException
      */
     public static Color getColor(String in) throws NotAColorException
-    {
+    {        
+        //Check if it is a web colour
         in = in.replace("#", "").trim().toLowerCase();
         for (String s : COLOR_CONVERTER.keySet())
         {

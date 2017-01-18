@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Base.Enums.ColorType;
 import Helpers.ColorUtils;
 import Helpers.ImageHelper;
 import Helpers.ImageUtils;
@@ -66,10 +67,23 @@ public class ProductArticleViewServlet extends HttpServlet
 
             BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
 
-            if (!type.equals("000000"))
+            ColorType t = ColorType.getTypeFromString(type);
+            switch (t)
             {
-                img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
+                case BLACKWHITE:
+                    img = ImageHelper.ToGrayScale(img);
+                    break;
+                case NOCOLOR:
+                    //Nothing
+                    break;
+                case SEPIA:
+                    img = ImageHelper.ToSepia(img);
+                    break;
+                case HEX: //for Hex and unknown
+                    img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
+                    break;
             }
+            
             //Wrap the image
             img = ImageUtils.wrapImage(img, str, true, 0);
             if (!article.toLowerCase().equals("standaard"))
@@ -82,7 +96,7 @@ public class ProductArticleViewServlet extends HttpServlet
         }
         catch (Exception e)
         {
-            
+
         }
         finally
         {

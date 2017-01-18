@@ -289,8 +289,8 @@ public class DBItemHandler extends DBBase
         while (rs2.next())
         {
             articles.add(new ListedArticle(rs2.getInt("minx"),
-                                           rs2.getInt("miny"),
                                            rs2.getInt("maxx"),
+                                           rs2.getInt("miny"),
                                            rs2.getInt("maxy"),
                                            rs2.getDouble("strength"),
                                            rs2.getString("voorwerpnaam"), rs2.getDouble("prijs")));

@@ -115,7 +115,7 @@ public class ProductArticlesServlet extends HttpServlet
 
                                 out.println("<div class=\"article\">\n"
                                             + "                                        <div class=\"center-article\">\n"
-                                            + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                            + "                                            <img src=\"ProductArticleViewServlet?article=" + article + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
                                             + "                                        </div>\n"
                                             + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
                                             + "                                    </div>");
@@ -137,11 +137,9 @@ public class ProductArticlesServlet extends HttpServlet
 
                     for (ListedArticle a : articles)
                     {
-                        //TODO
-                        //Add price tag over div
                         out.println("<div class=\"article\">\n"
                                     + "                                        <div class=\"center-article\">\n"
-                                    + "                                            <img src=\"ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                    + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
                                     + "                                        </div>\n"
                                     + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
                                     + "                                    </div>");

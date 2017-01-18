@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ProductArticleViewServlet extends HttpServlet
 {
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
+    public static String ARTICLE_DIRECTORY = "/Images";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,24 +44,35 @@ public class ProductArticleViewServlet extends HttpServlet
             throws ServletException, IOException
     {
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
+        ARTICLE_DIRECTORY = request.getServletContext().getRealPath("") + "/Images";
+
         response.setContentType("image/png");
         OutputStream out = response.getOutputStream();
         try
         {
             String type = request.getParameter("color");
             String id = request.getParameter("id");
+            String article = request.getParameter("article");
             int minx = Integer.valueOf(request.getParameter("x1"));
             int miny = Integer.valueOf(request.getParameter("y1"));
             int maxx = Integer.valueOf(request.getParameter("x2"));
             int maxy = Integer.valueOf(request.getParameter("y2"));
             double str = Double.valueOf(request.getParameter("str"));
-            
+
             BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
 
-            img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
-            //TODO
-            //Paste onto actual object
+            if (!type.equals("000000"))
+            {
+                img = ImageHelper.ToColourScale(img, ColorUtils.getColor(type), ImageHelper.CALCULATE_LIGHT_LEVEL);
+            }
+            //Wrap the image
             img = ImageUtils.wrapImage(img, str, true, 0);
+            if (!article.equals("Standaard"))
+            {
+                //copy the image over the article
+                BufferedImage iarticle = ImageHelper.getImage(ARTICLE_DIRECTORY + "/" + article + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
+                img = ImageUtils.copyOverImage(iarticle, img, minx, miny, maxx, maxy, str, 0);
+            }
             ImageIO.write(img, "PNG", out);
         }
         catch (Exception e)

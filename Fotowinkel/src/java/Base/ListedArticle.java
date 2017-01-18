@@ -21,7 +21,7 @@ public class ListedArticle extends Article
     public ListedArticle(String name, double price)
     {
         super(name, price);
-        this.path = "Images/" + name + ".png";
+        this.path = "Images/" + name + ".jpg";
     }
     
     public ListedArticle(int minx, int maxx, int miny, int maxy, double strength, String name, double price)

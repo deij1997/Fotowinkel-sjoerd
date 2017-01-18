@@ -72,7 +72,7 @@ public class ProductArticleViewServlet extends HttpServlet
             }
             //Wrap the image
             img = ImageUtils.wrapImage(img, str, true, 0);
-            if (!article.equals("Standaard"))
+            if (!article.toLowerCase().equals("standaard"))
             {
                 //copy the image over the article
                 BufferedImage iarticle = ImageHelper.getImage(ARTICLE_DIRECTORY + "/" + article + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");

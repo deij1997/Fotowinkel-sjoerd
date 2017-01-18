@@ -15,6 +15,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import javax.imageio.ImageIO;
 
 /**
@@ -158,8 +161,6 @@ public class Photo extends Item
     {
         this.code = newCode;
     }
-    
-
 
     public String GetFullLocation()
     {
@@ -173,7 +174,7 @@ public class Photo extends Item
 
     public String GetTitle()
     {
-        return (this.title == null || "".equals(this.title))? code : this.title;
+        return (this.title == null || "".equals(this.title)) ? code : this.title;
     }
 
     public String GetDescription()
@@ -195,10 +196,13 @@ public class Photo extends Item
     {
         return GetPriceAsString(this.price);
     }
-    
+
     public static String GetPriceAsString(double price)
     {
-        return "€ " + String.format("%.2f", price);
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        formatter.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ITALY));
+        
+        return "€ " + formatter.format(price);
     }
 
 }

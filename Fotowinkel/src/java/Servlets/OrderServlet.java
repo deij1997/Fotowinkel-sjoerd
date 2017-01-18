@@ -111,7 +111,7 @@ public class OrderServlet extends HttpServlet
 
                 if (a != null)
                 {
-                    String pricedetails = Photo.GetPriceAsString((p.GetPrice() + a.getPrice())* amnt);
+                    String pricedetails = Photo.GetPriceAsString((p.GetPrice() + a.getPrice()) * amnt);
                     out.println("<div class=\"col-md-12\">\n"
                                 + "                        \n"
                                 + "                        <div class=\"thumbnail\">\n"
@@ -125,13 +125,7 @@ public class OrderServlet extends HttpServlet
                                 + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
                                 + "                                \n"
                                 + "                                <div class=\"ratings\">\n"
-                                + "                                    <p class=\"pull-right\">" + amount + " Stuks a la " + price + "&nbsp&nbsp</p>\n"
-                                + "                                </div>\n"
-                                + "                                <div class=\"colorinfo\">\n"
-                                + "                                    <p class=\"pull-right\">Kleur:" + product.getColourName() + "&nbsp&nbsp</p>\n"
-                                + "                                </div>\n <br />"
-                                + "                                <div class=\"articleinfo\">\n"
-                                + "                                    <p class=\"pull-right\">Artikel:" + product.getArticle() + "&nbsp&nbsp</p>\n"
+                                + "                                    <p class=\"pull-right\">" + amount + " Stuks van " + price +" exclusief "+ Photo.GetPriceAsString(a.getPrice()) + " ("+ product.getArticle()+")&nbsp&nbsp</p>\n"
                                 + "                                </div>\n"
                                 + "                                \n"
                                 + "                            </div>\n"
@@ -142,7 +136,6 @@ public class OrderServlet extends HttpServlet
                 }
                 dtprice += ((a.getPrice() + p.GetPrice()) * amnt);
             }
-            String tprice = "€ " + String.format("%.2f", dtprice);
             out.println(
                     "                    \n"
                     + "                    <div class=\"col-sm-12 col-md-12\">\n"
@@ -153,7 +146,7 @@ public class OrderServlet extends HttpServlet
                     + "                                \n"
                     + "                                <div class=\"caption\">\n"
                     + "                                    <h4 class=\"pull-left\">Totaalprijs</h4>\n"
-                    + "                                    <h4 class=\"pull-right\">" + tprice + "</h4>\n"
+                    + "                                    <h4 class=\"pull-right\">" + Photo.GetPriceAsString(dtprice) + "</h4>\n"
                     + "                                </div>\n"
                     + "                                \n"
                     + "                                <div class=\"ratings\">\n"

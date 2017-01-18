@@ -7,6 +7,7 @@ package Servlets;
 
 import Base.Database;
 import Base.ListedArticle;
+import Base.Photo;
 import Base.ShoppingCart;
 import Base.ShoppingCartItem;
 import Managers.ShoppingCartHolder;
@@ -33,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ProductArticlesServlet extends HttpServlet
 {
     private static List<ListedArticle> articles = null;
-
+    private String lastID;
+    private double lastPrice;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -59,6 +62,15 @@ public class ProductArticlesServlet extends HttpServlet
 
             //Get photo code
             String id = request.getParameter("id");
+
+            if (!id.equals(lastID))
+            {
+                lastID = id;
+
+                Photo k = new Database().GetPhoto(id);
+                lastPrice = k.GetPrice();
+            }
+
             //Get if first load
             String ft = request.getParameter("ft");
             boolean firsttime = ft == null ? false : ft.equals("true");
@@ -115,6 +127,7 @@ public class ProductArticlesServlet extends HttpServlet
 
                                 out.println("<div class=\"article\">\n"
                                             + "                                        <div class=\"center-article\">\n"
+                                            + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
                                             + "                                            <img src=\"ProductArticleViewServlet?article=" + article + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
                                             + "                                        </div>\n"
                                             + "                                        <input type=\"number\" min=\"0\" value=\"" + orderamount + "\"/>\n"
@@ -139,6 +152,7 @@ public class ProductArticlesServlet extends HttpServlet
                     {
                         out.println("<div class=\"article\">\n"
                                     + "                                        <div class=\"center-article\">\n"
+                                    + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
                                     + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
                                     + "                                        </div>\n"
                                     + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"

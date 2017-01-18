@@ -95,8 +95,6 @@ public class OrderServlet extends HttpServlet
                 int amnt = (Integer) pair.getValue();
                 String amount = String.valueOf(amnt);
 
-                String pricedetails = Photo.GetPriceAsString(p.GetPrice() * amnt);
-
                 String article = product.getArticle().toLowerCase();
                 ListedArticle a = null;
                 for (ListedArticle art : articles)
@@ -113,10 +111,11 @@ public class OrderServlet extends HttpServlet
 
                 if (a != null)
                 {
+                    String pricedetails = Photo.GetPriceAsString((p.GetPrice() + a.getPrice())* amnt);
                     out.println("<div class=\"col-md-12\">\n"
                                 + "                        \n"
                                 + "                        <div class=\"thumbnail\">\n"
-                                + "                            <img id=\"myImg\" src='ProductArticleViewServlet?str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.onerror=null;this.src='Images/notfound.png'\">\n"
+                                + "                            <img id=\"myImg\" src='ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.src='Images/notfound.png'\">\n"
                                 + "                            \n"
                                 + "                            <div class=\"caption\">\n"
                                 + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
@@ -141,7 +140,7 @@ public class OrderServlet extends HttpServlet
                                 + "                        \n"
                                 + "                    </div>");
                 }
-                dtprice += (p.GetPrice() * amnt);
+                dtprice += ((a.getPrice() + p.GetPrice()) * amnt);
             }
             String tprice = "€ " + String.format("%.2f", dtprice);
             out.println(

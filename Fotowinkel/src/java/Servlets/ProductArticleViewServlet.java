@@ -57,7 +57,12 @@ public class ProductArticleViewServlet extends HttpServlet
             int miny = Integer.valueOf(request.getParameter("y1"));
             int maxx = Integer.valueOf(request.getParameter("x2"));
             int maxy = Integer.valueOf(request.getParameter("y2"));
-            double str = Double.valueOf(request.getParameter("str"));
+            String strength = request.getParameter("str");
+            if (strength == null)
+            {
+                strength = "0";
+            }
+            double str = Double.valueOf(strength);
 
             BufferedImage img = ImageHelper.getImage(PREVIEW_UPLOAD_DIRECTORY + "/" + id + ".jpg", request.getServletContext().getRealPath("") + "/Images/notfound.png");
 

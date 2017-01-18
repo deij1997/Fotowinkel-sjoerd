@@ -33,6 +33,10 @@ public enum ColorType
         {
             return NOCOLOR;
         }
+        if (string.contains("000000"))
+        {
+            return ColorType.NOCOLOR;
+        }
         if (string.contains("#"))
         {
             return ColorType.HEX;

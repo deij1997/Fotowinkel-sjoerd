@@ -17,8 +17,8 @@ public class ShoppingCartItem
     public ShoppingCartItem(Item Product, String ColorHex, String article)
     {
         this.Product = Product;
-        this.ColorHex = ColorHex;
-        this.colorType = ColorType.getTypeFromString(ColorHex);
+        this.ColorHex = ColorHex;        
+        this.colorType = ColorType.getTypeFromString(this.ColorHex);
         
         if (article == null || article.isEmpty() || article.equals("null"))
         {

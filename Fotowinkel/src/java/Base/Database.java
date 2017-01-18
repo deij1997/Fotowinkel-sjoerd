@@ -250,7 +250,7 @@ public class Database
      * @throws RandomiserFail
      * @throws Exception
      */
-    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
+    public void InsertOrder(List<ShoppingCartItem> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
         DBGlobals.D_B_ITEM_HANDLER.InsertOrder(items, customer, name, lastname, country, city, street, housenr, postcode, paymentmethod);
     }

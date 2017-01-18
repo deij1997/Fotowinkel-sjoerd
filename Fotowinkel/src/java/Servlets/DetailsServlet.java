@@ -6,6 +6,7 @@
 package Servlets;
 
 import Base.Database;
+import Base.ShoppingCartItem;
 import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,7 +48,7 @@ public class DetailsServlet extends HttpServlet
             String klantcode = UserHandler.getUserAsString(request);
             
             //TODO fetch items from shopping cart
-            List<String> Items = new ArrayList<String>();
+            List<ShoppingCartItem> Items = new ArrayList<ShoppingCartItem>();
             
             Database db = new Database();
 

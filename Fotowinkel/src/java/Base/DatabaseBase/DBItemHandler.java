@@ -13,6 +13,8 @@ import Base.LowerDatabase;
 import Base.Photo;
 import Base.PreviewArticle;
 import Base.PreviewItem;
+import Base.ShoppingCart;
+import Base.ShoppingCartItem;
 import Exceptions.RandomiserFail;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -63,7 +65,7 @@ public class DBItemHandler extends DBBase
         endConnection();
     }
 
-    public void InsertOrder(List<String> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
+    public void InsertOrder(List<ShoppingCartItem> items, String customer, String name, String lastname, String country, String city, String street, String housenr, String postcode, String paymentmethod) throws SQLException, RandomiserFail, Exception
     {
         String query = null;
         String[] parameters;
@@ -85,7 +87,7 @@ public class DBItemHandler extends DBBase
         int ID = 0;
         if (IDs.next())
         {
-            ID = IDs.getInt("id");
+            ID = IDs.getInt(1);
         }
         if (ID == 0)
         {
@@ -94,12 +96,27 @@ public class DBItemHandler extends DBBase
         setUpConnection();
 
         //Insert bestelling
-        for (String i : items)
+        for (ShoppingCartItem i : items)
         {
-            query = "Insert into `bestelling` (`itemid`, `orderid`) VALUES (?,?)";
+
+            //Insert voorwerp
+            String vwquery = "insert into voorwerp (naam) VALUES (?)";
+            String[] tparameters = new String[]
+            {
+                i.getArticle()
+            };
+            dab.sendQuery(vwquery, tparameters);
+            ResultSet ID2s = dab.getMutatedData();
+            int voorwerpID = -1;
+            if (ID2s.next())
+            {
+                voorwerpID = IDs.getInt(1);
+            }
+
+            query = "Insert into bestelling (itemid, orderid, kleur, voorwerpid) VALUES (?,?,?,?)";
             parameters = new String[]
             {
-                String.valueOf(i), String.valueOf(ID)
+                String.valueOf(i.getProduct().GetCode()), String.valueOf(ID), i.getColourName(), Integer.toString(voorwerpID)
             };
             dab.sendQuery(query, parameters);
         }

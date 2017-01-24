@@ -46,6 +46,10 @@ public class Database
         return DBGlobals.D_BPHOTO_RETRIEVER.GetPhotosByKlantHashedId(Klantid);
     }
 
+        public List<Photo> GetPhotosByPhotographerHashedId(String photographer) throws SQLException
+    {
+        return DBGlobals.D_BPHOTO_RETRIEVER.GetPhotosByPhotographerHashedId(photographer);
+    }
     /**
      * Returns all the photos
      * @deprecated only for testing

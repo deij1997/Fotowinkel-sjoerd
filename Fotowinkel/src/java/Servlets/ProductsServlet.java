@@ -51,6 +51,11 @@ public class ProductsServlet extends HttpServlet
         try
         {
             Database db = new Database();
+            if(UserHandler.userIsPhotographer(request)){
+                PhotographerPhotos(request, response);
+                return;
+            }
+            
             String id = UserHandler.getUserAsString(request);
             List<Photo> photos = db.GetPhotosByKlantHashedId(id);
 
@@ -93,10 +98,77 @@ public class ProductsServlet extends HttpServlet
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
-                            + "                             <input id='color_"+p.GetCode()+"' type='hidden' value =\"norml\"/>"
-                            + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"\" data-toggle=\"modal\" data-target=\"#product-modal\">Details</a></p>\n"
-                            + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" href=\"\">Bestel</a></p>\n"
-                            + "                                <p> Aantal: <input id='" + p.GetCode() + "_amnt' type=\"number\" min='0' value='1' name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
+                            + "                                 <input id='" + p.GetCode() + "_amnt' type=\"button\" min='0' value='1' name=\"aantal\"style=\"width:100%;height:30px;\">\n"
+                            + "                            </div>\n"
+                            + "                        </div>\n"
+                            + "                    </div>");
+            }
+
+        }
+        catch (Exception ehroar)
+        {
+            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+        }
+        finally
+        {
+            out.close();
+        }
+    }
+    
+      protected void PhotographerPhotos(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
+        PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try
+        {
+            Database db = new Database();
+            String id = UserHandler.getUserAsString(request);
+            List<Photo> photos = db.GetPhotosByPhotographerHashedId(id);
+
+            if (photos.isEmpty())
+            {
+                throw new Exception("<b>Geen fotos gevonden!</b>");
+            }
+
+            for (Photo p : photos)
+            {
+                String imgurl = p.getPreviewLocation();
+                String price = p.GetPriceAsString();
+                String title = p.GetTitle();
+                String description = p.GetDescription();
+                if (title == null)
+                {
+                    title = "Geen titel opgegeven";
+                }
+                if (description == null)
+                {
+                    description = "Zonder beschrijving";
+                }
+
+                /* TODO output your page here. You may use following sample code. */
+                out.println("<div class=\"col-sm-4 col-lg-4 col-md-4\">\n"
+                            + "                        <div class=\"thumbnail\">\n"
+                            + "                            <div class='center'>"
+                            + "                                  <img id=\"myImg\" src='" + imgurl + "' style=\"max-height: 100%;\" class=\"previewPhoto " + p.GetCode() + " \" alt='" + Encoder.HTMLEntityEncode(description) + "' "
+                            + "                                     onerror=\"removeButtons(event);\"\n" + "\" > </img>"
+                            + "                                     <ol class=\"carousel-indicators custombutt\">\n"
+                            + "                                         <li class=\"gree\"></li>\n"
+                            + "                                         <li class=\"norml active\"></li>\n"
+                            + "                                         <li class=\"sepia \"></li>\n"
+                            + "                                     </ol>"
+                            + "                             </div>\n"
+                            + "                            <div class=\"caption\">\n"
+                            + "                                <h4 class=\"pull-right\" style=\"display: inline-block;\">" + price + "</h4>\n"
+                            + "                                <h4><a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                            + "                                </h4>\n"
+                            + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
+                            + "                            </div>\n"
+                            + "                            <div class=\"ratings\">\n"
+                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img="+ p.GetCode()+"\" + data-toggle=\"modal\">Aanpassen</a>\n"
+
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");

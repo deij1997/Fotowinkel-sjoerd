@@ -30,7 +30,8 @@ html{
 }
 
 .caption h4 {
-    white-space: nowrap;
+    white-space: normal;
+    word-break: normal;
 }
 
 .thumbnail img {

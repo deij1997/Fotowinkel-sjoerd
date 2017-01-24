@@ -13,7 +13,6 @@ import Base.LowerDatabase;
 import Base.Photo;
 import Base.PreviewArticle;
 import Base.PreviewItem;
-import Base.ShoppingCart;
 import Base.ShoppingCartItem;
 import Exceptions.RandomiserFail;
 import java.sql.Date;
@@ -93,7 +92,6 @@ public class DBItemHandler extends DBBase
         {
             throw new Exception("No order could be inserted");
         }
-        setUpConnection();
 
         //Insert bestelling
         for (ShoppingCartItem i : items)
@@ -113,14 +111,31 @@ public class DBItemHandler extends DBBase
                 voorwerpID = IDs.getInt(1);
             }
 
-            query = "Insert into bestelling (itemid, orderid, kleur, voorwerpid) VALUES (?,?,?,?)";
+            //Get itemID
+            int itemID = -1;
+            query = "select id from item where code = ?";
             parameters = new String[]
             {
-                String.valueOf(i.getProduct().GetCode()), String.valueOf(ID), i.getColourName(), Integer.toString(voorwerpID)
+                String.valueOf(i.getProduct().GetCode())
             };
-            dab.sendQuery(query, parameters);
+            ResultSet r = dab.getData(query, parameters);
+
+            while (r.next())
+            {
+                itemID = r.getInt("id");
+                break;
+            }
+            if (itemID != -1)
+            {
+                //Use itemID to insert
+                query = "Insert into bestelling (itemid, orderid, kleur, voorwerpid) VALUES (?,?,?,?)";
+                parameters = new String[]
+                {
+                    String.valueOf(itemID), String.valueOf(ID), i.getColourName(), Integer.toString(voorwerpID)
+                };
+                dab.sendQuery(query, parameters);
+            }
         }
-        setUpConnection();
 
         //Insert adress with order
         query = "Insert into `adresgegevens`(`orderid`, `voornaam`, `achternaam`, `huisnr`, `straat`, `woonplaats`, `landcode`, `postcode`) VALUES (?,?,?,?,?,?,?,?)";

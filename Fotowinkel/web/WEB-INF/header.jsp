@@ -4,15 +4,15 @@
     Author     : Tu
 --%>
 
+<%@page import="Managers.LanguageHandler"%>
 <%@page import="Managers.ShoppingCartHolder"%>
 <%@page import="Managers.UserHandler"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<c:set var="language" value="en" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="Language.language" />
-
 
 
 <header class="header-login-signup">
@@ -33,41 +33,63 @@
             %>
 
             <%
-            if (UserHandler.userIsAdministrator(request))
-            {
+                if (UserHandler.userIsAdministrator(request))
+                {
             %><a href="Overview.jsp"><fmt:message key="Administration" /></a><%
-            }
+                }
             %>
         </nav>
         <ul>
-        <form>
-            <label><fmt:message key="Language" />:</label>
-            <select class="form-control" id="language" name="language" onchange="submit()">
-                <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-                <option value="nl" ${language == 'nl' ? 'selected' : ''}>Nederlands</option>
-            </select>
-        </form>
+            <form>
+                <label><fmt:message key="Language" />:</label>
+                <select class="form-control" id="language" name="language" onchange="submit()">
+                    <%
+                        if (LanguageHandler.getLanguage(request).equals("nl"))
+                        {
+                    %>
+                    <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
+                    <option selected value="nl" ${language == 'nl' ? 'selected' : ''}>Nederlands</option>
+                    <%
+                    }
+                    else
+                    {
+                    %>
+                    <option value="nl" ${language == 'nl' ? 'selected' : ''}>Nederlands</option>
+                    <option selected value="en" ${language == 'en' ? 'selected' : ''}>English</option>
+                    <%
+                        }
+                    %>
+                </select>
+                <script>
+                    $(document).on("change", "#language", function (e) {
+                        var xhttp = new XMLHttpRequest();
+                        var val = document.getElementById("language").value;
+                        xhttp.open("POST", "LanguageServlet?lang=" + val, true);
+                        xhttp.send();
+                    });
+                </script>
+            </form>
         </ul>
         <ul id="userinfo">
             <%
-            if (!UserHandler.isUserLoggedIn(request))
-            {%>
+                if (!UserHandler.isUserLoggedIn(request))
+                {%>
             <li><a href="#" data-toggle="modal" data-target="#login-modal"><img src="http://www.foodstarz.com/assets/images/login_icon.png" alt="" width="15" height="15"><fmt:message key="Login" /></a></li>
             <li><a href="#" data-toggle="modal" data-target="#register-modal"><img src="http://daytonsocialportal.com/wp-content/uploads/2014/06/signup-icon-white.png" alt="" width="15" height="15"><fmt:message key="Register" /></a></li>  
 
 
             <%}
-        else
-            if (UserHandler.userIsPhotographer(request) || UserHandler.userIsAdministrator(request))
-            {%>
+            else
+                if (UserHandler.userIsPhotographer(request) || UserHandler.userIsAdministrator(request))
+                {%>
             <li><fmt:message key="Welcome" /> <% out.println(UserHandler.getUserAsString(request)); %></li>
             <li><a href="#" id="logout" onclick="deleteAllCookies()"><fmt:message key="Logout" /><img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
-            <%}
-        else
-        {%>
+                    <%}
+                    else
+                    {%>
             <li><fmt:message key="Welcomec" /></li>
             <li><a href="#" id="logout" onclick="deleteAllCookies()"><fmt:message key="Logout" /><img src="http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255" alt="" width="30" height="30"></a></li>
-            <%}%>
+                    <%}%>
             <li><a href="Order.jsp" ><fmt:message key="Cart" /><img id="cart" src="Images/cart.png" alt="" width="50" height="50"></a></li>
         </ul>
         <script>

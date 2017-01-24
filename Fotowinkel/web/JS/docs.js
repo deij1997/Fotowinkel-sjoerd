@@ -30,10 +30,10 @@ $(function() {
 
     $image.cropper(options).on({
       "build.cropper": function(e) {
-        console.log(e.type);
+        //console.log(e.type);
       },
       "built.cropper": function(e) {
-        console.log(e.type);
+        //console.log(e.type);
       }
     });
 
@@ -60,7 +60,7 @@ $(function() {
           if (/^image\/\w+$/.test(file.type)) {
             fileReader.readAsDataURL(file);
             fileReader.onload = function () {
-              console.log($image);
+              //console.log($image);
               $image.cropper("reset", true).cropper("replace", this.result);
             };
           }
@@ -97,7 +97,7 @@ $(function() {
       try {
         val = JSON.stringify(data);
       } catch (e) {
-        console.log(data);
+        //console.log(data);
       }
 
       $getDataInto.val(val);
@@ -144,7 +144,7 @@ $(function() {
       try {
         val = JSON.stringify(data);
       } catch (e) {
-        console.log(data);
+        //console.log(data);
       }
 
       $getImageDataInto.val(val);

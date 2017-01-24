@@ -124,13 +124,13 @@ public class ProductsServlet extends HttpServlet
                 {
                     if (UserHandler.userIsPhotographer(request))
                     {
-                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt geuploadt.<br /> Indien u foto's wilt uploaden zal u naar de sectie <b>upload</b> moeten gaan.", 
-                                                                                  "It looks like you haven't uploaded anything yet.<br /> If you want to upload something, check out the <b>upload</b> section.");
+                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt geuploadt.<br /> Indien u foto's wilt uploaden zal u naar de sectie <b>upload</b> moeten gaan.",
+                                                                        "It looks like you haven't uploaded anything yet.<br /> If you want to upload something, check out the <b>upload</b> section.");
                     }
                     else
                     {
-                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt.<br /> Als u deze melding blijft zien, neem dan contact op met de fotograaf.", 
-                                                                                  "It looks like you don't have any photos shared with you.<br /> If you keep seeing this message, please contact your photographer");
+                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt.<br /> Als u deze melding blijft zien, neem dan contact op met de fotograaf.",
+                                                                        "It looks like you don't have any photos shared with you.<br /> If you keep seeing this message, please contact your photographer");
                     }
                 }
                 catch (SQLException ex)
@@ -204,6 +204,7 @@ public class ProductsServlet extends HttpServlet
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
+                            + "                             <input id='color_" + p.GetCode() + "' type='hidden' value =\"norml\"/>"
                             + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">Aanpassen</a>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"

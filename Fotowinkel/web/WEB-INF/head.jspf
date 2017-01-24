@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="icon" href="Images/icon.gif">
 
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>    
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>    
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>     

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 @WebServlet(name = "CropperServlet", urlPatterns =
     {
@@ -23,9 +25,9 @@ import org.apache.tomcat.util.codec.binary.Base64;
 public class CropperServlet
         extends HttpServlet
 {
-    final int MAX_FILE_SIZE = 5120000;
-    final int MAX_REQUEST_SIZE = 5120000;
-    final int THRESHOLD_SIZE = 5120000;
+    final int MAX_FILE_SIZE = 100000 * 1024;
+    final int MAX_REQUEST_SIZE = 100000 * 1024;
+    final int THRESHOLD_SIZE = 100000 * 1024;
     private static BufferedImage WaterMarkImage;
     public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
     public static String PREVIEW_UPLOAD_DIRECTORY = "/previewimages";
@@ -42,10 +44,20 @@ public class CropperServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        //Configures upload settings
+        DiskFileItemFactory factory = new DiskFileItemFactory();
+        factory.setSizeThreshold(THRESHOLD_SIZE);
+        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        upload.setFileSizeMax(MAX_FILE_SIZE);
+        upload.setSizeMax(MAX_REQUEST_SIZE);
+
         HttpSession session = request.getSession();
 
         this.image_in_file = request.getParameter("image_file");
         this.name = request.getParameter("image_name");
+        
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages/";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages/";
         WATERMARK_LOCATION = request.getServletContext().getRealPath("") + "/Images/watermark.png";
@@ -69,13 +81,19 @@ public class CropperServlet
         {
             this.extension = "jpg";
         }
-        else if (this.fileType.equalsIgnoreCase("image/png"))
+        else
         {
-            this.extension = "png";
-        }
-        else if (this.fileType.equalsIgnoreCase("image/gif"))
-        {
-            this.extension = "gif";
+            if (this.fileType.equalsIgnoreCase("image/png"))
+            {
+                this.extension = "png";
+            }
+            else
+            {
+                if (this.fileType.equalsIgnoreCase("image/gif"))
+                {
+                    this.extension = "gif";
+                }
+            }
         }
         byte[] imageByteArray = decodeImage(this.image);
 

@@ -126,8 +126,8 @@ public class Photo extends Item
         //Disable browser caching   
         //Get the server location and photo from it
         Random rand = new Random();
-        this.previewLocation = "previewimages" + "/" + code + ".jpg?" + rand.nextInt(50);
-        this.fullLocation = "fullimages" + "/" + code + ".png?" + rand.nextInt(50);
+        this.previewLocation = "previewimages" + "/" + code + ".jpg";
+        this.fullLocation = "fullimages" + "/" + code + ".png";
     }
 
     /**
@@ -167,12 +167,12 @@ public class Photo extends Item
 
     public String GetFullLocation()
     {
-        return this.fullLocation;
+        return this.fullLocation + "?" + System.currentTimeMillis();
     }
 
     public String getPreviewLocation()
     {
-        return this.previewLocation;
+        return this.previewLocation + "?" + System.currentTimeMillis();
     }
 
     public String GetTitle()
@@ -204,7 +204,7 @@ public class Photo extends Item
     {
         DecimalFormat formatter = new DecimalFormat("#,##0.00");
         formatter.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ITALY));
-        
+
         return "€ " + formatter.format(price);
     }
 

@@ -9,6 +9,8 @@ import Base.Database;
 import Base.Encoder;
 import Base.Photo;
 import Exceptions.NoPhotosForUserException;
+import Helpers.ErrorHandler;
+import Managers.LanguageHandler;
 import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,6 +48,8 @@ public class ProductsServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String language = LanguageHandler.getLanguage(request);
+
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("text/html;charset=UTF-8");
@@ -75,11 +79,11 @@ public class ProductsServlet extends HttpServlet
                 String description = p.GetDescription();
                 if (title == null)
                 {
-                    title = "Geen titel opgegeven";
+                    title = language.equals("nl") ? "Geen titel opgegeven" : "No title";
                 }
                 if (description == null)
                 {
-                    description = "Zonder beschrijving";
+                    description = language.equals("nl") ? "Zonder beschrijving" : "Without description";
                 }
 
                 /* TODO output your page here. You may use following sample code. */
@@ -113,17 +117,20 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
+            String output = "";
             if (ehroar instanceof NoPhotosForUserException)
             {
                 try
                 {
                     if (UserHandler.userIsPhotographer(request))
                     {
-                        out.println("<h1>Oh nee! :(</h1> \nHet lijkt erop dat u nog geen fotos hebt geuploadt.<br /> Indien u foto's wilt uploaden zal u naar de sectie <b>uploaden</b> moeten gaan.");
+                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt geuploadt.<br /> Indien u foto's wilt uploaden zal u naar de sectie <b>upload</b> moeten gaan.", 
+                                                                                  "It looks like you haven't uploaded anything yet.<br /> If you want to upload something, check out the <b>upload</b> section.");
                     }
                     else
                     {
-                        out.println("<h1>Oh nee! :(</h1> \nHet lijkt erop dat u nog geen fotos hebt.<br /> Als u deze melding blijft zien, neem dan contact op met de fotograaf.");
+                        output = ErrorHandler.getLanguageSpecifiedError(language, "Het lijkt erop dat u nog geen fotos hebt.<br /> Als u deze melding blijft zien, neem dan contact op met de fotograaf.", 
+                                                                                  "It looks like you don't have any photos shared with you.<br /> If you keep seeing this message, please contact your photographer");
                     }
                 }
                 catch (SQLException ex)
@@ -133,8 +140,9 @@ public class ProductsServlet extends HttpServlet
             }
             else
             {
-                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+                output = ErrorHandler.getLanguageError(language, ehroar);
             }
+            out.println(output);
         }
         finally
         {
@@ -145,6 +153,8 @@ public class ProductsServlet extends HttpServlet
     protected void PhotographerPhotos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String language = LanguageHandler.getLanguage(request);
+
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("text/html;charset=UTF-8");
@@ -157,7 +167,7 @@ public class ProductsServlet extends HttpServlet
 
             if (photos.isEmpty())
             {
-                throw new Exception("<b>Geen fotos gevonden!</b>");
+                throw new NoPhotosForUserException();
             }
 
             for (Photo p : photos)
@@ -168,11 +178,11 @@ public class ProductsServlet extends HttpServlet
                 String description = p.GetDescription();
                 if (title == null)
                 {
-                    title = "Geen titel opgegeven";
+                    title = language.equals("nl") ? "Geen titel opgegeven" : "No title";
                 }
                 if (description == null)
                 {
-                    description = "Zonder beschrijving";
+                    description = language.equals("nl") ? "Zonder beschrijving" : "Without description";
                 }
 
                 /* TODO output your page here. You may use following sample code. */
@@ -203,7 +213,7 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
-            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+            out.println(ErrorHandler.getLanguageError(language, ehroar));
         }
         finally
         {

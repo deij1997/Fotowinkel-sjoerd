@@ -58,13 +58,19 @@ public class UploadServlet extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String email = request.getParameter("inputEmail");
+        if (email == null || email.isEmpty())
+        {
+            return;
+        }
+        
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         WATERMARK_LOCATION = request.getServletContext().getRealPath("") + "/Images/watermark.png";
 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
+        
         try
         {
             String user = UserHandler.getUserAsString(request);
@@ -164,10 +170,6 @@ public class UploadServlet extends HttpServlet
                     i++;
                 }
 
-                //Create an Upload
-                String email = request.getParameter("inputEmail");
-
-                //TODO: FILL IN AFTER TESTING IS A SUCCESS
                 Upload pupload = new Upload(email);
 
                 pupload.AddPhotos(photos);

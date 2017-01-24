@@ -9,11 +9,14 @@ $(function () {
     $('#upload-form').ajaxForm({
         success: function (response)
         {
-            console.log('RESULT: ' + response);
-            $('#sbmbtn').innerHTML = "Upload";
-            $('#sbmbtn').removeProp('disabled');
-            // refresh page
-            location.reload();
+            if ($('#sbmbtn').enabled)
+            {
+                console.log('RESULT: ' + response);
+                $('#sbmbtn').innerHTML = "Upload";
+                $('#sbmbtn').removeProp('disabled');
+                // refresh page
+                location.reload();
+            }
         },
         error: function (response)
         {
@@ -23,6 +26,13 @@ $(function () {
             $('#sbmbtn').removeProp('disabled');
         }
     });
+});
+
+$(document).on("click", "#sbmbtn", function (event) {
+    if ($('#sbmbtn').enabled)
+    {
+        return false;
+    }
 });
 
 var open = true;

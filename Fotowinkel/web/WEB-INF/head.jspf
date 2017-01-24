@@ -1,6 +1,11 @@
 <%-- any content can be specified here e.g.: --%>
 <%@ page pageEncoding="UTF-8" %>
 
+<% response.setHeader("Cache-Control","no-cache"); //HTTP 1.1 
+ response.setHeader("Pragma","no-cache"); //HTTP 1.0 
+ response.setDateHeader ("Expires", 0); //prevents caching at the proxy server  
+%>
+
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">

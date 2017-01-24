@@ -164,8 +164,7 @@ public class ProductsServlet extends HttpServlet
             throws ServletException, IOException
     {
         String language = LanguageHandler.getLanguage(request);
-        String amount;
-        String order;
+        String edit ;
 
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
@@ -177,11 +176,9 @@ public class ProductsServlet extends HttpServlet
             String id = UserHandler.getUserAsString(request);
             List<Photo> photos = db.GetPhotosByPhotographerHashedId(id);
             if(language.equals("nl")){
-                amount = "Aantal";
-                order = "Bestel";
+                edit= "Aanpassen";
             }else{
-                amount = "Amount";
-                order = "Order";
+                edit="Edit";
             }
 
             if (photos.isEmpty())
@@ -223,7 +220,7 @@ public class ProductsServlet extends HttpServlet
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
-                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">Aanpassen</a>\n"
+                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">"+edit+"</a>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");

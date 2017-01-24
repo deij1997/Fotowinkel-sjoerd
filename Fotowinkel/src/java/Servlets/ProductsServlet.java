@@ -8,9 +8,11 @@ package Servlets;
 import Base.Database;
 import Base.Encoder;
 import Base.Photo;
+import Exceptions.NoPhotosForUserException;
 import Managers.UserHandler;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,17 +53,18 @@ public class ProductsServlet extends HttpServlet
         try
         {
             Database db = new Database();
-            if(UserHandler.userIsPhotographer(request)){
+            if (UserHandler.userIsPhotographer(request))
+            {
                 PhotographerPhotos(request, response);
                 return;
             }
-            
+
             String id = UserHandler.getUserAsString(request);
             List<Photo> photos = db.GetPhotosByKlantHashedId(id);
 
             if (photos.isEmpty())
             {
-                throw new Exception("<b>Geen fotos gevonden!</b>");
+                throw new NoPhotosForUserException();
             }
 
             for (Photo p : photos)
@@ -98,7 +101,7 @@ public class ProductsServlet extends HttpServlet
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
-                            + "                             <input id='color_"+p.GetCode()+"' type='hidden' value =\"norml\"/>"
+                            + "                             <input id='color_" + p.GetCode() + "' type='hidden' value =\"norml\"/>"
                             + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" style=\"height:100%\" href=\"\" data-toggle=\"modal\" data-target=\"#product-modal\">Details</a></p>\n"
                             + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" style=\"height:100%\" href=\"\">Bestel</a></p>\n"
                             + "                                <p> Aantal: <input id='" + p.GetCode() + "_amnt' type=\"number\" min='0' value='1' name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
@@ -110,15 +113,36 @@ public class ProductsServlet extends HttpServlet
         }
         catch (Exception ehroar)
         {
-            out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+            if (ehroar instanceof NoPhotosForUserException)
+            {
+                try
+                {
+                    if (UserHandler.userIsPhotographer(request))
+                    {
+                        out.println("<h1>Oh nee! :(</h1> \nHet lijkt erop dat u nog geen fotos hebt geuploadt.<br /> Indien u foto's wilt uploaden zal u naar de sectie <b>uploaden</b> moeten gaan.");
+                    }
+                    else
+                    {
+                        out.println("<h1>Oh nee! :(</h1> \nHet lijkt erop dat u nog geen fotos hebt.<br /> Als u deze melding blijft zien, neem dan contact op met de fotograaf.");
+                    }
+                }
+                catch (SQLException ex)
+                {
+                    //This error is thrown when the user is unable to connect to the database. This error is not thrown due to it being thrown before.
+                }
+            }
+            else
+            {
+                out.println("<h1>Oh nee! :(</h1> \nEr ging iets fout, probeer het (later) opnieuw. <br /> \n<b>Error</b>: \n" + ehroar.getMessage());
+            }
         }
         finally
         {
             out.close();
         }
     }
-    
-      protected void PhotographerPhotos(HttpServletRequest request, HttpServletResponse response)
+
+    protected void PhotographerPhotos(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
@@ -170,8 +194,7 @@ public class ProductsServlet extends HttpServlet
                             + "                                <div style=\"text-overflow: ellipsis; max-height: 70%\">" + Encoder.HTMLEntityEncode(description) + "</div>\n"
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
-                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img="+ p.GetCode()+"\" + data-toggle=\"modal\">Aanpassen</a>\n"
-
+                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">Aanpassen</a>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");

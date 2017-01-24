@@ -40,4 +40,8 @@ public class ShoppingCart
         return hm;
     }
 
+    public void clear()
+    {
+        hm.clear();
+    }
 }

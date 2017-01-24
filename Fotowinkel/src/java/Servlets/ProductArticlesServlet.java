@@ -36,7 +36,7 @@ public class ProductArticlesServlet extends HttpServlet
     private static List<ListedArticle> articles = null;
     private String lastID;
     private double lastPrice;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -135,6 +135,19 @@ public class ProductArticlesServlet extends HttpServlet
                             }
                         }
                     }
+                }
+
+                String color = "000000";
+                //Load in an array of standard products
+                for (ListedArticle a : articles)
+                {
+                    out.println("<div class=\"article\">\n"
+                                + "                                        <div class=\"center-article\">\n"
+                                + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
+                                + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                                + "                                        </div>\n"
+                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                                + "                                    </div>");
                 }
             }
             else

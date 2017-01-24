@@ -49,13 +49,13 @@
                                 </ol>
                                 <div class="carousel-inner">
                                     <div class="item active">
-                                        <img class="slide-image" src="https://lh3.googleusercontent.com/-Undk1_jbkk4/UZYlE8A1D1I/AAAAAAAD1yQ/yyqmYgHvnvY/w800-h800/uOYFkKS+%281%29.gif" alt="">
+                                        <img class="slide-image" src="Images/header/2.gif" alt="">
                                     </div>
                                     <div class="item">
-                                        <img class="slide-image" src="http://media.dods.co.uk/sites/media.dods.co.uk/files/image/Drupal%20top%20image%20for%20inside%20page%20800x300_5.jpg" alt="">
+                                        <img class="slide-image" src="Images/header/3.jpg" alt="">
                                     </div>
                                     <div class="item">
-                                        <img class="slide-image" src="http://lispine.com/wp-content/uploads/2016/06/Friends-jumping-into-the-water-from-a-jetty-000091153275_XXXLarge-800x300.jpg" alt="">
+                                        <img class="slide-image" src="Images/header/4.jpg" alt="">
                                     </div>
                                 </div>
                                 <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">

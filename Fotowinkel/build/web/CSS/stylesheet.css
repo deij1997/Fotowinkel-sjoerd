@@ -30,7 +30,8 @@ html{
 }
 
 .caption h4 {
-    white-space: nowrap;
+    white-space: normal;
+    word-break: normal;
 }
 
 .thumbnail img {
@@ -410,7 +411,7 @@ body {
 
 .smallfreespace{
     padding: 0px 25px;
-    
+
     margin: 0px;
 }
 
@@ -431,6 +432,7 @@ body {
 }
 
 .article{
+    position: relative;
     float: left; 
     margin: 14px;
     height: 150px;
@@ -457,9 +459,22 @@ body {
     overflow: scroll;
 }
 
- /*table*/
+.pricetag{
+    position: absolute;
+    right: 5px;
+    bottom: 30px;
+    background-color: rgba(255,234,171,0.8);
+}
 
- #appelsap{
-     max-width: 100px;
-     margin-left: 50px;
- }
+.persistent-top-bar{
+    position:fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 500000;
+}
+/*table*/
+
+#appelsap{
+    max-width: 100px;
+    margin-left: 50px;
+}

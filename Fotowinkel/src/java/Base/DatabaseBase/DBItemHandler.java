@@ -108,7 +108,7 @@ public class DBItemHandler extends DBBase
             int voorwerpID = -1;
             if (ID2s.next())
             {
-                voorwerpID = IDs.getInt(1);
+                voorwerpID = ID2s.getInt(1);
             }
 
             //Get itemID

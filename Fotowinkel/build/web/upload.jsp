@@ -35,7 +35,7 @@
                 </div>
 
                 <div id="uploadedImages" style="display: none;">
-                    <h4 id="morephotos" onclick="$('#UploadBox').fadeIn(200);" >&uarr;	Upload andere foto's</h4>
+                    <h4 id="morephotos" onclick="$('#UploadBox').fadeIn(200);" >&uarr;	<fmt:message key="Uploadfoto" /></h4>
 
                     <div  id="imageRow"><div id="leftArrow"class="arrow"></div>
 
@@ -53,7 +53,7 @@
                     <br>
                     <hr><br>
                     <div id="maildiv" class="form-group has-feedback">
-                        <label for="inputEmail" class="control-label">Klant mail</label>
+                        <label for="inputEmail" class="control-label"><fmt:message key="Customer" /> email</label>
                         <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Klant e-mail" data-error="Het e-mailadres van de klant is vereist." required>
                         <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                         <div class="help-block with-errors"></div>

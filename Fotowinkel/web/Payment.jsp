@@ -99,19 +99,19 @@
         <%@include file="WEB-INF/header.jsp" %>
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
-        <h1>Je gaat betalen</h1>
+        <h1><fmt:message key="Paymentinfo" /></h1>
         <div>
             <form style="padding-left: 50px" action="Payment.jsp" method="post">
                 <table>
-                    <tr><td id="appelsap"><p>Name: </p></td><td id="appelsap"><input type="text" name="name" id="name"></td></tr>
-                    <tr><td id="appelsap"><p>Last name: </p></td><td id="appelsap"><input type="text" name="lastname" id="lastname"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="Name" />: </p></td><td id="appelsap"><input type="text" name="name" id="name"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="Lastname" />: </p></td><td id="appelsap"><input type="text" name="lastname" id="lastname"></td></tr>
                     <%--<tr><td id="appelsap"><p>Country: </p></td><td id="appelsap"><input type="text" name="country" id="country" value="2"></td></tr>--%>
-                    <tr><td id="appelsap"><p>City: </p></td><td id="appelsap"><input type="text" name="city" id="city"></td></tr>
-                    <tr><td id="appelsap"><p>Street: </p></td><td id="appelsap"><input type="text" name="street" id="street"></td></tr>
-                    <tr><td id="appelsap"><p>House Nr: </p></td><td id="appelsap"><input type="text" name="housenr" id="housenr"></td></tr>
-                    <tr><td id="appelsap"><p>Postcode: </p></td><td id="appelsap"><input type="text" name="postcode" id="postcode"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="City" />: </p></td><td id="appelsap"><input type="text" name="city" id="city"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="Street" />: </p></td><td id="appelsap"><input type="text" name="street" id="street"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="Housenr" />: </p></td><td id="appelsap"><input type="text" name="housenr" id="housenr"></td></tr>
+                    <tr><td id="appelsap"><p><fmt:message key="Postcode" />: </p></td><td id="appelsap"><input type="text" name="postcode" id="postcode"></td></tr>
                     <%--<tr><td id="appelsap"><p>Payment method: </p></td><td id="appelsap"><input type="text" name="paymentmethod" id="paymentmethod" value="1"></td></tr>--%>
-                    <tr><td id="appelsap"><input type="submit" onclick="showinput();" id="pay" class="btn btn-success btn-block" style="margin:3px" value="Pay"></td></tr>
+                    <tr><td id="appelsap"><input type="submit" onclick="showinput();" id="pay" class="btn btn-success btn-block" style="margin:3px" value=<fmt:message key="Pay" />></td></tr>
                 </table> 
             </form>
         </div>

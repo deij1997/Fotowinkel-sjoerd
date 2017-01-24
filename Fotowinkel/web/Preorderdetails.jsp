@@ -18,7 +18,7 @@
         <%@include file="WEB-INF/login.jspf" %>
         <%@include file="WEB-INF/register.jspf" %>
         
-        <h1>Je hebt betaald</h1>
+        <h1><fmt:message key="Payment_succed" /></h1>
         <%--
         <div class="container">
             <div class="row">

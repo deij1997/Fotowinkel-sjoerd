@@ -183,7 +183,7 @@
 
 
                         <div class="container docs-overview">
-                            <h1 class="page-header" id="overview">Afbeelding aanpassen</h1>
+                            <h1 class="page-header" id="overview"><fmt:message key="Adjust" /></h1>
                             <div class="row">
                                 <div class="container-fluid eg-container" id="basic-example">
                                     <div class="row eg-main">
@@ -203,14 +203,14 @@
                                         <div class="col-xs-12">
                                             <div class="eg-button">
                                                 <button class="btn btn-warning" id="reset" type="button">Reset</button>
-                                                <button class="btn btn-info" id="zoomIn" type="button">Zoom In</button>
-                                                <button class="btn btn-info" id="zoomOut" type="button">Zoom Out</button>
-                                                <button class="btn btn-info" id="rotateLeft" type="button">Rotate Left</button>
-                                                <button class="btn btn-info" id="rotateRight" type="button">Rotate Right</button>
+                                                <button class="btn btn-info" id="zoomIn" type="button"><fmt:message key="Zoomin" /></button>
+                                                <button class="btn btn-info" id="zoomOut" type="button"><fmt:message key="Zoomout" /></button>
+                                                <button class="btn btn-info" id="rotateLeft" type="button"><fmt:message key="RotateL" /></button>
+                                                <button class="btn btn-info" id="rotateRight" type="button"><fmt:message key="RotateR" /></button>
                                                 <label class="btn btn-primary" for="inputImage" title="Upload image file">
                                                     <input class="hide" id="inputImage" name="file" accept="image/*" type="file">
                                                     <span data-original-title="Import image with FileReader" class="docs-tooltip" data-toggle="tooltip" title="">
-                                                        <span class="glyphicon glyphicon-upload"></span> Vervang deze afbeelding
+                                                        <span class="glyphicon glyphicon-upload"></span> <fmt:message key="Changepic" />
                                                     </span>
                                                 </label>
 
@@ -218,7 +218,7 @@
 
                                             <div class="row eg-output">
                                                 <div class="col-md-12">
-                                                    <button class="btn btn-primary" id="getDataURL" onclick="setCrop();" type="button">Crop Image to Preview</button>
+                                                    <button class="btn btn-primary" id="getDataURL" onclick="setCrop();" type="button"><fmt:message key="Croppreview" /></button>
                                                     <div id="err"></div>
 
                                                 </div>
@@ -238,7 +238,7 @@
                                                         <textarea name="image_file" style="display: none;"class="form-control" id="dataURL" rows="10"></textarea>
                                                         <textarea name="image_name" style="display: none;"class="form-control" id="dataURL" rows="10"><%=img%></textarea>
 
-                                                        <input type="submit" value="Save Image" >
+                                                        <input type="submit" value=<fmt:message key="Saveimage" /> >
                                                     </form>
                                                 </div>
 

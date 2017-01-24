@@ -11,6 +11,7 @@ import Base.ListedArticle;
 import Base.Photo;
 import Base.ShoppingCart;
 import Base.ShoppingCartItem;
+import Managers.LanguageHandler;
 import Managers.ShoppingCartHolder;
 import Managers.UserHandler;
 import java.io.IOException;
@@ -28,12 +29,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Jesse
  */
-@WebServlet(name = "OrderServlet", urlPatterns =
-    {
-        "/OrderServlet"
-})
-public class OrderServlet extends HttpServlet
-{
+@WebServlet(name = "OrderServlet", urlPatterns
+        = {
+            "/OrderServlet"
+        })
+public class OrderServlet extends HttpServlet {
+
     private static List<ListedArticle> articles = null;
 
     public static String FULL_UPLOAD_DIRECTORY = "/fullimages";
@@ -49,21 +50,31 @@ public class OrderServlet extends HttpServlet
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
+        String language = LanguageHandler.getLanguage(request);
+        String total;
+        String pay;
+        String piece;
 
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try
-        {
+        try {
             String klantcode = UserHandler.getUserAsString(request);
             Database db = new Database();
 
-            if (articles == null)
-            {
+            if (articles == null) {
                 articles = db.GetArticles();
+            }
+            if (language.equals("nl")) {
+                total = "Totaalprijs";
+                pay = "Afrekenen";
+                piece = "Stuks van";
+            } else {
+                total = "Total price";
+                pay = "Pay now";
+                piece = "Pieces of";
             }
 
             ShoppingCart cart = ShoppingCartHolder.getInstance().getCurrentCart(request, response);
@@ -74,8 +85,7 @@ public class OrderServlet extends HttpServlet
             Map cc = cart.getAllProducts();
             Iterator it = cc.entrySet().iterator();
 
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 ShoppingCartItem product = (ShoppingCartItem) pair.getKey();
                 Photo p = db.GetPhoto(String.valueOf(product.getProduct().GetCode()));
@@ -84,23 +94,19 @@ public class OrderServlet extends HttpServlet
                 String price = p.GetPriceAsString();
                 String title = p.GetTitle();
                 String description = p.GetDescription();
-                if (title == null)
-                {
-                    title = "Geen titel opgegeven";
+                if (title == null) {
+                    title = language.equals("nl") ? "Geen titel opgegeven" : "No title";
                 }
-                if (description == null)
-                {
-                    description = "Zonder beschrijving";
+                if (description == null) {
+                    description = language.equals("nl") ? "Zonder beschrijving" : "Without description";
                 }
                 int amnt = (Integer) pair.getValue();
                 String amount = String.valueOf(amnt);
 
                 String article = product.getArticle().toLowerCase();
                 ListedArticle a = null;
-                for (ListedArticle art : articles)
-                {
-                    if (art.getName().toLowerCase().equals(article))
-                    {
+                for (ListedArticle art : articles) {
+                    if (art.getName().toLowerCase().equals(article)) {
                         a = art;
                         break;
                     }
@@ -109,30 +115,29 @@ public class OrderServlet extends HttpServlet
                 String color = product.getColorHex();
                 color = color.replace("#", "");
 
-                if (a != null)
-                {
+                if (a != null) {
                     String pricedetails = Photo.GetPriceAsString((p.GetPrice() + a.getPrice()) * amnt);
                     out.println("<div class=\"col-md-12\">\n"
-                                + "                        \n"
-                                + "                        <div class=\"thumbnail\">\n"
-                                + "                            <img id=\"myImg\" src='ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.src='Images/notfound.png'\">\n"
-                                + "                            \n"
-                                + "                            <div class=\"caption\">\n"
-                                + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
-                                + "                                <h4>\n"
-                                + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
-                                + "                                </h4>\n"
-                                + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
-                                + "                                \n"
-                                + "                                <div class=\"ratings\">\n"
-                                + "                                    <p class=\"pull-right\">" + amount + " Stuks van " + price +" exclusief "+ Photo.GetPriceAsString(a.getPrice()) + " ("+ product.getArticle()+")&nbsp&nbsp</p>\n"
-                                + "                                </div>\n"
-                                + "                                \n"
-                                + "                            </div>\n"
-                                + "                            \n"
-                                + "                        </div>\n"
-                                + "                        \n"
-                                + "                    </div>");
+                            + "                        \n"
+                            + "                        <div class=\"thumbnail\">\n"
+                            + "                            <img id=\"myImg\" src='ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "' style=\"width: 15%; max-height: 100%;\" class=\"pull-left\" alt='" + Encoder.HTMLEntityEncode(description) + "' onerror=\"this.src='Images/notfound.png'\">\n"
+                            + "                            \n"
+                            + "                            <div class=\"caption\">\n"
+                            + "                                <h4 class=\"pull-right\">" + pricedetails + "</h4>\n"
+                            + "                                <h4>\n"
+                            + "                                    <a href=\"#\">" + Encoder.HTMLEntityEncode(title) + "</a>\n"
+                            + "                                </h4>\n"
+                            + "                                <p>" + Encoder.HTMLEntityEncode(description) + "</p>\n"
+                            + "                                \n"
+                            + "                                <div class=\"ratings\">\n"
+                            + "                                    <p class=\"pull-right\">" + amount + " "+piece+" " + price + " exclusief " + Photo.GetPriceAsString(a.getPrice()) + " (" + product.getArticle() + ")&nbsp&nbsp</p>\n"
+                            + "                                </div>\n"
+                            + "                                \n"
+                            + "                            </div>\n"
+                            + "                            \n"
+                            + "                        </div>\n"
+                            + "                        \n"
+                            + "                    </div>");
                 }
                 dtprice += ((a.getPrice() + p.GetPrice()) * amnt);
             }
@@ -145,13 +150,12 @@ public class OrderServlet extends HttpServlet
                     + "                            <div class=\"thumbnail\">\n"
                     + "                                \n"
                     + "                                <div class=\"caption\">\n"
-                    + "                                    <h4 class=\"pull-left\">Totaalprijs</h4>\n"
+                    + "                                    <h4 class=\"pull-left\">"+total+"</h4>\n"
                     + "                                    <h4 class=\"pull-right\">" + Photo.GetPriceAsString(dtprice) + "</h4>\n"
                     + "                                </div>\n"
                     + "                                \n"
                     + "                                <div class=\"ratings\">\n"
-                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_self\" href=\"Payment.jsp\">Afrekenen</a></p>\n"
-                    + "                                    <!--<p> Quantity: <input type=\"number\" name=\"aantal\"style=\"width:50px;height:30px;\"></p>-->\n"
+                    + "                                    <p class=\"\"><a class=\"btn btn-primary\" target=\"_self\" href=\"Payment.jsp\">"+pay+"</a></p>\n"
                     + "                                </div>\n"
                     + "                            \n"
                     + "                            </div>\n"
@@ -162,13 +166,9 @@ public class OrderServlet extends HttpServlet
                     + "                \n"
                     + "                </div>");
 
-        }
-        catch (Exception ehroar)
-        {
+        } catch (Exception ehroar) {
             out.println(ehroar.getMessage());
-        }
-        finally
-        {
+        } finally {
             out.close();
         }
     }
@@ -184,8 +184,7 @@ public class OrderServlet extends HttpServlet
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -199,8 +198,7 @@ public class OrderServlet extends HttpServlet
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 }

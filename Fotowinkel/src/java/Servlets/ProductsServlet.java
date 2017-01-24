@@ -49,6 +49,8 @@ public class ProductsServlet extends HttpServlet
             throws ServletException, IOException
     {
         String language = LanguageHandler.getLanguage(request);
+        String amount;
+        String order;
 
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
@@ -65,7 +67,16 @@ public class ProductsServlet extends HttpServlet
 
             String id = UserHandler.getUserAsString(request);
             List<Photo> photos = db.GetPhotosByKlantHashedId(id);
-
+            if (language.equals("nl"))
+            {
+                amount = "Aantal";
+                order = "Bestel";
+            }
+            else
+            {
+                amount = "Amount";
+                order = "Order";
+            }
             if (photos.isEmpty())
             {
                 throw new NoPhotosForUserException();
@@ -107,8 +118,8 @@ public class ProductsServlet extends HttpServlet
                             + "                            <div class=\"ratings\">\n"
                             + "                             <input id='color_" + p.GetCode() + "' type='hidden' value =\"norml\"/>"
                             + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" style=\"height:100%\" href=\"\" data-toggle=\"modal\" data-target=\"#product-modal\">Details</a></p>\n"
-                            + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" style=\"height:100%\" href=\"\">Bestel</a></p>\n"
-                            + "                                <p> Aantal: <input id='" + p.GetCode() + "_amnt' type=\"number\" min='0' value='1' name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
+                            + "                                <p class=\"pull-right\"><a id='" + p.GetCode() + "' class=\"btn addtocart btn-primary\" style=\"height:100%\" href=\"\">" + order + "</a></p>\n"
+                            + "                                <p> " + amount + ": <input id='" + p.GetCode() + "_amnt' type=\"number\" min='0' value='1' name=\"aantal\"style=\"width:50px;height:30px;\"></p>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");
@@ -154,6 +165,7 @@ public class ProductsServlet extends HttpServlet
             throws ServletException, IOException
     {
         String language = LanguageHandler.getLanguage(request);
+        String edit;
 
         FULL_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/fullimages";
         PREVIEW_UPLOAD_DIRECTORY = request.getServletContext().getRealPath("") + "/previewimages";
@@ -164,6 +176,14 @@ public class ProductsServlet extends HttpServlet
             Database db = new Database();
             String id = UserHandler.getUserAsString(request);
             List<Photo> photos = db.GetPhotosByPhotographerHashedId(id);
+            if (language.equals("nl"))
+            {
+                edit = "Aanpassen";
+            }
+            else
+            {
+                edit = "Edit";
+            }
 
             if (photos.isEmpty())
             {
@@ -205,7 +225,7 @@ public class ProductsServlet extends HttpServlet
                             + "                            </div>\n"
                             + "                            <div class=\"ratings\">\n"
                             + "                             <input id='color_" + p.GetCode() + "' type='hidden' value =\"norml\"/>"
-                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">Aanpassen</a>\n"
+                            + "                                <a style=\"width:100%;\" id='" + p.GetCode() + "' class=\"btn showdetails btn-primary\" href=\"cropper.jsp?img=" + p.GetCode() + "\" + data-toggle=\"modal\">" + edit + "</a>\n"
                             + "                            </div>\n"
                             + "                        </div>\n"
                             + "                    </div>");

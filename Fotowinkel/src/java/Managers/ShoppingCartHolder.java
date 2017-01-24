@@ -103,7 +103,7 @@ public class ShoppingCartHolder
 
     }
 
-    private void NewCookie(HttpServletResponse response)
+    public void NewCookie(HttpServletResponse response)
     {
         //cartID does not exist, so we assign a random one
         Cookie cookie = new Cookie("cartID", ShoppingCartHolder.getRandomID());

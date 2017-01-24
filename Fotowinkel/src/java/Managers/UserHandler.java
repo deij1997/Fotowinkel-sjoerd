@@ -77,6 +77,8 @@ public class UserHandler
             return "";
         }
     }
+    
+    
 
     public static void setUser(String user, HttpServletRequest request, HttpServletResponse response)
     {

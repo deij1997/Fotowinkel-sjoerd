@@ -71,7 +71,23 @@ public class DBPhotoRetriever extends DBBase
         return photos;
 
     }
-    
+        public List<Photo> GetPhotosByPhotographerHashedId(String Klantid) throws SQLException
+    {
+        setUpConnection();
+        List<Photo> photos = new ArrayList<Photo>();
+        String query = "Select * From `item` Where fotograafid = (Select `id` from `fotograaf` where email = ?)";
+        ResultSet rs2 = dab.getData(query, new String[]
+                            {
+                                Klantid
+        });
+        while (rs2.next())
+        {
+            photos.add(new Photo(rs2.getDouble("prijs"), rs2.getString("code"), rs2.getString("title"), rs2.getString("description")));
+        }
+        endConnection();
+        return photos;
+
+    }
     public Photo GetPhoto(String hashId) throws SQLException
     {
         setUpConnection();

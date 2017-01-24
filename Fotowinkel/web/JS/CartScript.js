@@ -163,7 +163,7 @@ function filterAndAddModalContent(toAdd) {
             i--;
         }
     }
-
+    
     $("#modalcontent").append(toAdd);
 }
 

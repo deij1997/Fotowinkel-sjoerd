@@ -123,6 +123,8 @@ public class ProductArticlesServlet extends HttpServlet
                             {
                                 String color = product.getColorHex();
                                 color = color.replace("#", "");
+                                color = color.replace("norml", "000000");
+                                color = color.replace("sepia", "463205");
                                 Integer orderamount = (Integer) amounts[i];
 
                                 out.println("<div class=\"article\">\n"
@@ -138,17 +140,7 @@ public class ProductArticlesServlet extends HttpServlet
                 }
 
                 String color = "000000";
-                //Load in an array of standard products
-                for (ListedArticle a : articles)
-                {
-                    out.println("<div class=\"article\">\n"
-                                + "                                        <div class=\"center-article\">\n"
-                                + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
-                                + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                + "                                        </div>\n"
-                                + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
-                                + "                                    </div>");
-                }
+                postArticles(out, id, color, request, response);
             }
             else
             {
@@ -160,18 +152,8 @@ public class ProductArticlesServlet extends HttpServlet
                     {
                         color = "000000";
                     }
-
-                    for (ListedArticle a : articles)
-                    {
-                        out.println("<div class=\"article\">\n"
-                                    + "                                        <div class=\"center-article\">\n"
-                                    + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
-                                    + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
-                                    + "                                        </div>\n"
-                                    + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
-                                    + "                                    </div>");
-                    }
-                    //Show other items of photo code in those divs
+                    color = color.replace("#", "");
+                    postArticles(out, id, color, request, response);
                 }
             }
         }
@@ -183,6 +165,78 @@ public class ProductArticlesServlet extends HttpServlet
         finally
         {
             out.close();
+        }
+    }
+
+    private void postArticles(PrintWriter out, String id, String color, HttpServletRequest request, HttpServletResponse response)
+    {
+        Cookie[] cookies = request.getCookies();
+        ShoppingCart cart = null;
+        Map ps = null;
+        Object[] products = null;
+        if (cookies != null)
+        {
+            for (Cookie c : cookies)
+            {
+                if (c.getName().equals("cartID"))
+                {
+                    cart = ShoppingCartHolder.getInstance().getCartByID(c.getValue());
+                    break;
+                }
+            }
+        }
+        if (cart == null)
+        {
+            response.addCookie(new Cookie("cartID", ShoppingCartHolder.getRandomID()));
+        }
+        else
+        {
+            //Get all the added products
+            ps = cart.getAllProducts();
+            products = ps.keySet().toArray();
+        }
+
+        for (ListedArticle a : articles)
+        {
+            boolean found = false;
+            if (cart != null)
+            {
+                for (int i = 0; i < ps.size(); i++)
+                {
+                    //Check if the product was already added
+                    ShoppingCartItem product = (ShoppingCartItem) products[i];
+
+                    //If the IDs match, it's the same product, which needs to be checked if they are the same
+                    if (product.getProduct().GetCode().equals(id))
+                    {
+                        //Get the article
+                        String article = product.getArticle();
+                        //Get the article colour
+                        String pcolor = product.getColorHex();
+                        pcolor = pcolor.replace("#", "");
+                        pcolor = pcolor.replace("norml", "000000");
+                        pcolor = pcolor.replace("sepia", "463205");
+
+                        //Check if the colour and article match
+                        if (pcolor.equals(color) && article.equals(a.getName()))
+                        {
+                            //If they do, there's no need to add this item
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!found)
+            {
+                out.println("<div class=\"article\">\n"
+                            + "                                        <div class=\"center-article\">\n"
+                            + "                                              <div class=\"pricetag\">" + Photo.GetPriceAsString(a.getPrice() + lastPrice) + "</div>"
+                            + "                                            <img src=\"ProductArticleViewServlet?article=" + a.getName() + "&str=" + a.getStrength() + "&id=" + id + "&color=" + color + "&x1=" + a.getMinx() + "&y1=" + a.getMiny() + "&x2=" + a.getMaxx() + "&y2=" + a.getMaxy() + "\" class=\"article-preview\" alt=\"" + a.getName() + "\"/>\n"
+                            + "                                        </div>\n"
+                            + "                                        <input type=\"number\" min=\"0\" value=\"0\"/>\n"
+                            + "                                    </div>");
+            }
         }
     }
 

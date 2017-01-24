@@ -81,7 +81,7 @@ public class AddToCartServlet extends HttpServlet
                         String articletype = request.getParameter("type");
                         if (articletype == null)
                         {
-                            articletype = "standaard";
+                            articletype = "Standaard";
                         }
 
                         //Create a product from the given Hash
@@ -94,6 +94,8 @@ public class AddToCartServlet extends HttpServlet
                             {
                                 if (new Database().CheckIfPhotoBelongsToUser(hash, UserHandler.getUserAsString(request)))
                                 {
+                                    color = color.replace("norml", "#000000");
+                                    color = color.replace("sepia", "#463205");
                                     ShoppingCartItem e = new ShoppingCartItem(product, color, articletype);
 
                                     if (amount == 0)

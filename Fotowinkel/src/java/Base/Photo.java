@@ -202,7 +202,7 @@ public class Photo extends Item
 
     public static String GetPriceAsString(double price)
     {
-        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        DecimalFormat formatter = new DecimalFormat("#,##0.00");
         formatter.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ITALY));
         
         return "€ " + formatter.format(price);

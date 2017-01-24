@@ -18,6 +18,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 /**
@@ -122,9 +123,11 @@ public class Photo extends Item
      */
     private void SetLocation()
     {
+        //Disable browser caching   
         //Get the server location and photo from it
-        this.previewLocation = "previewimages" + "/" + code + ".jpg";
-        this.fullLocation = "fullimages" + "/" + code + ".png";
+        Random rand = new Random();
+        this.previewLocation = "previewimages" + "/" + code + ".jpg?" + rand.nextInt(50);
+        this.fullLocation = "fullimages" + "/" + code + ".png?" + rand.nextInt(50);
     }
 
     /**

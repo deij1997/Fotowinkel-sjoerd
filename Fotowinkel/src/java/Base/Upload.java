@@ -11,6 +11,8 @@ import Managers.Mail.MailManager;
 import Managers.UploadManager;
 import Managers.UserHandler;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public class Upload
 
     public Upload(String customer)
     {
-        
+
         this.customer = customer;
     }
 
@@ -75,8 +77,9 @@ public class Upload
     public void Push(final HttpServletRequest request) throws UploadFailed, SQLException, MessagingException, UnsupportedEncodingException, Exception
     {
         final String user = UserHandler.getUser(request).getValue();
-        
-        new Thread() {
+
+        new Thread()
+        {
             @Override
             public void run()
             {
@@ -86,7 +89,7 @@ public class Upload
                     String uploader = user;
                     String[] ids = UploadManager.UploadPhotos(photos, uploader, customer);
                     String id = ids[0].substring(0, ids[0].length() - 2);
-                    EmailCustomer();
+                    EmailCustomer(request);
                 }
                 catch (Exception ex)
                 {
@@ -95,11 +98,16 @@ public class Upload
             }
         }.start();
     }
-    
-    public void EmailCustomer() throws MessagingException, UnsupportedEncodingException, RandomiserFail
+
+    public void EmailCustomer(HttpServletRequest request) throws MessagingException, UnsupportedEncodingException, RandomiserFail, UnknownHostException
     {
         MailManager mm = new MailManager();
-        mm.Mail(customer, String.format(customerbody, "http://localhost:8080/Fotowinkel/Products.jsp?id=" + Encoder.GetHash(customer)), "Uw fotos staan klaar!");
+        InetAddress inetAddress;
+        inetAddress = InetAddress.getLocalHost();
+        String hostname = inetAddress.getHostName();
+        String serverAddress = inetAddress.toString();
+        serverAddress = serverAddress.replace(hostname, "");
+        mm.Mail(customer, String.format(customerbody, "http://" + serverAddress + ":8080/Fotowinkel/Products.jsp?id=" + Encoder.GetHash(customer)), "Uw fotos staan klaar!");
     }
 
     public void EmailCustomer(String uploadID) throws MessagingException, UnsupportedEncodingException

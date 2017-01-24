@@ -23,15 +23,15 @@
         <div class="container">
             <div id="cart-popup" class="alert alert-success alert-dismissable persistent-top-bar hide">
                 <a href="#">&times;</a>
-                Your shopping cart has been <strong>updated</strong>!
+                <fmt:message key="Product_update" />
             </div>
             <div class="row">
 
                 <div class="col-md-3">
-                    <p class="lead">Category</p>
+                    <p class="lead"><fmt:message key="Product_category" /></p>
                     <div class="list-group">
-                        <a href="#" class="list-group-item">Individuele pictures</a>
-                        <a href="#" class="list-group-item">Group pictures</a>
+                        <a href="#" class="list-group-item"><fmt:message key="Product_indiv" /></a>
+                        <a href="#" class="list-group-item"><fmt:message key="Product_group" /></a>
                         <a href="#" class="list-group-item">Accessoires</a>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                                         if (document.cookie.indexOf("user") != -1 && document.cookie.indexOf("lim=t;") == -1)
                                         {
                                             //Set header stuff 
-                                            document.getElementById('userinfo').innerHTML = "<li>Welcome Klant</li> <li><a href=\"#\" id=\"logout\" onclick=\"deleteAllCookies()\">Uitloggen<img src=\"http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255\" alt=\"\" width=\"30\" height=\"30\"></a></li> <li><a href=\"Order.jsp\" >Winkelmandje<img id=\"cart\" src=\"Images/cart.png\" alt=\"\" width=\"50\" height=\"50\"></a></li>";
+                                            document.getElementById('userinfo').innerHTML = "<li><fmt:message key="Welcomec" /></li> <li><a href=\"#\" id=\"logout\" onclick=\"deleteAllCookies()\"><fmt:message key="Logout" /><img src=\"http://flaticons.net/gd/makefg.php?i=icons/Mobile%20Application/Logout.png&r=255&g=255&b=255\" alt=\"\" width=\"30\" height=\"30\"></a></li> <li><a href=\"Order.jsp\" ><fmt:message key="Cart" /><img id=\"cart\" src=\"Images/cart.png\" alt=\"\" width=\"50\" height=\"50\"></a></li>";
                                         }
                                     }
                                 };

@@ -129,8 +129,12 @@ function addImageDetails(image, imageCount) {
 
     div.id = 'ImageDetails' + imageCount;
     div.className = 'imageDetails hidden';
-
-    div.innerHTML = '<span><h4>Product details</h4></span><br/><br/><span> <label for="imgtitle">Titel:</label></span><br><span> <input class="form-control" id="imagetitle" name="imgtitle" type="text" placeholder="Titel is vereist..." value="' + autoTitle + '" ></span>  <br/>  <span> <label for="imgDesc">Beschrijving:</label></span><br> <span> <textarea class="form-control"  id="imageDesc" name="imgdesc" type="text" placeholder="" contenteditable="true"></textarea></span>  <br/><span> <label for="imgPrice">Prijs:</label></span><br> <span>   <input class="form-control" type="number" id="imageprice" name="imgprice" min="0.00" step="0.01" value="0.00"></span>';
+    var language = document.getElementById("language").value;
+    if (language === "nl"){
+        div.innerHTML = '<span><h4>Product details</h4></span><br/><br/><span> <label for="imgtitle">Titel:</label></span><br><span> <input class="form-control" id="imagetitle" name="imgtitle" type="text" placeholder="Titel is vereist..." value="' + autoTitle + '" ></span>  <br/>  <span> <label for="imgDesc">Beschrijving:</label></span><br> <span> <textarea class="form-control"  id="imageDesc" name="imgdesc" type="text" placeholder="" contenteditable="true"></textarea></span>  <br/><span> <label for="imgPrice">Prijs:</label></span><br> <span>   <input class="form-control" type="number" id="imageprice" name="imgprice" min="0.00" step="0.01" value="0.00"></span>';
+    }else{
+        div.innerHTML = '<span><h4>Product details</h4></span><br/><br/><span> <label for="imgtitle">Title:</label></span><br><span> <input class="form-control" id="imagetitle" name="imgtitle" type="text" placeholder="Titel is vereist..." value="' + autoTitle + '" ></span>  <br/>  <span> <label for="imgDesc">Description:</label></span><br> <span> <textarea class="form-control"  id="imageDesc" name="imgdesc" type="text" placeholder="" contenteditable="true"></textarea></span>  <br/><span> <label for="imgPrice">Price:</label></span><br> <span>   <input class="form-control" type="number" id="imageprice" name="imgprice" min="0.00" step="0.01" value="0.00"></span>';
+    }
 
     document.getElementById('imageDataWrapper').appendChild(input);
     document.getElementById('imageDataWrapper').appendChild(div);

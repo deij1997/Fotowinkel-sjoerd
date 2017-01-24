@@ -28,7 +28,7 @@
                             <!-- Scrollable box with options. Fill with JSP if possible-->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 style="display: inline-block; left">Artikelen</h4>
+                                    <h4 style="display: inline-block; left"><fmt:message key="Articles" /></h4>
                                     <div id="modalbutton" class="btn btn-primary" style="display: inline-block; float:right">+</div>
                                 </div>
                                 <div id="modalcontent" class="panel-body articleholder">
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <p class="btn btn-primary" style="display: inherit" href="" id="modalpreview">Bestel</p>
+                            <p class="btn btn-primary" style="display: inherit" href="" id="modalpreview"><fmt:message key="Order" /></p>
                         </div>
                     </form>
                 </div>
